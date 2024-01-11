@@ -1,0 +1,159 @@
+/* todos.css */
+
+/* 共通のスタイル */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0 1vh;
+    /* align-items: center; */
+    /* justify-content: center; */
+    font-size: medium;
+    overflow-y: scroll;
+}
+
+h1, h2 {
+    color: #333;
+    text-align: center;
+}
+
+input,
+textarea {
+    font-size: medium;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ToDoリストのスタイル */
+#todo-list {
+    list-style: none;
+    padding: 0;
+    width: 100%; /* 幅を100%に設定 */
+    /* max-width: 600px; /* 最大幅を指定（PC上で適切な幅に調整） */
+    margin: 0 auto; /* 中央寄せ */
+}
+
+#todo-list li {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#todo-list li strong {
+    font-weight: bold;
+}
+
+/* フォームのスタイル */
+#add-todo-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%; /* 幅を100%に設定 */
+    /* max-width: 600px; /* 最大幅を指定（PC上で適切な幅に調整） */
+    margin: 0 auto; /* 中央寄せ */
+}
+
+#add-todo-form input[type="text"],
+#add-todo-form textarea,
+#add-todo-form button {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%; /* 幅を100%に設定 */
+    min-width: 100%;
+    max-width: 100%;
+    box-sizing: border-box; /* ボックスモデルの設定 */
+}
+
+#add-todo-form button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#add-todo-form button:hover {
+    background-color: #45a049;
+}
+
+
+.hidden {
+    display: none;
+}
+
+
+footer {
+    margin: 0 0;
+    margin-top: 30px;
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+
+.toggle-status-btn,
+.edit-btn,
+.delete-btn,
+.confirm-edit-btn,
+.cancel-edit-btn,
+.confirm-delete-btn,
+.cancel-edit-btn {
+    margin-right: 6px;
+}
+
+
+.edit-form input {
+    margin-top: 16px;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%; /* 幅を100%に設定 */
+    min-width: 100%;
+    max-width: 100%;
+    box-sizing: border-box; /* ボックスモデルの設定 */
+}
+
+.edit-form textarea {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%; /* 幅を100%に設定 */
+    min-width: 100%;
+    max-width: 100%;
+    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
+}
+
+
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+/* レスポンシブデザイン */
+@media (min-width: 1080px) {
+    /* PC向けのスタイル */
+    #todo-list,
+    #add-todo-form {
+        width: 40%; /* PCサイズ向けに幅を調整 */
+    }
+}
+
