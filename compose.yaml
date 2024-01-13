@@ -1,5 +1,0 @@
-volumes:
-  type: volume
-  source: volume
-  target: /code
-  name: volume
