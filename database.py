@@ -4,11 +4,11 @@
 from sqlmodel import SQLModel, create_engine, Session
 import os
 
+env = "AZURE"
+persist = "persist"
 
-azure_storage = "/azstorage1"
-
-if os.path.isdir(azure_storage):
-    db_file = f'sqlite:///{azure_storage}/database.sqlite'
+if env in os.environ:
+    db_file = f'sqlite:///{persist}/database.sqlite'
 else:
     db_file = 'sqlite:///database.sqlite'
 
