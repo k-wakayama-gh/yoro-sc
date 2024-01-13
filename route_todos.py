@@ -118,4 +118,3 @@ async def read_own_todos(current_user: Annotated[UserRead, Depends(get_current_a
     return [{"item_id": "Foo", "owner": current_user.username}]
 
 
-

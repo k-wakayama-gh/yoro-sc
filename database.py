@@ -5,10 +5,10 @@ from sqlmodel import SQLModel, create_engine, Session
 import os
 
 env = "AZURE"
-persist = "persist"
+mount = "azstorage1"
 
 if env in os.environ:
-    db_file = f'sqlite:///{persist}/database.sqlite'
+    db_file = f'sqlite:///{mount}/database.sqlite'
 else:
     db_file = 'sqlite:///database.sqlite'
 
