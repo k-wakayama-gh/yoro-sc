@@ -8,7 +8,7 @@ RUN pip install --upgrade -r requirements.txt
 
 COPY . .
 
-VOLUME /code/volume1
+VOLUME /code/azstorage1
 
 EXPOSE 8000
 
