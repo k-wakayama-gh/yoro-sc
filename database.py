@@ -5,10 +5,10 @@ from sqlmodel import SQLModel, create_engine, Session
 import os
 
 
-azstorage1_foler = os.path.join(os.getcwd(), "azstorage1")
+azure_storage = "/azstorage1"
 
-if os.path.isdir(azstorage1_foler):
-    db_file = 'sqlite:///azstorage1/database.sqlite'
+if os.path.isdir(azure_storage):
+    db_file = f'sqlite:///{azure_storage}/database.sqlite'
 else:
     db_file = 'sqlite:///database.sqlite'
 
