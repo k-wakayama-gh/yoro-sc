@@ -45,8 +45,8 @@ async def create_todo(session: Annotated[Session, Depends(get_session)], todo: T
 @router.get("/todos", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
 async def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
     todos = session.exec(select(Todo).offset(commons.offset).limit(commons.limit)).all() # Todo here must be a database model i.e. table: not TodoRead model
-    if not todos:
-        raise HTTPException(status_code=404, detail="Not found")
+    # if not todos:
+    #     raise HTTPException(status_code=404, detail="Not found")
     context = {
         "request": request,
         "todos": todos,
