@@ -1,18 +1,72 @@
 /* styles.css */
 
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  justify-content: flex-start;
+  overflow-y: scroll;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
 }
 
-h1 {
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+nav > ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+#aside-and-main {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+aside {
+  width: 20%;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+section {
+  display: block;
+}
+
+article {
+  display: block;
+}
+
+footer {
+  display: block;
+  margin-top: 20px;
+  padding: 10px 0;
+  text-align: center;
+}
+
+
+h1 h2 h3 h4 h5 h6 p {
   color: #333;
 }
 
+
+.hidden {
+  display: none;
+}

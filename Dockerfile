@@ -8,7 +8,7 @@ RUN pip install --upgrade -r requirements.txt
 
 COPY . .
 
-VOLUME /code/azstorage1
+VOLUME ./mount
 
 EXPOSE 8000
 

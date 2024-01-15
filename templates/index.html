@@ -2,16 +2,47 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Success!</h1>
+<header>
+    <p>ロゴ</p>
+    <p>検索</p>
+    <p>メニュー</p>
+</header>
 
-<h2>index.html is loaded.</h2>
+<nav>
+    <ul>
+        <li>メニュー１</li>
+        <li>メニュー２</li>
+        <li>メニュー３</li>
+    </ul>
+</nav>
 
+<div id="aside-and-main">
+    <aside class="hidden">
+        サイドバー
+    </aside>
 
+    <main>
+        <section>
+            <h1>Success!</h1>
+            <h2>index.html is loaded.</h2>
+        </section>
 
-<div id="message">
-    <p>{{ message1 }}</p>
-    <p>{{ message2 }}</p>
+        <section>
+            セクション
+        </section>
+
+        <article>
+            アーティクル
+        </article>
+    </main>
+
 </div>
+
+<footer>
+    フッター
+</footer>
+
+
 
 
 
