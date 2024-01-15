@@ -4,7 +4,7 @@
 from sqlmodel import SQLModel, create_engine, Session
 import os
 
-env = "az"
+env = "WORKDIR"
 mount = "azstorage1"
 
 if env in os.environ:
