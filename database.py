@@ -4,8 +4,8 @@
 from sqlmodel import SQLModel, create_engine, Session
 import os
 
-env = "WORKDIR"
-mount = "azstorage1"
+env = "DUMMY"
+mount = "/azstorage1"
 
 if env in os.environ:
     db_file = f'sqlite:///{mount}/database.sqlite'
