@@ -8,7 +8,9 @@ RUN pip install --upgrade -r requirements.txt
 
 COPY . .
 
-VOLUME ./mount
+VOLUME ./azstorage1
+
+ENV DUMMY=dummy
 
 EXPOSE 8000
 
