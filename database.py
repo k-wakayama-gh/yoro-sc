@@ -6,7 +6,7 @@ import os
 
 # env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
 env = "IN_DOCKER_CONTAINER"
-mount = "/mount"
+mount = "/docker_volume"
 
 if env in os.environ:
     db_file = f'sqlite:///{mount}/database.sqlite'
