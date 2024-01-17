@@ -43,18 +43,6 @@ jobs:
             release.zip
             !venv/
 
-  # edit
-  create-docker-volume:
-    runs-on: ubuntu-latest
-
-    steps:
-      #- name: Log in to Docker
-      #  run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-
-      - name: Create Docker volume
-        run: docker volume create docker-volume
-        #edit end
-
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -77,9 +65,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_BD648F6B8A5C4B8AAF45553E82C6DE77 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9DF79F05C3F444FF87B12A24D4B0F5BE }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_732C68F4F795429C8E73FCB649902BA2 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7C5FAB83249E4211BCA9F0F3734EC70C }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4BC8625490D04C69811705CC28AFAA5C }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_EE2BADC16A0D401CAFFDE167A097642D }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
@@ -87,3 +75,4 @@ jobs:
         with:
           app-name: 'm9-m9-m9'
           slot-name: 'Production'
+          
