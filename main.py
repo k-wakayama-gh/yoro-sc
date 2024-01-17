@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 # my modules
-from database import engine, create_database
+from database import engine, create_database, load_db, save_db
 import route_html, route_items, route_users, route_lessons, route_auth, route_todos
 
 # FastAPI instance
@@ -27,7 +27,12 @@ app.mount('/assets', StaticFiles(directory='assets'), name='static')
 # create database on startup
 @app.on_event("startup")
 def on_startup():
+    load_db()
     create_database()
+
+@app.on_event("shutdown")
+def on_shutdown():
+    save_db()
 
 # run
 if __name__ == '__main__':
