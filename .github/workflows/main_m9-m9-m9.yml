@@ -31,6 +31,12 @@ jobs:
         run: pip install -r requirements.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+      
+      - name: mount docker volume
+        volumes:
+          - ${WEBAPP_STORAGE_HOME}/docker_volume:/docker_volume
+      
+      # edit end
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
@@ -75,11 +81,3 @@ jobs:
         with:
           app-name: 'm9-m9-m9'
           slot-name: 'Production'
-
-      # edit: make a volume mounted
-      - name: Mount Docker Volume
-        run: echo "Mount Docker Volume"
-        volumes:
-          - source: docker_volume
-            target: /docker_volume
-            name: docker_volume
