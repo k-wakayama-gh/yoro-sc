@@ -7,11 +7,13 @@ import os
 env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
 mount = "/mount"
 
-if env in os.environ:
-    db_file = f'sqlite:///{mount}/database.sqlite'
-else:
-    db_file = 'sqlite:///database.sqlite'
+# if env in os.environ:
+#     db_file = f'sqlite:///{mount}/database.sqlite'
+# else:
+#     db_file = 'sqlite:///local/database.sqlite'
 
+
+db_file = 'sqlite:///local/database.sqlite'
 
 # database settings
 engine = create_engine(db_file, echo=False, connect_args={'check_same_thread': False})

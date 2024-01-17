@@ -1,13 +1,15 @@
 # --- main.py ---
 
 # frameworks and libraries
+import os
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 # my modules
-from database import engine, create_database
+from database import engine, create_database, env, mount
 import route_html, route_items, route_users, route_lessons, route_auth, route_todos
+from connection import download_database, upload_database
 
 # FastAPI instance
 app = FastAPI()
@@ -28,6 +30,13 @@ app.mount('/assets', StaticFiles(directory='assets'), name='static')
 @app.on_event("startup")
 def on_startup():
     create_database()
+    if env in os.environ:
+        download_database()
+
+@app.on_event("shutdown")
+def on_shutdown():
+    if env in os.environ:
+        upload_database()
 
 # run
 if __name__ == '__main__':
