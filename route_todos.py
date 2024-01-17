@@ -58,7 +58,7 @@ async def display_todos(session: Annotated[Session, Depends(get_session)], commo
 
 # read list
 @router.get("/todos/json", response_model=list[TodoRead], tags=["Todo"])
-def read_todos_list(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100)):
+async def read_todos_list(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100)):
     todos = session.exec(select(Todo).offset(offset).limit(limit)).all()
     if not todos:
         raise HTTPException(status_code=404, detail="Not found")
@@ -69,7 +69,7 @@ def read_todos_list(*, session: Session = Depends(get_session), offset: int = 0,
 
 # read one
 @router.get("/todos/json/{todo_id}", response_model=TodoRead, tags=["Todo"])
-def read_todo(*, session: Session = Depends(get_session), todo_id: int):
+async def read_todo(*, session: Session = Depends(get_session), todo_id: int):
     todo = session.get(Todo, todo_id)
     if not todo:
         raise HTTPException(status_code=404, detail="Not found")
@@ -84,7 +84,7 @@ async def update_todo(
     todo_id: int,
     todo_update: TodoUpdate,
     session: Session = Depends(get_session)
-):
+    ):
     db_todo = session.get(Todo, todo_id)# todoテーブルをTodo.idで検索する
     if not db_todo:
         raise HTTPException(status_code=404, detail="Todo not found")
