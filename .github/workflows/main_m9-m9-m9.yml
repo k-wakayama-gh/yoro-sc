@@ -75,3 +75,11 @@ jobs:
         with:
           app-name: 'm9-m9-m9'
           slot-name: 'Production'
+
+      # edit: make a volume mounted
+      - name: Mount Docker Volume
+        run: echo "Mount Docker Volume"
+        volumes:
+          - source: docker_volume
+            target: /docker_volume
+            name: docker_volume
