@@ -31,12 +31,6 @@ jobs:
         run: pip install -r requirements.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-      
-      - name: mount docker volume
-        volumes:
-          - ${WEBAPP_STORAGE_HOME}/docker_volume:/docker_volume
-      
-      # edit end
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
@@ -48,6 +42,18 @@ jobs:
           path: |
             release.zip
             !venv/
+
+  # edit
+  create-docker-volume:
+    runs-on: ubuntu-latest
+
+    steps:
+      #- name: Log in to Docker
+      #  run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Create Docker volume
+        run: docker volume create docker-volume
+        #edit end
 
   deploy:
     runs-on: ubuntu-latest
