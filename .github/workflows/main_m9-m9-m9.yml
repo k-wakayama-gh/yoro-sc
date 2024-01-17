@@ -75,13 +75,3 @@ jobs:
         with:
           app-name: 'm9-m9-m9'
           slot-name: 'Production'
-
-          # Optional: Add volume mount for persistent data
-          volumes:
-            - mount:/mount
-
-# Volume set volume name
-volumes:
-  mount:
-    name: mount
-          
