@@ -5,7 +5,7 @@ from sqlmodel import SQLModel, create_engine, Session
 import os
 
 env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
-mount = "/volume"
+mount = "/mount"
 
 if env in os.environ:
     db_file = f'sqlite:///{mount}/database.sqlite'
@@ -23,5 +23,4 @@ def create_database():
 def get_session():
     with Session(engine) as session:
         yield session
-
 
