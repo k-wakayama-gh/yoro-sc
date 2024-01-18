@@ -14,7 +14,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 0 2vw;
+    padding: 0 2%;
     font-family: sans-serif;
     font-size: medium;
 }
@@ -53,7 +53,7 @@ textarea {
     justify-content: flex-start;
     list-style: none;
     padding: 0; /* ulのデフォル値をトリセット */
-    margin: 0; /* ulのデフォルト値リセット */
+    margin: 0; /* ulのデフォルト値をリセット */
 }
 
 #todo-list li {
@@ -164,6 +164,10 @@ button {
     align-items: center;
 }
 
+
+textarea {
+    resize: none;
+}
 
 
 /* レスポンシブデザイン */

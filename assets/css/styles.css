@@ -55,7 +55,7 @@ nav ul {
 }
 
 aside {
-  display: none; /* レスポンシブでPCなら表示する */
+  display: none; /* レスポンシブ：PCなら表示する */
   flex-direction: column;
   justify-content: flex-start;
   flex-grow: 1;

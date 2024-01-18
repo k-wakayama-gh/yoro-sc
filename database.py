@@ -5,23 +5,30 @@ from sqlmodel import SQLModel, create_engine, Session
 import os
 import shutil
 
+
+# env1 = "IN_DOCKER_CONTAINER"
 env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
-# env = "IN_DOCKER_CONTAINER"
-mount = "/mount"
 
-# if env in os.environ:
-#     db_file = f'sqlite:///{mount}/database.sqlite'
-# else:
-#     db_file = 'sqlite:///database.sqlite'
+if env in os.environ:
+    mount = "/mount"
+else:
+    mount = ""
 
-remote_db = "/mount/database.sqlite"
+
+remote_db = f"{mount}/database.sqlite"
 local_db = "/database.sqlite"
 
 def load_db():
-    shutil.copy(remote_db, local_db)
+    if env in os.environ:
+        shutil.copy(remote_db, local_db)
+    else:
+        pass
 
 def save_db():
-    shutil.copy(local_db, remote_db)
+    if env in os.environ:
+        shutil.copy(local_db, remote_db)
+    else:
+        pass
 
 
 db_file = 'sqlite:///database.sqlite'
