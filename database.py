@@ -10,10 +10,11 @@ import shutil
 env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
 
 if env in os.environ:
-    mount = "/mount"
+    db_fir = "/home/db_dir"
 else:
-    mount = ""
+    db_dir = ""
 
+mount = "/mount"
 
 remote_db = f"{mount}/database.sqlite"
 local_db = "/database.sqlite"
@@ -31,7 +32,7 @@ def save_db():
         pass
 
 
-db_file = 'sqlite:///database.sqlite'
+db_file = f'sqlite:///{db_dir}/database.sqlite'
 
 # database settings
 engine = create_engine(db_file, echo=False, connect_args={'check_same_thread': False})
