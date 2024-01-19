@@ -3,7 +3,7 @@
 :root {
   --text-color: #333;
   --bg-color: #f9f9f9;
-  --bg-color-accent: #fff
+  --bg-color-accent: #fff;
 }
 
 body {
@@ -185,10 +185,37 @@ textarea {
     }
 }
 
+/* ダークモード */
 @media (prefers-color-scheme: dark) {
   :root {
-    --text-color: #f9f9f9;
-    --bg-color: #222;
-    --bg-color-accent: #444
+    --text-color: #f0f0f0;
+    --bg-color: #141414;
+    --bg-color-accent: #1e1e1e;
   }
+
+  #todo-list li {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  #add-todo-form input[type="text"], #add-todo-form textarea, #add-todo-form button {
+    border: 1px solid #555;  /* より暗いボーダーカラー */
+  }
+
+  #add-todo-form button {
+    background-color: #008000;  /* ダークグリーン */
+  }
+
+  #add-todo-form button:hover {
+    background-color: #006400;  /* より濃いダークグリーン */
+  }
+
+  footer {
+    background-color: #444;  /* より暗いフッター背景色 */
+  }
+  
+  input, textarea {
+    color: var(--text-color);
+    background-color: var(--bg-color-accent);
+  }
+
 }
