@@ -27,12 +27,13 @@ app.mount('/assets', StaticFiles(directory='assets'), name='static')
 # create database on startup
 @app.on_event("startup")
 def on_startup():
-    load_db()
+    # load_db()
     create_database()
 
 @app.on_event("shutdown")
 def on_shutdown():
-    save_db()
+    # save_db()
+    pass
 
 # run
 if __name__ == '__main__':
