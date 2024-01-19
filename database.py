@@ -10,7 +10,7 @@ import shutil
 env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
 
 if env in os.environ:
-    mount = "/home/db_dir"
+    mount = "/home"
 else:
     mount = ""
 

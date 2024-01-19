@@ -1,12 +1,18 @@
 /* styles.css */
 
+:root {
+  --text-color: #333;
+  --bg-color: #f9f9f9;
+}
+
 body {
   display: block;
   margin: 0;
   padding: 0;
   overflow-y: scroll;
   width: 100%;
-  background-color: #f9f9f9;
+  color: var(--text-color);
+  background-color: var(--bg-color);
 }
 
 #app {
@@ -86,7 +92,7 @@ footer {
 
 
 h1, h2, h3, h4, h5, h6, p {
-  color: #333;
+  color: var(--text-color);
 }
 
 
@@ -119,5 +125,12 @@ h1, h2, h3, h4, h5, h6, p {
       display: flex;
       flex-direction: column;
       justify-content: start;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-color: #f9f9f9;
+    --bg-color: #333;
   }
 }
