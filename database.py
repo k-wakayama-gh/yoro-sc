@@ -10,8 +10,11 @@ import shutil
 env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
 
 
-remote_db = "/home/mount/database.sqlite"
-local_db = "database.sqlite"
+db_file = 'database.sqlite'
+
+
+remote_db = f"/mount/{db_file}"
+local_db = db_file
 
 
 def load_db():
@@ -27,15 +30,11 @@ def save_db():
         pass
 
 
-
-sql_connection = f'sqlite:///{local_db}'
-
-if env in os.environ:
-    sql_connection = 'Server=tcp:m9-m9-m9.database.windows.net,1433;Initial Catalog=m9-m9-m9;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default";'
+db_connection = f'sqlite:///{local_db}'
 
 
 # database settings
-engine = create_engine(sql_connection, echo=False, connect_args={'check_same_thread': False})
+engine = create_engine(db_connection, echo=False, connect_args={'check_same_thread': False})
 
 # def : create the database
 def create_database():
