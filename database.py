@@ -19,7 +19,7 @@ else:
     local_db = db_file
 
 
-db_connection = f'sqlite:///{local_db}'
+db_connection = f'sqlite:///{db_file}'
 
 # database settings
 engine = create_engine(db_connection, echo=False, connect_args={'check_same_thread': False})
