@@ -13,13 +13,33 @@ db_file = 'database.sqlite'
 
 remote_db = f"/mount/{db_file}"
 
-if env in os.environ:
-    local_db = f"/home/site/wwwroot/{db_file}"
-else:
-    local_db = db_file
+# if env in os.environ:
+#     local_db = f"/home/site/wwwroot/db_dir/{db_file}"
+# else:
+#     local_db = db_file
+
+local_db = db_file
 
 
-db_connection = f'sqlite:///{db_file}'
+# copy data
+def load_db():
+    if env in os.environ:
+        try:
+            shutil.copy(remote_db, local_db)
+        except:
+            print("Source file not found")
+    else:
+        pass
+
+def save_db():
+    if env in os.environ:
+        shutil.copy(local_db, remote_db)
+    else:
+        pass
+
+
+db_connection = f'sqlite:///{local_db}'
+
 
 # database settings
 engine = create_engine(db_connection, echo=False, connect_args={'check_same_thread': False})
@@ -32,17 +52,4 @@ def get_session():
     with Session(engine) as session:
         yield session
 
-
-# copy data
-def load_db():
-    if env in os.environ:
-        shutil.copy(remote_db, local_db)
-    else:
-        pass
-
-def save_db():
-    if env in os.environ:
-        shutil.copy(local_db, remote_db)
-    else:
-        pass
 
