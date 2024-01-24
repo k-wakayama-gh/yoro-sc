@@ -1,0 +1,7 @@
+# Run this app
+python main.py
+
+# Database migration: create a revision and apply changes to DB
+alembic revision --autogenerate -m "comment"
+alembic upgrade head
+

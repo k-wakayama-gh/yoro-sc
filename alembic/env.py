@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from sqlmodel import SQLModel
 
-from models import todos, users, items, lessons
+from models import *
 
 from alembic import context
 

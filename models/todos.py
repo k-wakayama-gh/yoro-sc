@@ -10,7 +10,7 @@ from sqlmodel import SQLModel, Field, Relationship
 # base model
 class TodoBase(SQLModel):
     title: str = Field(index=True)
-    content: Optional[str] = Field(default=None, index=True)
+    content: Optional[str] = Field(default=None)
     is_done: bool = Field(default=False) #is_done: bool = Noneにすると、patchでも空のリクエストがあるたびにboolの値をFalseにしようとする。Fieldを使うと最初だけFalseにしようとする。
 
 
@@ -33,11 +33,14 @@ class TodoRead(TodoBase):
 
 
 
-# update
-class TodoUpdate(TodoBase):
-    title: Optional[str] = Field(default=None, index=True) # Field(default=None)はデータがない場合も適切に処理されるようになる。
-    pass
+# update: independent SQLModel models for each: Optional[...] = None works properly for Patch requests
+class TodoUpdate(SQLModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
 
+
+class ToDoUpdateIsDone(SQLModel):
+    is_done: bool
 
 
 # delete

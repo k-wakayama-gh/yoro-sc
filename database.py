@@ -11,7 +11,7 @@ env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
 
 db_file = 'database.sqlite'
 
-remote_db_dir ="/mount/db_dir/"
+remote_db_dir = "/mount/db_dir/"
 
 if env in os.environ:
     if not os.path.exists(remote_db_dir):

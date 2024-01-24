@@ -1,8 +1,14 @@
 # --- models/users.py ---
 
 # modules
-from typing import Optional
+from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import SQLModel, Field, Relationship
+
+# my modules
+from models import link_table
+
+if TYPE_CHECKING:
+    import lessons
 
 # models below 000000000000000000000
 
@@ -25,10 +31,12 @@ class UserInDB(UserBase):
 # table
 class User(UserInDB, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    
+    lessons: List["lessons.Lesson"] = Relationship(back_populates="users", link_model=link_table.UserLessonLink)
 
 
 
-# create: includes plain password: never send this out!!!!!
+# create: this includes a plain password: never send this out!!!!!
 class UserCreate(UserBase):
     plain_password: str
     pass

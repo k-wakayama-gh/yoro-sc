@@ -9,7 +9,7 @@ from typing import Optional, Annotated
 
 # my modules
 from database import engine, get_session
-from models.todos import Todo, TodoCreate, TodoRead, TodoUpdate, TodoDelete
+from models.todos import Todo, TodoCreate, TodoRead, TodoUpdate, TodoDelete, ToDoUpdateIsDone
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete
 from route_auth import get_current_active_user
 
@@ -20,6 +20,10 @@ router = APIRouter()
 # templates settings
 templates = Jinja2Templates(directory='templates')
 
+# database session
+session = Session(engine)
+
+# common query parameters
 class CommonQueryParams:
     def __init__(self, q: Optional[str] = None, offset: int = 0, limit: int = Query(default=100, le=100)):
         self.q = q
@@ -85,11 +89,13 @@ async def update_todo(
     todo_update: TodoUpdate,
     session: Session = Depends(get_session)
     ):
+    
     db_todo = session.get(Todo, todo_id)# todoテーブルをTodo.idで検索する
     if not db_todo:
         raise HTTPException(status_code=404, detail="Todo not found")
     
     todo_data = todo_update.model_dump(exclude_unset=True) # <= dict(...) on SQLModel version older than 0.0.14
+    
     for field, value in todo_data.items():
         setattr(db_todo, field, value)
     
@@ -98,6 +104,25 @@ async def update_todo(
     session.refresh(db_todo)
     return db_todo
 
+
+
+# update is_done
+@router.patch("/todos/is-done/{todo_id}", response_model=TodoRead, tags=["Todo"])
+async def update_todo(todo_id: int, todo_update: ToDoUpdateIsDone):
+    with session:
+        db_todo = session.get(Todo, todo_id)# todoテーブルをTodo.idで検索する
+        if not db_todo:
+            raise HTTPException(status_code=404, detail="Todo not found")
+        
+        todo_data = todo_update.model_dump(exclude_unset=True) # <= dict(...) on SQLModel version older than 0.0.14
+        
+        for key, value in todo_data.items():
+            setattr(db_todo, key, value)
+        
+        session.add(db_todo)
+        session.commit()
+        session.refresh(db_todo)
+        return db_todo
 
 
 

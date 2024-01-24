@@ -44,7 +44,7 @@ document.querySelectorAll(".toggle-status-btn").forEach(button => {
         const currentIsDone = this.dataset.isDone === "True" ? true : false; // 現在のis_doneの状態を取得
 
         // FastAPIのエンドポイントにPATCHリクエストを送信してステータスをトグルする
-        await fetch(`/todos/${todoId}`, {
+        await fetch(`/todos/is-done/${todoId}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -86,16 +86,24 @@ document.querySelectorAll(".edit-btn").forEach(button => {
             const newTitle = editForm.querySelector(".edit-title").value;
             const newContent = editForm.querySelector(".edit-content").value;
 
-            // FastAPIのエンドポイントにPATCHリクエストを送信してToDoを更新
+            // 送信するデータを格納するオブジェクト
+            const sendingData = {};
+
+            // 新しいデータが存在すればオブジェクトに追加
+            if (newTitle) {
+                sendingData.title = newTitle;
+            }
+            if (newContent) {
+                sendingData.content = newContent;
+            }
+
+            // FastAPIのエンドポイントにPATCHリクエストを送信してToDoを更新：Null(=None)でないものだけを送信する
             fetch(`/todos/${todoId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    title: newTitle,
-                    content: newContent
-                })
+                body: JSON.stringify(sendingData)
             })
             .then(response => response.json())
             .then(data => {
@@ -203,3 +211,4 @@ function autoResize(textarea) {
     textarea.style.height = 'auto';
     textarea.style.height = (textarea.scrollHeight) + 'px';
 }
+
