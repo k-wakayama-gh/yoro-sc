@@ -28,6 +28,7 @@ templates = Jinja2Templates(directory='templates')
 def index(request: Request):
     context = {
         "request": request,
+        "title": "タイトル",
     }
     return templates.TemplateResponse("index.html", context)
 

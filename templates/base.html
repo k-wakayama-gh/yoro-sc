@@ -9,8 +9,35 @@
     <title>{{ title }}</title>
 </head>
 <body>
-    {% block content %}
-    {% endblock content %}
+    <div id="app">
+        <div id="header-and-nav">
+            <header>
+                <p>ロゴ</p>
+                <p>検索</p>
+                <p>メニュー</p>
+            </header>
+        
+            <nav>
+                <ul>
+                    <li>メニュー１</li>
+                    <li>メニュー２</li>
+                    <li>メニュー３</li>
+                </ul>
+            </nav>
+        </div>
+    
+        <div id="aside-and-main">
+            <aside>
+                サイドバー
+            </aside>
+
+            {% block content %}{% endblock content %}
+        </div>
+        
+        <footer>
+            フッター
+        </footer>
+    </div>
     <script src="/assets/js/scripts.js"></script>
 </body>
 </html>

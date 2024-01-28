@@ -1,0 +1,94 @@
+<!-- todos.html -->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your ToDo App">
+    <meta name="author" content="YourToDoApp">
+    <title>Lessons</title>
+    <link rel="stylesheet" href="/assets/css/todos.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <section id="login-form-section">
+                <form id="login-form" class="" action="/token" method="post">
+                    <!-- ユーザー名とパスワードの入力 -->
+                    <input type="text" name="username" placeholder="Username">
+                    <input type="password" name="password" placeholder="Password">
+                    <!-- ログインボタン -->
+                    <button type="submit">Login</button>
+                    <!-- ログアウトボタン -->
+                    <button type="button" id="logout-btn">Logout</button>
+                </form>
+            </section>
+        </header>
+        
+        <main>
+            <section id="todo-list-section">
+                <h1>Lesson List</h1>
+            
+                <ul id="todo-list">
+                    {% for lesson in lessons %}
+                    <!-- ToDoリストの各アイテム -->
+                    <li>
+                        <strong>{{ lesson.title }}</strong>
+                        {% if lesson.year %}
+                        <p>{{ lesson.year }}</p>
+                        {% endif %}
+                        {% if lesson.season %}
+                        <p>{{ lesson.season }}</p>
+                        {% endif %}
+                        {% if lesson.teacher %}
+                        <p>{{ lesson.teacher }}</p>
+                        {% endif %}
+                        {% if lesson.description %}
+                        <p>{{ lesson.description }}</p>
+                        {% endif %}
+                        <section>
+                            <!-- Pending状態変更ボタン -->
+                            <button class="toggle-status-btn" data-todo-id="{{ lesson.id }}" data-is-done="{{ lesson.day }}">Toggle Status</button>
+                            <!-- Editボタン -->
+                            <button class="edit-btn" data-todo-id="{{ lesson.id }}">Edit</button>
+                            <!-- 削除ボタンを追加 -->
+                            <button class="delete-btn" data-todo-id="{{ lesson.id }}">Delete</button>
+                            <!-- 確認用ポップアップ -->
+                            <div class="confirmation-popup hidden" data-todo-id="{{ lesson.id }}">
+                                <p>Are you sure you want to delete this ToDo?</p>
+                                <button class="confirm-delete-btn">Confirm</button>
+                                <button class="cancel-delete-btn">Cancel</button>
+                            </div>
+                            <!-- Editフォーム -->
+                            <div class="edit-form hidden" data-todo-id="{{ lesson.id }}">
+                                <input type="text" class="edit-title" placeholder="New Title" required>
+                                <textarea class="edit-content" placeholder="New Content" oninput="autoResize(this)"></textarea>
+                                <button class="confirm-edit-btn">Save</button>
+                                <button class="cancel-edit-btn">Cancel</button>
+                            </div>
+                        </section>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+            
+            <section id="add-todo-form-section">
+                    <!-- 新しいToDoを追加するフォーム -->
+            <h2>Add a new ToDo</h2>
+            <form id="add-todo-form" action="/todos" method="post">
+                <input type="text" id="title" name="title" placeholder="Title" required>
+                <textarea id="content" name="content" placeholder="Content" oninput="autoResize(this)"></textarea>
+                <button type="submit">Add ToDo</button>
+            </form>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2023 YourToDoApp. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="/assets/js/todos.js"></script>
+</body>
+</html>

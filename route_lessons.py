@@ -22,6 +22,13 @@ templates = Jinja2Templates(directory='templates')
 # database session
 session = Session(engine)
 
+# common query parameters
+class CommonQueryParams:
+    def __init__(self, q: Optional[str] = None, offset: int = 0, limit: int = Query(default=100, le=100)):
+        self.q = q
+        self.offset = offset
+        self.limit = limit
+
 # routes below 000000000000000000000000000000000000
 
 
@@ -37,12 +44,27 @@ def create_lesson(lesson_create: LessonCreate):
 
 
 
-# read list
-@router.get("/lessons", response_model=list[LessonRead], tags=["Lesson"])
+# display lessons
+@router.get("/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
+async def display_lessons(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
+    lessons = session.exec(select(Lesson).offset(commons.offset).limit(commons.limit)).all() # Lesson here must be a database model i.e. table: not LessonRead model
+    # if not lessons:
+    #     raise HTTPException(status_code=404, detail="Not found")
+    context = {
+        "request": request,
+        "lessons": lessons,
+        "title": "教室一覧",
+    }
+    return templates.TemplateResponse("lessons.html", context) # this context includes lesson.id even if it is not loaded in the html corresponding response_model
+
+
+
+# read list as json
+@router.get("/lessons/json", response_model=list[LessonRead], tags=["Lesson"])
 def read_lessons_list(session: Annotated[Session, Depends(get_session)], offset: int = 0, limit: int = Query(default=100, le=100)):
     lessons = session.exec(select(Lesson).offset(offset).limit(limit)).all()
-    if not lessons:
-        raise HTTPException(status_code=404, detail="Not found")
+    # if not lessons:
+    #     raise HTTPException(status_code=404, detail="Not found")
     return lessons
 
 
@@ -86,6 +108,6 @@ def delete_lesson(*, session: Session = Depends(get_session), lesson_id: int):
         raise HTTPException(status_code=404, detail="Not found")
     session.delete(lesson)
     session.commit()
-    return {"ok": True}
+    return {"deleted": lesson}
 
 

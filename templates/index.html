@@ -1,57 +1,23 @@
-<!-- body content -->
+<!-- block content -->
 {% extends 'base.html' %}
 {% block content %}
 
-<div id="app">
-    <div id="header-and-nav">
-        <header>
-            <p>ロゴ</p>
-            <p>検索</p>
-            <p>メニュー</p>
-        </header>
-    
-        <nav>
-            <ul>
-                <li>メニュー１</li>
-                <li>メニュー２</li>
-                <li>メニュー３</li>
-            </ul>
-        </nav>
-    </div>
+<main>
+    <section>
+        <h1>Success!</h1>
+        <h2>index.html is loaded.</h2>
+    </section>
 
-    <div id="aside-and-main">
-        <aside>
-            サイドバー
-        </aside>
+    <section>
+        セクション
+        <a href="/todos">ToDo List</a>
+    </section>
 
-        <main>
-            <section>
-                <h1>Success!</h1>
-                <h2>index.html is loaded.</h2>
-            </section>
-
-            <section>
-                セクション
-                <a href="/todos">ToDo List</a>
-            </section>
-
-            <article>
-                アーティクル
-            </article>
-        </main>
-
-    </div>
-
-    <footer>
-        フッター
-    </footer>
-</div>
-
-
-
-
-
+    <article>
+        アーティクル
+    </article>
+</main>
 
 
 {% endblock content %}
-<!-- end body content -->
+<!-- end block content -->

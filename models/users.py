@@ -22,13 +22,19 @@ class UserBase(SQLModel):
 
 
 
-# includes hashed password: never send this out!!!!!
+# this includes a plain password: never send this out!!!!!
+class UserIn(UserBase):
+    plain_password: str
+    pass
+
+
+# this includes hashed password: never send this out!!!!!
 class UserInDB(UserBase):
     hashed_password: str
 
 
 
-# table
+# table: this includes hashed password: never send this out!!!!!
 class User(UserInDB, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     
