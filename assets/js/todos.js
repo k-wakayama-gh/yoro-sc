@@ -93,9 +93,10 @@ document.querySelectorAll(".edit-btn").forEach(button => {
             if (newTitle) {
                 sendingData.title = newTitle;
             }
-            if (newContent) {
-                sendingData.content = newContent;
-            }
+            // if (newContent) {
+            //     sendingData.content = newContent;
+            // }
+            sendingData.content = newContent;
 
             // FastAPIのエンドポイントにPATCHリクエストを送信してToDoを更新：Null(=None)でないものだけを送信する
             fetch(`/todos/${todoId}`, {

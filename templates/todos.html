@@ -58,8 +58,8 @@
                             </div>
                             <!-- Editフォーム -->
                             <div class="edit-form hidden" data-todo-id="{{ todo.id }}">
-                                <input type="text" class="edit-title" placeholder="New Title" required>
-                                <textarea class="edit-content" placeholder="New Content" oninput="autoResize(this)"></textarea>
+                                <input type="text" class="edit-title" placeholder="New Title" value="{{ todo.title }}">
+                                <textarea class="edit-content" placeholder="New Content" oninput="autoResize(this)">{{ todo.content }}</textarea>
                                 <button class="confirm-edit-btn">Save</button>
                                 <button class="cancel-edit-btn">Cancel</button>
                             </div>
