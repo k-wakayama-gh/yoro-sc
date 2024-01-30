@@ -1,8 +1,14 @@
 # --- models/todos.py ---
 
 # modules
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import SQLModel, Field, Relationship
+
+# my modules
+from models import link_table
+
+if TYPE_CHECKING:
+    import users
 
 # models below 000000000000000000000
 
@@ -18,6 +24,8 @@ class TodoBase(SQLModel):
 # table
 class Todo(TodoBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    
+    users: List["users.User"] = Relationship(back_populates="todos", link_model=link_table.UserTodoLink)
 
 
 

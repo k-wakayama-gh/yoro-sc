@@ -1,35 +1,30 @@
 // todos.js
 
-// Create
+// create: add todo from
 document.getElementById("add-todo-form").addEventListener("submit", function(event) {
     event.preventDefault(); // フォームのデフォルトの送信を停止
 
     // フォームのデータを取得
     const formData = new FormData(document.getElementById("add-todo-form"));
     
-    // データをオブジェクトに変換し、titleとcontentを文字列に変換
-    const todoData = {
-        title: String(formData.get("title")),
-        content: String(formData.get("content"))
+    const sendingData = {
+        title: formData.get("title"),
+        content: formData.get("content")
     };
 
-    // FastAPIのエンドポイントにPOSTリクエストを送信
+    // エンドポイントにPOSTリクエストを送信
     fetch("/todos", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(todoData)
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(sendingData)
     })
     .then(response => response.json())
     .then(data => {
         console.log("Success:", data);
-        // リクエストが成功したらページをリロード
         location.reload();
     })
     .catch((error) => {
         console.error("Error:", error);
-        // エラーが発生した場合の処理を追加
     });
 });
 
@@ -37,30 +32,30 @@ document.getElementById("add-todo-form").addEventListener("submit", function(eve
 
 
 
-// ToDoリスト内のToggle Statusボタンをクリックした時の処理
+// patch: ToDoリスト内のToggle Statusボタンをクリックした時の処理
 document.querySelectorAll(".toggle-status-btn").forEach(button => {
     button.addEventListener("click", async function(event) {
         const todoId = this.dataset.todoId; // ボタンに紐付けられたToDoのIDを取得
         const currentIsDone = this.dataset.isDone === "True" ? true : false; // 現在のis_doneの状態を取得
+        
+        // 送信するデータは現在の状態の反転
+        const sendingData = {
+            is_done: !currentIsDone
+        };
 
-        // FastAPIのエンドポイントにPATCHリクエストを送信してステータスをトグルする
+        // エンドポイントにPATCHリクエストを送信する
         await fetch(`/todos/is-done/${todoId}`, {
             method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ is_done: !currentIsDone }) // 現在の状態を反転して送信する
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(sendingData)
         })
         .then(response => response.json())
         .then(data => {
             console.log("Success:", data);
-            // リクエストが成功した場合の処理を追加
-            // 例: ステータスをトグルした後の表示を更新する
-            document.location.reload(); // 必要に応じてページ全体をリロードする
+            document.location.reload();
         })
         .catch((error) => {
             console.error("Error:", error);
-            // エラーが発生した場合の処理を追加
         });
     });
 });
@@ -69,15 +64,12 @@ document.querySelectorAll(".toggle-status-btn").forEach(button => {
 
 
 
-// ToDoリスト内のEditボタンをクリックした時の処理
+// patch: ToDoリスト内のEditボタンをクリックした時の処理
 document.querySelectorAll(".edit-btn").forEach(button => {
     button.addEventListener("click", function(event) {
         const todoId = this.dataset.todoId; // Editボタンに紐付けられたToDoのIDを取得
-
-        // ToDoの内容を表示している要素を非表示にし、編集用フォームを表示する
-        const todoElement = document.querySelector(`li[data-todo-id="${todoId}"]`);
-        // todoElement.classList.add("hidden");
-
+        
+        // 編集用のフォームを表示する
         const editForm = document.querySelector(`.edit-form[data-todo-id="${todoId}"]`);
         editForm.classList.toggle("hidden");
 
@@ -89,7 +81,7 @@ document.querySelectorAll(".edit-btn").forEach(button => {
             // 送信するデータを格納するオブジェクト
             const sendingData = {};
 
-            // 新しいデータが存在すればオブジェクトに追加
+            // 新しいデータが存在すればオブジェクトに追加 => contentはNone/Nullでもいい
             if (newTitle) {
                 sendingData.title = newTitle;
             }
@@ -98,31 +90,26 @@ document.querySelectorAll(".edit-btn").forEach(button => {
             // }
             sendingData.content = newContent;
 
-            // FastAPIのエンドポイントにPATCHリクエストを送信してToDoを更新：Null(=None)でないものだけを送信する
+            // エンドポイントにPATCHリクエストを送信する
             fetch(`/todos/${todoId}`, {
                 method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(sendingData)
             })
             .then(response => response.json())
             .then(data => {
                 console.log("Success:", data);
-                // リクエストが成功したらToDoリストを更新
                 document.location.reload();
             })
             .catch((error) => {
                 console.error("Error:", error);
-                // エラーが発生した場合の処理を追加
             });
         });
 
         // 編集用フォーム内のCancelボタンがクリックされた時の処理
         editForm.querySelector(".cancel-edit-btn").addEventListener("click", function() {
-            // 編集用フォームを非表示にし、ToDoの内容を表示している要素を再表示する
+            // 編集用フォームを非表示にする
             editForm.classList.add("hidden");
-            // todoElement.classList.remove("hidden");
         });
     });
 });
@@ -130,7 +117,7 @@ document.querySelectorAll(".edit-btn").forEach(button => {
 
 
 
-// ToDoリスト内の削除ボタンをクリックした時の処理
+// delete: ToDoリスト内の削除ボタンをクリックした時の処理
 document.querySelectorAll(".delete-btn").forEach(button => {
     button.addEventListener("click", function(event) {
         const todoId = this.dataset.todoId; // 削除ボタンに紐付けられたToDoのIDを取得
@@ -148,19 +135,16 @@ document.querySelectorAll(".delete-btn").forEach(button => {
             .then(response => response.json())
             .then(data => {
                 console.log("Success:", data);
-                // リクエストが成功したらToDoリストを更新
-                // 例: ページをリロード
                 document.location.reload();
             })
             .catch((error) => {
                 console.error("Error:", error);
-                // エラーが発生した場合の処理を追加
             });
         });
 
-        // 確認用ポップアップ内のCancelボタンがクリックされた時の処理
+        // 確認用メッセージのCancelボタンがクリックされた時の処理
         confirmationPopup.querySelector(".cancel-delete-btn").addEventListener("click", function() {
-            // 確認用ポップアップを隠す
+            // 確認用メッセージを隠す
             confirmationPopup.classList.add("hidden");
         });
     });
@@ -178,19 +162,19 @@ loginForm.addEventListener('submit', async (event) => {
     const username = formData.get('username');
     const password = formData.get('password');
 
+    // ログインはjsonでなくform dataを送信する
     const response = await fetch('/token', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: `username=${username}&password=${password}`,
     });
 
     if (response.ok) {
         const { access_token } = await response.json();
-        // トークンをlocalStorageなどに保存
+        // トークンをlocalStorageに保存
         localStorage.setItem('accessToken', access_token);
         alert('ログイン成功');
+        // console.log('ログイン成功');
     } else {
         alert('ログイン失敗');
     }

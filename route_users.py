@@ -87,7 +87,7 @@ def update_user(session: Annotated[Session, Depends(get_session)], user_id: int,
 
 
 # delete
-@router.delete("/users/{user_id}", tags=["User"])
+@router.delete("/users/{user_id}", response_model=UserRead, tags=["User"])
 def delete_user(*, session: Session = Depends(get_session), user_id: int):
     user = session.get(User, user_id)
     if not user:

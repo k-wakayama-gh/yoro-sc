@@ -8,9 +8,9 @@ from sqlmodel import SQLModel, Field, Relationship
 from models import link_table
 
 if TYPE_CHECKING:
-    import lessons
+    import lessons, todos
 
-# models below 000000000000000000000
+# models below 000000000000000000000000000000000000
 
 
 # base model
@@ -18,7 +18,6 @@ class UserBase(SQLModel):
     username: str = Field(unique=True, index=True)
     email: Optional[str] = Field(default=None)
     full_name: Optional[str] = Field(default=None)
-    is_active: Optional[bool] = Field(default=True)
 
 
 
@@ -37,8 +36,10 @@ class UserInDB(UserBase):
 # table: this includes hashed password: never send this out!!!!!
 class User(UserInDB, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    is_active: Optional[bool] = Field(default=True)
     
     lessons: List["lessons.Lesson"] = Relationship(back_populates="users", link_model=link_table.UserLessonLink)
+    todos: List["todos.Todo"] = Relationship(back_populates="users", link_model=link_table.UserTodoLink)
 
 
 
