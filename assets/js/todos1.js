@@ -1,5 +1,74 @@
 // todos.js
 
+// read: ToDoリストのデータを非同期で取得する関数
+async function fetchTodos() {
+    try {
+        const response = await fetch("/todos/json"); // サーバーのエンドポイントに合わせて調整
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const todos = await response.json();
+        return todos;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return [];
+    }
+};
+
+// ToDoリストのデータを表示する関数
+function displayTodos(todos) {
+    const todoList = document.getElementById("todo-list");
+    todoList.textContent = ""; // 既存のToDoをクリア
+
+    todos.forEach((todo) => {
+        const listItem = `
+            <li>
+                <strong>${todo.title}</strong>
+                ${todo.content ? `<p>${todo.content}</p>` : ''}
+                <p>Status: ${todo.is_done ? 'Done' : 'Pending'}</p>
+                <section class="todo-action-section">
+                    <!-- Pending状態変更ボタン -->
+                    <button class="toggle-status-btn" data-todo-id="${ todo.id }" data-is-done="${ todo.is_done }">Toggle Status</button>
+                    <!-- Editボタン -->
+                    <button class="edit-btn" data-todo-id="${todo.id}">Edit</button>
+                    <!-- Deleteボタン -->
+                    <button class="delete-btn" data-todo-id="${todo.id}">Delete</button>
+                    <!-- 確認用メッセージ -->
+                    <div class="delete-form hidden" data-todo-id="${todo.id}">
+                        <p>Are you sure you want to delete this ToDo?</p>
+                        <button class="confirm-delete-btn">Confirm</button>
+                        <button class="cancel-delete-btn">Cancel</button>
+                    </div>
+                    <!-- Editフォーム -->
+                    <div class="edit-form hidden" data-todo-id="${todo.id}">
+                        <input type="text" class="edit-title" placeholder="New Title" value="${todo.title}">
+                        <textarea class="edit-content" placeholder="New Content" oninput="autoResize(this)">${todo.content}</textarea>
+                        <button class="confirm-edit-btn">Save</button>
+                        <button class="cancel-edit-btn">Cancel</button>
+                    </div>
+                </section>
+            </li>
+        `;
+        todoList.insertAdjacentHTML("beforeend", listItem);
+    });
+};
+
+
+// function: fetch and display todo list data
+async function fetchAndDisplayTodos() {
+    const todos = await fetchTodos();
+    displayTodos(todos);
+};
+
+
+// ページロード時にToDoリストのデータを非同期で取得・表示する
+document.addEventListener("DOMContentLoaded", async function () {
+    fetchAndDisplayTodos();
+});
+
+
+
 
 // create: add todo from
 document.getElementById("add-todo-form").addEventListener("submit", function(event) {
@@ -22,7 +91,8 @@ document.getElementById("add-todo-form").addEventListener("submit", function(eve
     .then(response => response.json())
     .then(data => {
         console.log("Success:", data);
-        location.reload();
+        // location.reload();
+        fetchAndDisplayTodos();
     })
     .catch((error) => {
         console.error("Error:", error);
@@ -53,7 +123,8 @@ document.querySelectorAll(".toggle-status-btn").forEach(button => {
         .then(response => response.json())
         .then(data => {
             console.log("Success:", data);
-            document.location.reload();
+            // document.location.reload();
+            fetchAndDisplayTodos();
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -100,7 +171,8 @@ document.querySelectorAll(".edit-btn").forEach(button => {
             .then(response => response.json())
             .then(data => {
                 console.log("Success:", data);
-                document.location.reload();
+                // document.location.reload();
+                fetchAndDisplayTodos();
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -136,7 +208,8 @@ document.querySelectorAll(".delete-btn").forEach(button => {
             .then(response => response.json())
             .then(data => {
                 console.log("Success:", data);
-                document.location.reload();
+                // document.location.reload();
+                fetchAndDisplayTodos();
             })
             .catch((error) => {
                 console.error("Error:", error);

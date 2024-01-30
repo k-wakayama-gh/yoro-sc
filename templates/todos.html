@@ -16,7 +16,7 @@
         <header>
             <section id="login-form-section">
                 <form id="login-form" class="" action="/token" method="post">
-                    <!-- ユーザー名とパスワードの入力 -->
+                    <!-- ユーザー名とパスワードの入力フォーム -->
                     <input type="text" name="username" placeholder="Username">
                     <input type="password" name="password" placeholder="Password">
                     <!-- ログインボタン -->
@@ -44,12 +44,12 @@
                         {% else %}
                         <p>Status: Pending</p>
                         {% endif %}
-                        <section>
+                        <section class="todo-action-section">
                             <!-- Pending状態変更ボタン -->
                             <button class="toggle-status-btn" data-todo-id="{{ todo.id }}" data-is-done="{{ todo.is_done }}">Toggle Status</button>
                             <!-- Editボタン -->
                             <button class="edit-btn" data-todo-id="{{ todo.id }}">Edit</button>
-                            <!-- 削除ボタン -->
+                            <!-- Deleteボタン -->
                             <button class="delete-btn" data-todo-id="{{ todo.id }}">Delete</button>
                             <!-- 確認用メッセージ -->
                             <div class="confirmation-popup hidden" data-todo-id="{{ todo.id }}">

@@ -58,6 +58,16 @@ async def display_todos(session: Annotated[Session, Depends(get_session)], commo
     return templates.TemplateResponse("todos.html", context) # this context includes todo.id even if it is not loaded in the html
 
 
+# display todos for test
+@router.get("/todos1", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
+async def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
+    todos = session.exec(select(Todo).offset(commons.offset).limit(commons.limit)).all()
+    context = {
+        "request": request,
+        "todos": todos,
+    }
+    return templates.TemplateResponse("todos1.html", context)
+
 
 
 # read list
