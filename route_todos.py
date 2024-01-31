@@ -51,6 +51,7 @@ async def display_todos(session: Annotated[Session, Depends(get_session)], commo
     todos = session.exec(select(Todo).offset(commons.offset).limit(commons.limit)).all() # Todo here must be a database model i.e. table: not TodoRead model
     # if not todos:
     #     raise HTTPException(status_code=404, detail="Not found")
+    # dont raise error but send the empty json if there is no record
     context = {
         "request": request,
         "todos": todos,
@@ -58,7 +59,8 @@ async def display_todos(session: Annotated[Session, Depends(get_session)], commo
     return templates.TemplateResponse("todos.html", context) # this context includes todo.id even if it is not loaded in the html
 
 
-# display todos for test
+
+# display todos for async test
 @router.get("/todos1", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
 async def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
     todos = session.exec(select(Todo).offset(commons.offset).limit(commons.limit)).all()
@@ -148,8 +150,24 @@ async def delete_todo(session: Annotated[Session, Depends(get_session)], todo_id
 
 
 
-@router.get("/users/me/todos")
-async def read_own_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
-    return [{"item_id": "Foo", "owner": current_user.username}]
+@router.get("/my/todos", response_model=list[TodoRead])
+async def read_my_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
+    with session:
+        user = session.exec(select(User).where(User.username == current_user.username)).first()
+        my_todos = user.todos
+        return my_todos
+
+
+
+@router.post("/my/todos", response_model=list[TodoRead])
+async def create_my_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)], todo_create: TodoCreate):
+    with session:
+        new_todo = Todo.model_validate(todo_create)
+        user = session.exec(select(User).where(User.username == current_user.username)).first()
+        user.todos.append(new_todo)
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        return user.todos
 
 
