@@ -3,3 +3,4 @@
 /venv/
 /others/
 alembic.ini
+database.sqlite

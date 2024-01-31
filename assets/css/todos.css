@@ -71,6 +71,9 @@ textarea {
     background-color: var(--bg-color-accent);
 }
 
+.dummy-todo-li {
+    height: 20rem;
+}
 
 #add-todo-form-section {
     display: flex;
