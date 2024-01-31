@@ -144,7 +144,7 @@ function patchTodoEventListeners() {
             editForm.classList.toggle("hidden");
             
             // send patch request and refresh on click "Save" button
-            editForm.querySelector(".confirm-edit-btn").addEventListener("click", function() {
+            editForm.querySelector(".confirm-edit-btn").addEventListener("click", async function() {
                 const newTitle = editForm.querySelector(".edit-title").value;
                 const newContent = editForm.querySelector(".edit-content").value;
                 
@@ -155,7 +155,7 @@ function patchTodoEventListeners() {
                 }
                 sendingData.content = newContent;
 
-                patchTodo(todoId, sendingData);
+                await patchTodo(todoId, sendingData);
                 
                 fetchAndDisplayTodos();
             });
