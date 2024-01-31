@@ -1,4 +1,18 @@
-// todos1.js
+// todos2.js
+
+// Event Delegation for todo-action-section
+document.getElementById("todo-list").addEventListener("click", function(event) {
+    const target = event.target;
+
+    if (target.classList.contains("toggle-status-btn")) {
+        handleToggleStatusButtonClick(target);
+    } else if (target.classList.contains("edit-btn")) {
+        handleEditButtonClick(target);
+    } else if (target.classList.contains("delete-btn")) {
+        handleDeleteButtonClick(target);
+    }
+});
+
 
 // function: read: ToDo list data async
 async function fetchTodos() {
@@ -6,7 +20,7 @@ async function fetchTodos() {
         const response = await fetch("/todos/json");
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        };
 
         const todos = await response.json();
         return todos;
@@ -16,7 +30,9 @@ async function fetchTodos() {
     }
 };
 
-// function: render and display ToDo list data
+
+
+// Updated displayTodos function
 function displayTodos(todos) {
     const todoList = document.getElementById("todo-list");
     todoList.textContent = ""; // 既存のToDoをクリア
@@ -52,13 +68,18 @@ function displayTodos(todos) {
         `;
         todoList.insertAdjacentHTML("beforeend", listItem);
     });
-};
+
+    // Attach event listeners after elements are added to the DOM
+    attachEventListeners();
+}
+
 
 
 // function: fetch and display todo list data
 async function fetchAndDisplayTodos() {
     const todos = await fetchTodos();
     displayTodos(todos);
+    attachEventListeners();
 };
 
 
@@ -101,69 +122,21 @@ document.getElementById("add-todo-form").addEventListener("submit", function(eve
 
 
 
-
-
-// patch: ToDoリスト内のToggle Statusボタンをクリックした時の処理
-document.querySelectorAll(".toggle-status-btn").forEach(button => {
-    button.addEventListener("click", async function(event) {
-        const todoId = this.dataset.todoId; // ボタンに紐付けられたToDoのIDを取得
-        const currentIsDone = this.dataset.isDone === "True" ? true : false; // 現在のis_doneの状態を取得
-        
-        // 送信するデータは現在の状態の反転
-        const sendingData = {
-            is_done: !currentIsDone
-        };
-
-        // エンドポイントにPATCHリクエストを送信する
-        await fetch(`/todos/is-done/${todoId}`, {
-            method: "PATCH",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(sendingData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Success:", data);
-            // document.location.reload();
-            fetchAndDisplayTodos();
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
-    });
-});
-
-
-
-
-
-// patch: ToDoリスト内のEditボタンをクリックした時の処理
-document.querySelectorAll(".edit-btn").forEach(button => {
-    button.addEventListener("click", function(event) {
-        const todoId = this.dataset.todoId; // Editボタンに紐付けられたToDoのIDを取得
-        
-        // 編集用のフォームを表示する
-        const editForm = document.querySelector(`.edit-form[data-todo-id="${todoId}"]`);
-        editForm.classList.toggle("hidden");
-
-        // 編集用フォーム内のSaveボタンがクリックされた時の処理
-        editForm.querySelector(".confirm-edit-btn").addEventListener("click", function() {
-            const newTitle = editForm.querySelector(".edit-title").value;
-            const newContent = editForm.querySelector(".edit-content").value;
-
-            // 送信するデータを格納するオブジェクト
-            const sendingData = {};
-
-            // 新しいデータが存在すればオブジェクトに追加 => contentはNone/Nullでもいい
-            if (newTitle) {
-                sendingData.title = newTitle;
-            }
-            // if (newContent) {
-            //     sendingData.content = newContent;
-            // }
-            sendingData.content = newContent;
+// Attach event listeners to dynamically created elements
+function attachEventListeners() {
+    // Toggle Status
+    document.querySelectorAll(".toggle-status-btn").forEach(button => {
+        button.addEventListener("click", async function(event) {
+            const todoId = this.dataset.todoId; // ボタンに紐付けられたToDoのIDを取得
+            const currentIsDone = this.dataset.isDone === "True" ? true : false; // 現在のis_doneの状態を取得
+            
+            // 送信するデータは現在の状態の反転
+            const sendingData = {
+                is_done: !currentIsDone
+            };
 
             // エンドポイントにPATCHリクエストを送信する
-            fetch(`/todos/${todoId}`, {
+            await fetch(`/todos/is-done/${todoId}`, {
                 method: "PATCH",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(sendingData)
@@ -178,53 +151,101 @@ document.querySelectorAll(".edit-btn").forEach(button => {
                 console.error("Error:", error);
             });
         });
-
-        // 編集用フォーム内のCancelボタンがクリックされた時の処理
-        editForm.querySelector(".cancel-edit-btn").addEventListener("click", function() {
-            // 編集用フォームを非表示にする
-            editForm.classList.add("hidden");
-        });
     });
-});
 
+    // Edit
+    document.querySelectorAll(".edit-btn").forEach(button => {
+        button.addEventListener("click", function(event) {
+            const todoId = this.dataset.todoId; // Editボタンに紐付けられたToDoのIDを取得
+            
+            // 編集用のフォームを表示する
+            const editForm = document.querySelector(`.edit-form[data-todo-id="${todoId}"]`);
+            editForm.classList.toggle("hidden");
 
+            // 編集用フォーム内のSaveボタンがクリックされた時の処理
+            editForm.querySelector(".confirm-edit-btn").addEventListener("click", function() {
+                const newTitle = editForm.querySelector(".edit-title").value;
+                const newContent = editForm.querySelector(".edit-content").value;
 
+                // 送信するデータを格納するオブジェクト
+                const sendingData = {};
 
-// delete: ToDoリスト内の削除ボタンをクリックした時の処理
-document.querySelectorAll(".delete-btn").forEach(button => {
-    button.addEventListener("click", function(event) {
-        const todoId = this.dataset.todoId; // 削除ボタンに紐付けられたToDoのIDを取得
+                // 新しいデータが存在すればオブジェクトに追加 => contentはNone/Nullでもいい
+                if (newTitle) {
+                    sendingData.title = newTitle;
+                }
+                // if (newContent) {
+                //     sendingData.content = newContent;
+                // }
+                sendingData.content = newContent;
 
-        // 確認用ポップアップを表示
-        const confirmationPopup = document.querySelector(`.confirmation-popup[data-todo-id="${todoId}"]`);
-        confirmationPopup.classList.toggle("hidden");
+                // エンドポイントにPATCHリクエストを送信する
+                fetch(`/todos/${todoId}`, {
+                    method: "PATCH",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(sendingData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Success:", data);
+                    // document.location.reload();
+                    fetchAndDisplayTodos();
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+            });
 
-        // 確認用ポップアップ内のConfirmボタンがクリックされた時の処理
-        confirmationPopup.querySelector(".confirm-delete-btn").addEventListener("click", function() {
-            // FastAPIのエンドポイントにDELETEリクエストを送信してToDoを削除
-            fetch(`/todos/${todoId}`, {
-                method: "DELETE"
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Success:", data);
-                // document.location.reload();
-                fetchAndDisplayTodos();
-            })
-            .catch((error) => {
-                console.error("Error:", error);
+            // 編集用フォーム内のCancelボタンがクリックされた時の処理
+            editForm.querySelector(".cancel-edit-btn").addEventListener("click", function() {
+                // 編集用フォームを非表示にする
+                editForm.classList.add("hidden");
             });
         });
+    });
 
-        // 確認用メッセージのCancelボタンがクリックされた時の処理
-        confirmationPopup.querySelector(".cancel-delete-btn").addEventListener("click", function() {
-            // 確認用メッセージを隠す
-            confirmationPopup.classList.add("hidden");
+    // Delete
+    document.querySelectorAll(".delete-btn").forEach(button => {
+        button.addEventListener("click", function(event) {
+            const todoId = this.dataset.todoId; // 削除ボタンに紐付けられたToDoのIDを取得
+
+            // 確認用ポップアップを表示
+            const confirmationPopup = document.querySelector(`.confirmation-popup[data-todo-id="${todoId}"]`);
+            confirmationPopup.classList.toggle("hidden");
+
+            // 確認用ポップアップ内のConfirmボタンがクリックされた時の処理
+            confirmationPopup.querySelector(".confirm-delete-btn").addEventListener("click", function() {
+                // FastAPIのエンドポイントにDELETEリクエストを送信してToDoを削除
+                fetch(`/todos/${todoId}`, {
+                    method: "DELETE"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Success:", data);
+                    // document.location.reload();
+                    fetchAndDisplayTodos();
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+            });
+
+            // 確認用メッセージのCancelボタンがクリックされた時の処理
+            confirmationPopup.querySelector(".cancel-delete-btn").addEventListener("click", function() {
+                // 確認用メッセージを隠す
+                confirmationPopup.classList.add("hidden");
+            });
         });
     });
+}
+
+
+// Initial fetch and display
+document.addEventListener("DOMContentLoaded", async function() {
+    await fetchAndDisplayTodos();
+    // Attach event listeners after initial display
+    attachEventListeners();
 });
-
-
 
 
 // ログインフォーム
