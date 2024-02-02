@@ -45,8 +45,8 @@ async def create_todo(session: Annotated[Session, Depends(get_session)], todo: T
 
 
 
-# display todos
-@router.get("/todos", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
+# display todos with jinja: sync
+@router.get("/todos_jinja", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
 async def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
     todos = session.exec(select(Todo).offset(commons.offset).limit(commons.limit)).all() # Todo here must be a database model i.e. table: not TodoRead model
     # if not todos:
@@ -56,19 +56,19 @@ async def display_todos(session: Annotated[Session, Depends(get_session)], commo
         "request": request,
         "todos": todos,
     }
-    return templates.TemplateResponse("todos.html", context) # this context includes todo.id even if it is not loaded in the html
+    return templates.TemplateResponse("todos_jinja.html", context) # this context includes todo.id even if it is not loaded in the html
 
 
 
-# display todos for async test
-@router.get("/todos1", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
+# display todos async
+@router.get("/todos", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
 async def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
     todos = session.exec(select(Todo).offset(commons.offset).limit(commons.limit)).all()
     context = {
         "request": request,
         "todos": todos,
     }
-    return templates.TemplateResponse("todos1.html", context)
+    return templates.TemplateResponse("todos.html", context)
 
 
 
