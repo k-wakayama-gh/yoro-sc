@@ -1,9 +1,14 @@
 // todos.js
 
-// function: get todo list data
+// function: get todo list data depending on user
 async function fetchTodos() {
     try {
-        const response = await fetch("/todos/json");
+        const token = loadAccessToken();
+        const response = await fetch("/my/todos/json", {
+            method: "GET",
+            headers: {"Authorization": "Bearer " + token},
+            contentType: "application/json",
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         };
@@ -290,6 +295,7 @@ const logoutBtn = document.getElementById('logout-btn');
 logoutBtn.addEventListener('click', async (event) => {
     event.preventDefault();
     localStorage.removeItem('accessToken');
+    alert("logout");
     }
 );
 
@@ -301,3 +307,16 @@ function autoResize(textarea) {
     textarea.style.height = (textarea.scrollHeight) + 'px';
 };
 
+
+
+// load access token from local storage
+function loadAccessToken() {
+    try {
+        const token = localStorage.getItem("accessToken");
+        return token;
+    }
+    catch (error) {
+        console.error("Not found:", error);
+        return [];
+    }
+};

@@ -150,7 +150,7 @@ async def delete_todo(session: Annotated[Session, Depends(get_session)], todo_id
 
 
 
-@router.get("/my/todos", response_model=list[TodoRead])
+@router.get("/my/todos/json", response_model=list[TodoRead])
 async def read_my_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
     with session:
         user = session.exec(select(User).where(User.username == current_user.username)).first()
