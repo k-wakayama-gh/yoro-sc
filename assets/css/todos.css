@@ -1,9 +1,15 @@
 /* todos.css */
 
 :root {
-  --text-color: #333;
-  --bg-color: #f9f9f9;
-  --bg-color-accent: #fff;
+    --text-color: #333;
+    --bg-color: #f9f9f9;
+    --bg-color-accent: #fff;
+}
+
+ul {
+    /* ulのデフォルト値をリセット */
+    padding: 0;
+    margin: 0;
 }
 
 body {
@@ -53,14 +59,11 @@ textarea {
 }
 
 
-/* ToDoリストのスタイル */
 #todo-list {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     list-style: none;
-    padding: 0; /* ulのデフォル値をトリセット */
-    margin: 0; /* ulのデフォルト値をリセット */
 }
 
 #todo-list li {
@@ -72,7 +75,7 @@ textarea {
 }
 
 .dummy-todo-li {
-    height: 10rem;
+    height: 9rem;
 }
 
 #add-todo-form-section {
@@ -81,7 +84,6 @@ textarea {
     justify-content: flex-start;
 }
 
-/* フォームのスタイル */
 #add-todo-form {
     display: flex;
     flex-direction: column;
@@ -152,7 +154,7 @@ button {
     border: 1px solid #ccc;
     min-width: 100%;
     max-width: 100%;
-    box-sizing: border-box; /* ボックスモデルの設定 */
+    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
 }
 
 .edit-form textarea {
@@ -201,19 +203,19 @@ textarea {
   }
 
   #add-todo-form input[type="text"], #add-todo-form textarea, #add-todo-form button {
-    border: 1px solid #555;  /* より暗いボーダーカラー */
+    border: 1px solid #666;
   }
 
   #add-todo-form button {
-    background-color: #008000;  /* ダークグリーン */
+    background-color: #008000;
   }
 
   #add-todo-form button:hover {
-    background-color: #006400;  /* より濃いダークグリーン */
+    background-color: #006400;
   }
 
   footer {
-    background-color: #444;  /* より暗いフッター背景色 */
+    background-color: #444;
   }
   
   input, textarea {

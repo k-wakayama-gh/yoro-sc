@@ -1,4 +1,4 @@
-// todos3.js
+// todos.js
 
 // function: get todo list data
 async function fetchTodos() {
