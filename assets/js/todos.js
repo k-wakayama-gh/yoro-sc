@@ -240,9 +240,10 @@ document.getElementById("add-todo-form").addEventListener("submit", async functi
     };
 
     // エンドポイントにPOSTリクエストを送信
-    await fetch("/todos", {
+    const token = loadAccessToken();
+    await fetch("/my/todos", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
         body: JSON.stringify(sendingData)
     })
     .then(response => response.json())
