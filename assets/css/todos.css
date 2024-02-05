@@ -4,10 +4,14 @@
     --text-color: #333;
     --bg-color: #f9f9f9;
     --bg-color-accent: #fff;
+    /* dark theme */
+    --text-color-dark: #f0f0f0;
+    --bg-locor-dark: #141414;
+    --bg-color-accent-dark: #1e1e1e;
 }
 
 ul {
-    /* ulのデフォルト値をリセット */
+    /* ulのデフォルト値をリセット：インデント用のマージンを消す */
     padding: 0;
     margin: 0;
 }
@@ -196,35 +200,34 @@ textarea {
 
 /* ダークモード */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --text-color: #f0f0f0;
-    --bg-color: #141414;
-    --bg-color-accent: #1e1e1e;
-  }
+    :root {
+    --text-color: var(--text-color-dark);
+    --bg-color: var(--bg-locor-dark);
+    --bg-color-accent: var(--bg-color-accent-dark);
+    }
 
-  #todo-list li {
+    #todo-list li {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
+    }
 
-  #add-todo-form input[type="text"], #add-todo-form textarea, #add-todo-form button {
+    #add-todo-form input[type="text"], #add-todo-form textarea, #add-todo-form button {
     border: 1px solid #666;
-  }
+    }
 
-  #add-todo-form button {
-    background-color: #008000;
-  }
+    #add-todo-form button {
+    background-color: #1b831b;
+    }
 
-  #add-todo-form button:hover {
-    background-color: #006400;
-  }
+    #add-todo-form button:hover {
+    background-color: #19a219;
+    }
 
-  footer {
+    footer {
     background-color: #444;
-  }
-  
-  input, textarea {
+    }
+
+    input, textarea {
     color: var(--text-color);
     background-color: var(--bg-color-accent);
-  }
-
+    }
 }

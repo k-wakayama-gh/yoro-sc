@@ -101,6 +101,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     return encoded_jwt
 
 
+
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -150,5 +151,15 @@ async def read_users_me(current_user: Annotated[User, Depends(get_current_active
 @router.get("/users/me/items/")
 async def read_own_items(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
     return [{"item_id": "Foo", "owner": current_user.username}]
+
+
+# refresh the expiring limit of access token
+@router.post("/token/refresh", response_model=Token)
+async def refresh_token(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
+    username = current_user.username
+    if username is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="authorization error")
+    new_access_token = create_access_token(data={"sub": username}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    return {"access_token": new_access_token, "token_type": "bearer"}
 
 

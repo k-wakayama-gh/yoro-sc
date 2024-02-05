@@ -14,7 +14,11 @@
 <body>
     <div id="app">
         <header>
+            <section id="login-status-section">
+                <p>Not loged in</p>
+            </section>
             <section id="login-form-section">
+                <!-- login form -->
                 <form id="login-form" class="" action="/token" method="post">
                     <!-- ユーザー名とパスワードの入力 -->
                     <input type="text" name="username" placeholder="Username">
@@ -31,6 +35,7 @@
             <section id="todo-list-section">
                 <h1>ToDo List</h1>
                 
+                <!-- dummy todos before loading data -->
                 <ul id="todo-list">
                     <li class="dummy-todo-li"></li>
                     <li class="dummy-todo-li"></li>
@@ -40,13 +45,14 @@
             </section>
             
             <section id="add-todo-form-section">
-                    <!-- 新しいToDoを追加するフォーム -->
-            <h2>Add a new ToDo</h2>
-            <form id="add-todo-form" action="/todos" method="post">
-                <input type="text" id="title" name="title" placeholder="Title" required>
-                <textarea id="content" name="content" placeholder="Content" oninput="autoResize(this)"></textarea>
-                <button id="add-todo-form-btn" type="submit">Add ToDo</button>
-            </form>
+                <h2>Add a new ToDo</h2>
+
+                <!-- 新しいToDoを追加するフォーム -->
+                <form id="add-todo-form" action="/todos" method="post">
+                    <input type="text" id="title" name="title" placeholder="Title" required>
+                    <textarea id="content" name="content" placeholder="Content" oninput="autoResize(this)"></textarea>
+                    <button id="add-todo-form-btn" type="submit">Add ToDo</button>
+                </form>
             </section>
         </main>
         

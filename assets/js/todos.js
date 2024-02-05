@@ -6,13 +6,13 @@ async function fetchTodos() {
         const token = loadAccessToken();
         const response = await fetch("/my/todos/json", {
             method: "GET",
-            headers: {"Authorization": "Bearer " + token},
-            contentType: "application/json",
+            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
         });
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         };
         const todos = await response.json();
+        console.log("success: fetching todo list");
         return todos;
     } catch (error) {
         console.error("Error fetching data:", error);
@@ -58,7 +58,8 @@ function displayTodos(todos) {
         `;
         todoList.insertAdjacentHTML("beforeend", listItem);
     });
-}
+    console.log("rendered todo list")
+};
 
 
 // function: fetch and render todo list data and attach event listeners
@@ -81,6 +82,7 @@ function attachEventListeners() {
 
 // fetch and render todo list on loading this page
 document.addEventListener("DOMContentLoaded", function () {
+    // refreshToken();
     fetchAndDisplayTodos();
 });
 
@@ -325,3 +327,29 @@ function loadAccessToken() {
         return [];
     }
 };
+
+
+
+// refresh access token
+async function refreshToken() {
+    const token = loadAccessToken();
+    if (token) {
+        try {
+            const response = await fetch("/token/refresh", {
+                method: "POST",
+                headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const { new_access_token } = await response.json();
+            localStorage.setItem("accessToken", new_access_token);
+            console.log("refreshed access token")
+        } catch (error) {
+            console.error("error refreshing token:", error)
+        }
+    }
+};
+
