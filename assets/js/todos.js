@@ -230,6 +230,7 @@ function deleteTodoEventListeners() {
 // create: add todo from
 document.getElementById("add-todo-form").addEventListener("submit", async function(event) {
     event.preventDefault(); // フォームのデフォルトの送信を停止
+    document.querySelector("#add-todo-form-btn").style.pointerEvents = "none";
 
     // フォームのデータを取得
     const formData = new FormData(document.getElementById("add-todo-form"));
@@ -258,6 +259,7 @@ document.getElementById("add-todo-form").addEventListener("submit", async functi
     // clear form after sending data
     document.querySelector("#title").value = "";
     document.querySelector("#content").value = "";
+    document.querySelector("#add-todo-form-btn").style.pointerEvents = "auto";
 });
 
 
@@ -283,10 +285,12 @@ loginForm.addEventListener('submit', async (event) => {
         const { access_token } = await response.json();
         // トークンをlocalStorageに保存
         localStorage.setItem('accessToken', access_token);
-        alert('ログイン成功');
+        
+        location.reload();
+        // alert('ログイン成功');
         // console.log('ログイン成功');
     } else {
-        alert('ログイン失敗');
+        alert('failed login');
     }
 });
 
