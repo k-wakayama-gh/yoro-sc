@@ -54,11 +54,13 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 
+# verify password with hashed password
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 
 
+# def: make hashed password
 def get_hashed_password(password):
     return pwd_context.hash(password)
 
@@ -70,6 +72,8 @@ def get_hashed_password(password):
 #         return UserInDB(**user_dict)
 
 
+
+# def: get user by username
 def get_user(username: str):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.username == username)).first()
@@ -80,6 +84,7 @@ def get_user(username: str):
 # with Session...を使う場合は、argumentは検索用のusernameひとつでいい。
 
 
+# def: verify username and password
 def authenticate_user(username: str, password: str):
     user = get_user(username)
     if not user:
@@ -90,6 +95,7 @@ def authenticate_user(username: str, password: str):
 
 
 
+# def: create access token expecting {"sub": username} and expiring time
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
     if expires_delta:
@@ -102,6 +108,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 
 
 
+# def: get user information from access token
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -123,6 +130,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
 
 
+# def: eliminate inactive user
 async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
@@ -130,7 +138,7 @@ async def get_current_active_user(current_user: Annotated[User, Depends(get_curr
 
 
 
-
+# login to get access token by sending username and password as a form data
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     user = authenticate_user(form_data.username, form_data.password)
@@ -153,13 +161,13 @@ async def read_own_items(current_user: Annotated[UserRead, Depends(get_current_a
     return [{"item_id": "Foo", "owner": current_user.username}]
 
 
-# refresh the expiring limit of access token
-@router.post("/token/refresh", response_model=Token)
-async def refresh_token(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
-    username = current_user.username
-    if username is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="authorization error")
-    new_access_token = create_access_token(data={"sub": username}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-    return {"access_token": new_access_token, "token_type": "bearer"}
+# # refresh the expiring limit of access token
+# @router.post("/token/refresh", response_model=Token)
+# async def refresh_token(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
+#     username = current_user.username
+#     if username is None:
+#         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="authorization error")
+#     new_access_token = create_access_token(data={"sub": username}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+#     return {"access_token": new_access_token, "token_type": "bearer"}
 
 

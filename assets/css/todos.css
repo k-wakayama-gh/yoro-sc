@@ -190,6 +190,11 @@ textarea {
 }
 
 
+.todo-list-content {
+    white-space: pre-wrap;
+}
+
+
 /* レスポンシブデザイン */
 @media (min-width: 1080px) {
     /* PC向けのスタイル */

@@ -31,7 +31,7 @@ function displayTodos(todos) {
         const listItem = `
             <li>
                 <strong>${todo.title}</strong>
-                ${todo.content ? `<p>${todo.content}</p>` : ''}
+                ${todo.content ? `<p class="todo-list-content">${todo.content}</p>` : ''}
                 <p>Status: ${todo.is_done ? 'Done' : 'Pending'}</p>
                 <section class="todo-action-section">
                     <!-- Pending状態変更ボタン -->
