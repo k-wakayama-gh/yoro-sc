@@ -45,8 +45,11 @@ def load_db():
 
 def save_db():
     if env in os.environ:
-        shutil.copy(local_db, remote_db)
-        print(f"Copyed {local_db} to {remote_db}")
+        try:
+            shutil.copy(local_db, remote_db)
+            print(f"Copyed {local_db} to {remote_db}")
+        except:
+            print("Source file not found")
     else:
         pass
 
