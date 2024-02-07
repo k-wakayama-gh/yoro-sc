@@ -15,7 +15,7 @@ async function fetchTodos() {
         console.log("success: fetching todo list");
         return todos;
     } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("fetchTodos", error);
         return [];
     }
 };
@@ -82,7 +82,6 @@ function attachEventListeners() {
 
 // fetch and render todo list on loading this page
 document.addEventListener("DOMContentLoaded", function () {
-    // refreshToken();
     fetchAndDisplayTodos();
 });
 
@@ -284,15 +283,17 @@ loginForm.addEventListener('submit', async (event) => {
     });
 
     if (response.ok) {
-        const { access_token } = await response.json();
         // トークンをlocalStorageに保存
+        const { access_token } = await response.json();
         localStorage.setItem('accessToken', access_token);
+
+        localStorage.setItem("username", username);
         
         location.reload();
         // alert('ログイン成功');
-        // console.log('ログイン成功');
+        console.log('success: login');
     } else {
-        alert('failed login');
+        alert('failed: login');
     }
 });
 
@@ -302,7 +303,10 @@ const logoutBtn = document.getElementById('logout-btn');
 logoutBtn.addEventListener('click', async (event) => {
     event.preventDefault();
     localStorage.removeItem('accessToken');
-    alert("logout");
+
+    localStorage.removeItem("username");
+    console.log("success: logout");
+    alert("success: logout");
     }
 );
 
@@ -330,26 +334,26 @@ function loadAccessToken() {
 
 
 
-// refresh access token
-async function refreshToken() {
-    const token = loadAccessToken();
-    if (token) {
-        try {
-            const response = await fetch("/token/refresh", {
-                method: "POST",
-                headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            
-            const { new_access_token } = await response.json();
-            localStorage.setItem("accessToken", new_access_token);
-            console.log("refreshed access token")
-        } catch (error) {
-            console.error("error refreshing token:", error)
-        }
+
+async function getUserData() {
+    try {
+        const token = loadAccessToken();
+        const response = await fetch("/my/username", {
+            method: "GET",
+            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        };
+
+        const user = await response.json();
+
+        localStorage.setItem("username", user);
+        console.log("user: " + user);
+
+    } catch (error) {
+        console.error("getUserData", error);
     }
 };
+
 

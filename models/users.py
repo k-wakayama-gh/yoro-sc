@@ -55,6 +55,10 @@ class UserRead(UserBase):
     id: int
 
 
+# read: username
+class UserUsername(SQLModel):
+    username: str
+
 
 # update
 class UserUpdate(UserBase):

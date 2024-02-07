@@ -14,7 +14,7 @@ from passlib.context import CryptContext
 # my modules
 from database import engine, get_session
 from models.auth import Token, TokenData
-from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserInDB
+from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserInDB, UserUsername
 
 # FastAPI instance and API router
 app = FastAPI()
@@ -29,7 +29,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 1440
 
 
 # codes below 000000000000000000000000000000000000
@@ -159,6 +159,16 @@ async def read_users_me(current_user: Annotated[User, Depends(get_current_active
 @router.get("/users/me/items/")
 async def read_own_items(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
     return [{"item_id": "Foo", "owner": current_user.username}]
+
+
+
+# return username
+@router.get("/my/username")
+async def get_username(current_user: Annotated[User, Depends(get_current_active_user)]):
+    username = current_user.username
+    return username
+
+
 
 
 # # refresh the expiring limit of access token
