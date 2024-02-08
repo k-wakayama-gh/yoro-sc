@@ -1,25 +1,5 @@
 // todos.js
 
-// // function: get todo list data depending on user
-// async function fetchTodos() {
-//     try {
-//         const token = loadAccessToken();
-//         const response = await fetch("/my/todos/json", {
-//             method: "GET",
-//             headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
-//         });
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! Status: ${response.status}`);
-//         };
-//         const todos = await response.json();
-//         console.log("success: fetching todo list");
-//         return todos;
-//     } catch (error) {
-//         console.error("fetchTodos", error);
-//         return [];
-//     }
-// };
-
 
 // function: get todo list data depending on user
 async function fetchTodos() {
@@ -37,7 +17,7 @@ async function fetchTodos() {
         // throw new Error(`HTTP error! Status: ${response.status}`);
         renderOnLogout();
         console.error("error: fetchTodos()");
-        return [];
+        return []; // this.length == 0
     };
 };
 
@@ -381,11 +361,12 @@ async function getUserData() {
 
 
 // sign up form
-document.getElementById("sign-up-form").addEventListener("submit", function(event) {
+const signUpForm = document.getElementById("sign-up-form");
+signUpForm.addEventListener("submit", async function signUp(event) {
     event.preventDefault(); // prevent the default form sending
 
     // get the form data and define the sending data
-    const formData = new FormData(document.getElementById("sign-up-form"));
+    const formData = new FormData(signUpForm);
     
     const sendingData = {
         username: formData.get("username"),
@@ -393,7 +374,7 @@ document.getElementById("sign-up-form").addEventListener("submit", function(even
     };
     
     // send a post request to the endpoint
-    fetch("/users", {
+    await fetch("/users", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(sendingData)

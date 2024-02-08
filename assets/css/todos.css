@@ -113,7 +113,7 @@ main {
 }
 
 
-#dummy-todo-list-section > li {
+.dummy-todo-li {
     height: 9rem;
 }
 
