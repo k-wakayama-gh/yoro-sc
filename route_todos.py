@@ -164,6 +164,8 @@ async def create_my_todos(current_user: Annotated[UserRead, Depends(get_current_
     with session:
         new_todo = Todo.model_validate(todo_create)
         user = session.exec(select(User).where(User.username == current_user.username)).first()
+        if user is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
         user.todos.append(new_todo)
         session.add(user)
         session.commit()

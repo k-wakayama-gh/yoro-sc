@@ -10,10 +10,34 @@
     --bg-color-accent-dark: #1e1e1e;
 }
 
+h1, h2 {
+    color: var(--text-color);
+    text-align: center;
+}
+
 ul {
-    /* ulのデフォルト値をリセット：インデント用のマージンを消す */
+    /* remove default list style and the margin */
+    list-style: none;
     padding: 0;
     margin: 0;
+}
+
+input, textarea {
+    font-size: medium;
+}
+
+textarea {
+    resize: none;
+}
+
+button {
+    font-size: small;
+    cursor: pointer;
+}
+
+.space {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 body {
@@ -31,11 +55,30 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 0 2%; /* do not set width with padding here */
+    padding: 0 0.6rem; /* do not set width with this padding here */
     font-family: sans-serif;
     font-size: medium;
 }
 
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+    position: relative;
+}
+
+footer {
+    display: block;
+    padding: 1rem 0;
+    margin-top: 2rem;
+    width: 100vw;
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+/* subject to chagnge on responsible theme */
 main {
     display: flex;
     flex-direction: column;
@@ -44,18 +87,8 @@ main {
 }
 
 
-h1, h2 {
-    color: var(--text-color);
-    text-align: center;
-}
 
-
-input,
-textarea {
-    font-size: medium;
-}
-
-
+/* main contents below */
 #todo-list-section {
     display: flex;
     flex-direction: column;
@@ -70,41 +103,45 @@ textarea {
     list-style: none;
 }
 
-#todo-list li {
-    padding: 10px;
-    margin: 5px 0;
+
+#todo-list > li {
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: var(--bg-color-accent);
 }
 
-.dummy-todo-li {
+
+#dummy-todo-list-section > li {
     height: 9rem;
 }
+
 
 #add-todo-form-section {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 #add-todo-form {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    margin: 10px 0;
 }
 
-#add-todo-form input[type="text"],
+
+#add-todo-form input,
 #add-todo-form textarea,
 #add-todo-form button {
-    margin: 5px 0;
-    padding: 8px;
+    padding: 0.6rem;
+    margin-bottom: 0.6rem;
     border-radius: 5px;
     border: 1px solid #ccc;
-    min-width: 100%;
-    max-width: 100%;
-    box-sizing: border-box; /* ボックスモデルの設定 */
+    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
+    width: 100%;
 }
 
 #add-todo-form button {
@@ -122,42 +159,20 @@ textarea {
 }
 
 
-.hidden {
-    display: none;
+
+.todo-action-section button {
+    margin-right: 1rem;
 }
 
 
-footer {
-    display: block;
-    padding: 20px 0;
-    margin-top: 30px;
-    width: 100vw;
-    background-color: #333;
-    color: white;
-    text-align: center;
-}
-
-
-button {
-    cursor: pointer;
-}
-
-
-.toggle-status-btn,
-.edit-btn,
-.delete-btn,
-.confirm-edit-btn,
-.cancel-edit-btn,
-.confirm-delete-btn,
-.cancel-edit-btn {
-    margin-right: 6px;
+.edit-form {
+    margin-top: 1rem;
 }
 
 
 .edit-form input {
-    margin-top: 16px;
-    margin-bottom: 10px;
-    padding: 8px;
+    padding: 0.6rem;
+    margin-bottom: 0.6rem;
     border-radius: 5px;
     border: 1px solid #ccc;
     min-width: 100%;
@@ -166,8 +181,8 @@ button {
 }
 
 .edit-form textarea {
-    margin-bottom: 10px;
-    padding: 8px;
+    padding: 0.6rem;
+    margin-bottom: 0.4rem;
     border-radius: 5px;
     border: 1px solid #ccc;
     min-width: 100%;
@@ -185,13 +200,79 @@ button {
 }
 
 
-textarea {
-    resize: none;
+#login-form > input {
+    padding: 8px;
+    margin: 1% 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
+    width: 60%;
 }
+
+
+#login-btn {
+    background-color: #4c99af;
+    color: white;
+    border: none;
+    pointer-events: auto;
+    margin: 2% 0;
+    padding: 2%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    width: 60%;
+}
+
+#login-btn:hover {
+    background-color: #236180;
+}
+
+
+#sign-up-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+#sign-up-form > input {
+    padding: 8px;
+    margin: 1% 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
+    width: 60%;
+}
+
+
+
+#sign-up-btn {
+    background-color: #4c99af;
+    color: white;
+    border: none;
+    pointer-events: auto;
+    margin: 2% 0;
+    padding: 2%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    width: 60%;
+}
+
+#sign-up-btn:hover {
+    background-color: #236180;
+}
+
 
 
 .todo-list-content {
     white-space: pre-wrap;
+}
+
+
+.hidden {
+    display: none;
 }
 
 
@@ -211,19 +292,19 @@ textarea {
     --bg-color-accent: var(--bg-color-accent-dark);
     }
 
-    #todo-list li {
+    #todo-list > li {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
-    #add-todo-form input[type="text"], #add-todo-form textarea, #add-todo-form button {
+    #add-todo-form > input, #add-todo-form > textarea, #add-todo-form > button {
     border: 1px solid #666;
     }
 
-    #add-todo-form button {
+    #add-todo-form > button {
     background-color: #1b831b;
     }
 
-    #add-todo-form button:hover {
+    #add-todo-form > button:hover {
     background-color: #19a219;
     }
 
@@ -236,3 +317,4 @@ textarea {
     background-color: var(--bg-color-accent);
     }
 }
+

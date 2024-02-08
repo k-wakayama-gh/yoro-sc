@@ -1,28 +1,51 @@
 // todos.js
 
+// // function: get todo list data depending on user
+// async function fetchTodos() {
+//     try {
+//         const token = loadAccessToken();
+//         const response = await fetch("/my/todos/json", {
+//             method: "GET",
+//             headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+//         });
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! Status: ${response.status}`);
+//         };
+//         const todos = await response.json();
+//         console.log("success: fetching todo list");
+//         return todos;
+//     } catch (error) {
+//         console.error("fetchTodos", error);
+//         return [];
+//     }
+// };
+
+
 // function: get todo list data depending on user
 async function fetchTodos() {
-    try {
-        const token = loadAccessToken();
-        const response = await fetch("/my/todos/json", {
-            method: "GET",
-            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        };
+    const token = loadAccessToken();
+    const response = await fetch("/my/todos/json", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+    });
+    if (response.ok) {
         const todos = await response.json();
-        console.log("success: fetching todo list");
+        renderOnLogin();
+        console.log("success: fetched todo list");
         return todos;
-    } catch (error) {
-        console.error("fetchTodos", error);
+    } else {
+        // throw new Error(`HTTP error! Status: ${response.status}`);
+        renderOnLogout();
+        console.error("error: fetchTodos()");
         return [];
-    }
+    };
 };
 
 
+
 // function: render and display todo list
-function displayTodos(todos) {
+async function displayTodos() {
+    const todos = await fetchTodos();
     const todoList = document.getElementById("todo-list");
     // clear the previous todo list
     todoList.textContent = "";
@@ -58,15 +81,9 @@ function displayTodos(todos) {
         `;
         todoList.insertAdjacentHTML("beforeend", listItem);
     });
-    console.log("rendered todo list")
-};
-
-
-// function: fetch and render todo list data and attach event listeners
-async function fetchAndDisplayTodos() {
-    const todos = await fetchTodos();
-    displayTodos(todos);
-    attachEventListeners();
+    if (todos.length !== 0) {
+        console.log("rendered todo list");
+    };
 };
 
 
@@ -80,7 +97,15 @@ function attachEventListeners() {
 
 
 
-// fetch and render todo list on loading this page
+// function: fetch and render todo list data and attach event listeners
+async function fetchAndDisplayTodos() {
+    await displayTodos();
+    attachEventListeners();
+};
+
+
+
+// on loading page: fetch and render todo list
 document.addEventListener("DOMContentLoaded", function () {
     fetchAndDisplayTodos();
 });
@@ -115,11 +140,11 @@ function toggleIsDoneEventListeners() {
                 is_done: !currentIsDone
             };
             
-            console.log('fetching data...');
+            console.log("fetching data...");
             await toggleIsDone(todoId, sendingData);
 
             fetchAndDisplayTodos();
-            console.log('rendered data.');
+            console.log("success: rendered data.");
         });
     });
 };
@@ -229,9 +254,9 @@ function deleteTodoEventListeners() {
 
 
 // create: add todo from
-document.getElementById("add-todo-form").addEventListener("submit", async function(event) {
-    event.preventDefault(); // フォームのデフォルトの送信を停止
-    document.querySelector("#add-todo-form-btn").style.pointerEvents = "none";
+document.getElementById("add-todo-form").addEventListener("submit", async function addTodo(event) {
+    event.preventDefault(); // prevent default form submit
+    document.querySelector("#add-todo-form-btn").style.pointerEvents = "none"; // prevent double submit
 
     // フォームのデータを取得
     const formData = new FormData(document.getElementById("add-todo-form"));
@@ -260,6 +285,7 @@ document.getElementById("add-todo-form").addEventListener("submit", async functi
     // clear form after sending data
     document.querySelector("#title").value = "";
     document.querySelector("#content").value = "";
+    // reactivate submit button
     document.querySelector("#add-todo-form-btn").style.pointerEvents = "auto";
 });
 
@@ -268,7 +294,7 @@ document.getElementById("add-todo-form").addEventListener("submit", async functi
 
 // ログインフォーム
 const loginForm = document.getElementById('login-form');
-loginForm.addEventListener('submit', async (event) => {
+loginForm.addEventListener('submit', async function login(event) {
     event.preventDefault();
     
     const formData = new FormData(loginForm);
@@ -286,7 +312,6 @@ loginForm.addEventListener('submit', async (event) => {
         // トークンをlocalStorageに保存
         const { access_token } = await response.json();
         localStorage.setItem('accessToken', access_token);
-
         localStorage.setItem("username", username);
         
         location.reload();
@@ -303,10 +328,10 @@ const logoutBtn = document.getElementById('logout-btn');
 logoutBtn.addEventListener('click', async (event) => {
     event.preventDefault();
     localStorage.removeItem('accessToken');
-
     localStorage.removeItem("username");
     console.log("success: logout");
     alert("success: logout");
+    location.reload();
     }
 );
 
@@ -336,24 +361,75 @@ function loadAccessToken() {
 
 
 async function getUserData() {
-    try {
-        const token = loadAccessToken();
-        const response = await fetch("/my/username", {
-            method: "GET",
-            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        };
-
+    const token = loadAccessToken();
+    const response = await fetch("/my/username", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+    });
+    if (response.ok) {
         const user = await response.json();
-
         localStorage.setItem("username", user);
         console.log("user: " + user);
-
-    } catch (error) {
+        return user;
+    } else {
+        // throw new Error(`HTTP error! Status: ${response.status}`);
         console.error("getUserData", error);
-    }
+        return [];
+    };
+};
+
+
+
+// sign up form
+document.getElementById("sign-up-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // prevent the default form sending
+
+    // get the form data and define the sending data
+    const formData = new FormData(document.getElementById("sign-up-form"));
+    
+    const sendingData = {
+        username: formData.get("username"),
+        plain_password: formData.get("password")
+    };
+    
+    // send a post request to the endpoint
+    fetch("/users", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(sendingData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("success: create a new account", data);
+        location.reload();
+    })
+    .catch((error) => {
+        console.error("error: create a new account", error);
+    });
+});
+
+
+
+// switch rendering depending on login status
+function renderOnLogout () {
+    document.querySelectorAll(".on-login").forEach((x) => {
+        x.classList.add("hidden");
+    });
+    document.querySelectorAll(".on-logout").forEach((x) => {
+        x.classList.remove("hidden");
+    });
+};
+
+
+
+// switch rendering depending on login status
+function renderOnLogin () {
+    document.querySelectorAll(".on-login").forEach((x) => {
+        x.classList.remove("hidden");
+    });
+    document.querySelectorAll(".on-logout").forEach((x) => {
+        x.classList.add("hidden");
+    });
 };
 
 
