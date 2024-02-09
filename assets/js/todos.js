@@ -10,14 +10,14 @@ async function fetchTodos() {
     });
     if (response.ok) {
         const todos = await response.json();
-        renderOnLogin();
         console.log("success: fetched todo list");
+        renderOnLogin();
         return todos;
     } else {
         // throw new Error(`HTTP error! Status: ${response.status}`);
-        renderOnLogout();
         console.error("error: fetchTodos()");
-        return []; // this.length == 0
+        renderOnLogout();
+        return []; // empty <=> length == 0
     };
 };
 
@@ -86,8 +86,9 @@ async function fetchAndDisplayTodos() {
 
 
 // on loading page: fetch and render todo list
-document.addEventListener("DOMContentLoaded", function () {
-    fetchAndDisplayTodos();
+document.addEventListener("DOMContentLoaded", async function () {
+    setDarkMode();
+    await fetchAndDisplayTodos();
 });
 
 
@@ -112,9 +113,9 @@ async function toggleIsDone(todoId, sendingData) {
 // function: attach toggle is_done event listeners
 function toggleIsDoneEventListeners() {
     document.querySelectorAll(".toggle-status-btn").forEach(button => {
-        button.addEventListener("click", async function(event) {
+        button.addEventListener("click", async function () {
             const todoId = this.dataset.todoId;
-            const currentIsDone = this.dataset.isDone === "true" ? true : false; // small letter "true" !!
+            const currentIsDone = this.dataset.isDone === "true" ? true : false; // small letter "true"
 
             const sendingData = {
                 is_done: !currentIsDone
@@ -151,14 +152,14 @@ async function patchTodo(todoId, sendingData) {
 // function: event listeners for "patchTodo" 
 function patchTodoEventListeners() {
     document.querySelectorAll(".edit-btn").forEach(button => {
-        button.addEventListener("click", function(event) {
+        button.addEventListener("click", function () {
             const todoId = this.dataset.todoId;
             const editForm = document.querySelector(`.edit-form[data-todo-id="${todoId}"]`);
 
             editForm.classList.toggle("hidden");
             
             // send patch request and refresh on click "Save" button
-            editForm.querySelector(".confirm-edit-btn").addEventListener("click", async function() {
+            editForm.querySelector(".confirm-edit-btn").addEventListener("click", async function () {
                 const newTitle = editForm.querySelector(".edit-title").value;
                 const newContent = editForm.querySelector(".edit-content").value;
                 
@@ -177,7 +178,7 @@ function patchTodoEventListeners() {
             });
 
             // hide this edit form on click "Cancel" button
-            editForm.querySelector(".cancel-edit-btn").addEventListener("click", function() {
+            editForm.querySelector(".cancel-edit-btn").addEventListener("click", function () {
                 editForm.classList.add("hidden");
             });
         });
@@ -206,14 +207,14 @@ async function deleteTodo(todoId) {
 // function: event listeners for "deleteTodo"
 function deleteTodoEventListeners() {
     document.querySelectorAll(".delete-btn").forEach(button => {
-        button.addEventListener("click", function(event) {
+        button.addEventListener("click", function () {
             const todoId = this.dataset.todoId;
             const deleteForm = document.querySelector(`.delete-form[data-todo-id="${todoId}"]`);
 
             deleteForm.classList.toggle("hidden");
             
             // send delete request and refresh on click "Confirm" button
-            deleteForm.querySelector(".confirm-delete-btn").addEventListener("click", async function() {
+            deleteForm.querySelector(".confirm-delete-btn").addEventListener("click", async function () {
                 
                 console.log('fetching data...');
                 await deleteTodo(todoId);
@@ -223,7 +224,7 @@ function deleteTodoEventListeners() {
             });
 
             // hide this confirmation message on click "Cancel" button
-            deleteForm.querySelector(".cancel-delete-btn").addEventListener("click", function() {
+            deleteForm.querySelector(".cancel-delete-btn").addEventListener("click", () => {
                 deleteForm.classList.add("hidden");
             });
         });
@@ -234,7 +235,7 @@ function deleteTodoEventListeners() {
 
 
 // create: add todo from
-document.getElementById("add-todo-form").addEventListener("submit", async function addTodo(event) {
+document.getElementById("add-todo-form").addEventListener("submit", async function (event) {
     event.preventDefault(); // prevent default form submit
     document.querySelector("#add-todo-form-btn").style.pointerEvents = "none"; // prevent double submit
 
@@ -272,10 +273,10 @@ document.getElementById("add-todo-form").addEventListener("submit", async functi
 
 
 
-// ログインフォーム
-const loginForm = document.getElementById('login-form');
-loginForm.addEventListener('submit', async function login(event) {
+// login form
+document.getElementById('login-form').addEventListener('submit', async function (event) {
     event.preventDefault();
+    const loginForm = document.getElementById('login-form');
     
     const formData = new FormData(loginForm);
     const username = formData.get('username');
@@ -289,8 +290,7 @@ loginForm.addEventListener('submit', async function login(event) {
     });
 
     if (response.ok) {
-        // トークンをlocalStorageに保存
-        const { access_token } = await response.json();
+        const { access_token } = await response.json(); // { access_token } <=> response.access_token
         localStorage.setItem('accessToken', access_token);
         localStorage.setItem("username", username);
         
@@ -298,14 +298,14 @@ loginForm.addEventListener('submit', async function login(event) {
         // alert('ログイン成功');
         console.log('success: login');
     } else {
-        alert('failed: login');
+        alert("error: login");
     }
 });
 
 
-// ログアウト
+// logout
 const logoutBtn = document.getElementById('logout-btn');
-logoutBtn.addEventListener('click', async (event) => {
+logoutBtn.addEventListener('click', async function (event) {
     event.preventDefault();
     localStorage.removeItem('accessToken');
     localStorage.removeItem("username");
@@ -339,7 +339,7 @@ function loadAccessToken() {
 
 
 
-
+// 使用しない
 async function getUserData() {
     const token = loadAccessToken();
     const response = await fetch("/my/username", {
@@ -361,9 +361,9 @@ async function getUserData() {
 
 
 // sign up form
-const signUpForm = document.getElementById("sign-up-form");
-signUpForm.addEventListener("submit", async function signUp(event) {
+document.getElementById("sign-up-form").addEventListener("submit", async function (event) {
     event.preventDefault(); // prevent the default form sending
+    const signUpForm = document.getElementById("sign-up-form");
 
     // get the form data and define the sending data
     const formData = new FormData(signUpForm);
@@ -391,7 +391,7 @@ signUpForm.addEventListener("submit", async function signUp(event) {
 
 
 
-// switch rendering depending on login status
+// switch rendering depending on login status: logout
 function renderOnLogout () {
     document.querySelectorAll(".on-login").forEach((x) => {
         x.classList.add("hidden");
@@ -403,7 +403,7 @@ function renderOnLogout () {
 
 
 
-// switch rendering depending on login status
+// switch rendering depending on login status: login
 function renderOnLogin () {
     document.querySelectorAll(".on-login").forEach((x) => {
         x.classList.remove("hidden");
@@ -412,5 +412,62 @@ function renderOnLogin () {
         x.classList.add("hidden");
     });
 };
+
+
+// function isDarkMode() {
+//     const isDarkMode = localStorage.getItem("isDarkMode");
+//     return isDarkMode;
+// };
+
+
+// function: set dark mode adaptively
+function setDarkMode() {
+    const isDarkMode = localStorage.getItem("isDarkMode");
+
+    if (isDarkMode === "true") {
+        document.body.classList.add("dark-mode");
+        console.log("success: set dark mode");
+    } else if (isDarkMode === "false") {
+        // pass
+        console.log("success: set light mode");
+    } else {
+        adaptiveDarkMode();
+    };
+};
+
+
+// lemma: function for setDarkMode()
+function adaptiveDarkMode() {
+    const isDarkMode = window.matchMedia("(prefers-color-scheme:dark)").matches;
+
+    if (isDarkMode === true) {
+        document.body.classList.add("dark-mode");
+        localStorage.setItem("isDarkMode", true);
+        console.log("success: saved dark mode");
+    } else if (isDarkMode === false) {
+        localStorage.setItem("isDarkMode", false);
+        console.log("success: saved light mode");
+    };
+};
+
+
+// switch dark mode and light mode
+function toggleDarkMode() {
+    const isDarkMode = document.body.classList.contains("dark-mode");
+
+    if (isDarkMode) {
+        document.body.classList.remove("dark-mode");
+        localStorage.setItem("isDarkMode", false);
+    } else if (!isDarkMode) {
+        document.body.classList.add("dark-mode");
+        localStorage.setItem("isDarkMode", true);
+    };
+};
+
+
+// event listener to toggleDarkMode()
+document.getElementById("toggle-dark-mode-btn").addEventListener("click", function () {
+    toggleDarkMode();
+});
 
 

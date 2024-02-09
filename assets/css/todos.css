@@ -2,38 +2,24 @@
 
 :root {
     --text-color: #333;
-    --bg-color: #f9f9f9;
+    --bg-color: #f4f4f4;
     --bg-color-accent: #fff;
-    /* dark theme */
-    --text-color-dark: #f0f0f0;
-    --bg-locor-dark: #141414;
-    --bg-color-accent-dark: #1e1e1e;
+    --border-form: 1px solid #ccc;
+    --btn-green: #45a049;
+    --btn-green-hover: #4CAF50;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
-    color: var(--text-color);
-    text-align: center;
+.dark-mode {
+    --text-color: #f0f0f0;
+    --bg-color: #161616;
+    --bg-color-accent: #1e1e1e;
+    --border-form: 1px solid #888888;
+    --btn-green: #1b831b;
+    --btn-green-hover: #19a219;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-ul {
-    /* remove default list style and the margin */
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-input, textarea {
-    font-size: medium;
-}
-
-textarea {
-    resize: none;
-}
-
-button {
-    font-size: small;
-    cursor: pointer;
-}
 
 .space {
     margin-top: 1rem;
@@ -52,6 +38,36 @@ button {
     justify-content: flex-start;
 }
 
+h1, h2 {
+    color: var(--text-color);
+    text-align: center;
+}
+
+ul {
+    /* remove default list styles and the margin on the left */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+input, textarea {
+    font-size: medium;
+    color: var(--text-color);
+    background-color: var(--bg-color-accent);
+    border: var(--border-form);
+    border-radius: 5px;
+    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
+}
+
+textarea {
+    resize: none;
+    font-family: inherit;
+}
+
+button {
+    font-size: small;
+    cursor: pointer;
+}
 
 body {
     padding: 0;
@@ -83,11 +99,10 @@ footer {
     text-align: center;
 }
 
-/* subject to chagnge on responsible theme */
+/* main width: subject to chagnge on responsive design */
 main {
     width: 100%;
 }
-
 
 
 /* main contents below */
@@ -97,8 +112,13 @@ main {
     padding: 0.8rem;
     margin-bottom: 0.8rem;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
     background-color: var(--bg-color-accent);
+}
+
+
+.todo-list-content {
+    white-space: pre-wrap;
 }
 
 
@@ -107,43 +127,31 @@ main {
 }
 
 /* classによるスタイルはidによるスタイルで上書きされる */
-/*
-#add-todo-form-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-*/
-/*
-#add-todo-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-*/
+
 
 #add-todo-form > input,
-#add-todo-form > textarea,
+#add-todo-form > textarea {
+    padding: 0.6rem;
+    margin: 0.4rem 0;
+    width: 100%;
+}
+
 #add-todo-form > button {
     padding: 0.6rem;
     margin: 0.4rem 0;
+    border: var(--border-form);
     border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
     width: 100%;
 }
 
 #add-todo-form-btn {
-    background-color: #4CAF50;
+    background-color: var(--btn-green);
     color: white;
-    border: none;
     pointer-events: auto;
 }
 
 #add-todo-form-btn:hover {
-    background-color: #45a049;
+    background-color: var(--btn-green-hover);
 }
 
 
@@ -161,19 +169,12 @@ main {
 .edit-form > input {
     padding: 0.6rem;
     margin-bottom: 0.6rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    min-width: 100%;
-    max-width: 100%;
-    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
+    width: 100%;
 }
 
 .edit-form > textarea {
     padding: 0.6rem;
     margin-bottom: 0.4rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
     width: 100%;
 }
 
@@ -185,11 +186,8 @@ main {
 
 
 #login-form > input {
-    padding: 8px;
-    margin: 1% 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
+    padding: 0.6rem; /* 0.5rem equals 8px if font size is 16px */
+    margin: 0.4rem 0;
     width: 60%;
 }
 
@@ -197,7 +195,6 @@ main {
 #login-btn {
     background-color: #4c99af;
     color: white;
-    border: none;
     pointer-events: auto;
     padding: 0.6rem;
     margin: 0.4rem 0;
@@ -220,9 +217,6 @@ main {
 #sign-up-form > input {
     padding: 0.6rem;
     margin: 0.4rem 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
     width: 60%;
 }
 
@@ -231,7 +225,6 @@ main {
 #sign-up-btn {
     background-color: #4c99af;
     color: white;
-    border: none;
     pointer-events: auto;
     padding: 0.6rem;
     margin: 0.4rem 0;
@@ -247,55 +240,24 @@ main {
 
 
 
-.todo-list-content {
-    white-space: pre-wrap;
-}
+/* fixed styles below */
 
-
+/* hidden must be last */
 .hidden {
     display: none;
 }
 
 
-/* レスポンシブデザイン */
+/* responsive design for PC */
 @media (min-width: 1080px) {
-    /* PC向けのスタイル */
     main {
-        width: 40%; /* PCサイズ向けに幅を調整 */
+        width: 40%;
     }
 }
 
-/* ダークモード */
+
+/* exceptional dark mode */
 @media (prefers-color-scheme: dark) {
-    :root {
-    --text-color: var(--text-color-dark);
-    --bg-color: var(--bg-locor-dark);
-    --bg-color-accent: var(--bg-color-accent-dark);
-    }
-
-    #todo-list > li {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    #add-todo-form > input, #add-todo-form > textarea, #add-todo-form > button {
-    border: 1px solid #666;
-    }
-
-    #add-todo-form > button {
-    background-color: #1b831b;
-    }
-
-    #add-todo-form > button:hover {
-    background-color: #19a219;
-    }
-
-    footer {
-    background-color: #444;
-    }
-
-    input, textarea {
-    color: var(--text-color);
-    background-color: var(--bg-color-accent);
-    }
+    /* pass */
 }
 
