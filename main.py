@@ -22,7 +22,7 @@ app.include_router(route_todos.router)
 
 
 # static files settings
-app.mount('/assets', StaticFiles(directory='assets'), name='static')
+app.mount('/static', StaticFiles(directory='static'), name='static')
 
 # create database on startup
 @app.on_event("startup")
