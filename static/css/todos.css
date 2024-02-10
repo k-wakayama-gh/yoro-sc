@@ -20,7 +20,6 @@
     --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
 .space {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -90,6 +89,11 @@ header {
     position: relative;
 }
 
+/* main width: subject to chagnge on responsive design */
+main {
+    width: 100%;
+}
+
 footer {
     padding: 1rem 0;
     margin-top: 2rem;
@@ -97,11 +101,6 @@ footer {
     background-color: #333;
     color: white;
     text-align: center;
-}
-
-/* main width: subject to chagnge on responsive design */
-main {
-    width: 100%;
 }
 
 
@@ -125,6 +124,7 @@ main {
 .dummy-todo-li {
     height: 9rem;
 }
+
 
 /* classによるスタイルはidによるスタイルで上書きされる */
 
@@ -161,10 +161,10 @@ main {
 }
 
 
+
 .edit-form {
     margin-top: 1rem;
 }
-
 
 .edit-form > input {
     padding: 0.6rem;
@@ -184,13 +184,11 @@ main {
     align-items: center;
 }
 
-
 #login-form > input {
     padding: 0.6rem; /* 0.5rem equals 8px if font size is 16px */
     margin: 0.4rem 0;
     width: 60%;
 }
-
 
 #login-btn {
     background-color: #4c99af;
@@ -213,14 +211,11 @@ main {
     align-items: center;
 }
 
-
 #sign-up-form > input {
     padding: 0.6rem;
     margin: 0.4rem 0;
     width: 60%;
 }
-
-
 
 #sign-up-btn {
     background-color: #4c99af;
@@ -239,13 +234,14 @@ main {
 }
 
 
+/* main contents above */
 
-/* fixed styles below */
 
 /* hidden must be last */
 .hidden {
     display: none;
 }
+
 
 
 /* responsive design for PC */

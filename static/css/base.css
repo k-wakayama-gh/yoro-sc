@@ -1,137 +1,223 @@
 /* base.css */
 
 :root {
-  --text-color: #333;
-  --bg-color: #f9f9f9;
-  --bg-color-accent: #fff;
+    --text-color: #333;
+    --bg-color: #f4f4f4;
+    --bg-color-accent: #fff;
+    --border-form: 1px solid #ccc;
+    --btn-green: #45a049;
+    --btn-green-hover: #4CAF50;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode {
+    --text-color: #f0f0f0;
+    --bg-color: #161616;
+    --bg-color-accent: #1e1e1e;
+    --border-form: 1px solid #888888;
+    --btn-green: #1b831b;
+    --btn-green-hover: #19a219;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.space {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.flex-row-around {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.flex-row-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+h1, h2 {
+    color: var(--text-color);
+    text-align: center;
+}
+
+ul {
+    /* remove default list styles and the margin on the left */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+input, textarea {
+    font-size: medium;
+    color: var(--text-color);
+    background-color: var(--bg-color-accent);
+    border: var(--border-form);
+    border-radius: 5px;
+    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
+}
+
+textarea {
+    resize: none;
+    font-family: inherit;
+}
+
+button {
+    font-size: small;
+    cursor: pointer;
 }
 
 body {
-  display: block;
-  margin: 0;
-  padding: 0;
-  overflow-y: scroll;
-  width: 100%;
-  color: var(--text-color);
-  background-color: var(--bg-color);
+    padding: 0;
+    margin: 0;
+    overflow-y: scroll;
+    width: 100%;
+    color: var(--text-color);
+    background-color: var(--bg-color);
 }
 
 #app {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0 2%; /* do not set width with padding here */
-  font-family: sans-serif;
-  font-size: medium;
-}
-
-#header-and-nav {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 100%;
+    align-items: center;
+    font-family: sans-serif;
+    font-size: medium;
 }
 
 header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-nav {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  width: 100%;
-}
-
-nav ul {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  list-style: none;
-  padding-left: 4%;
-}
-
-#aside-and-main {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
-}
-
-aside {
-  display: none; /* レスポンシブ：PCなら表示する */
-  flex-direction: column;
-  justify-content: flex-start;
-  flex-grow: 1;
-}
-
-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  flex-grow: 4;
-}
-
-section {
-  display: block;
-}
-
-article {
-  display: block;
+    width: 100%;
+    position: relative;
 }
 
 footer {
-  display: block;
-  margin-top: 20px;
-  padding: 10px 0;
-  width: 100vw;
-  text-align: center;
-}
-
-
-h1, h2, h3, h4, h5, h6, p {
-  color: var(--text-color);
-}
-
-
-.hidden {
-  display: none;
-}
-
-
-/* レスポンシブデザイン */
-@media (min-width: 1080px) {
-  /* PC向けのスタイル */
-  header {
-    justify-content: space-around;
-  }
-
-  nav ul {
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    list-style: none;
-    padding-left: 0;
+    padding: 1rem 0;
+    margin-top: 2rem;
     width: 100%;
-  }
-
-  nav ul li {
-    margin-right: 2%;
-  }
-  
-  aside {
-      display: flex;
-      flex-direction: column;
-      justify-content: start;
-  }
+    background-color: #333;
+    color: white;
+    text-align: center;
 }
 
+/* display on PC */
+aside {
+    display: none;
+    padding: 0.2rem;
+    margin: 0.2rem;
+    border: 1px solid #ccc;
+}
+
+/* main width: subject to chagnge on responsive design */
+main {
+    flex-grow: 4;
+    padding: 0.2rem;
+    margin: 0.2rem;
+    border: 1px solid #ccc;
+}
+
+#aside-and-main {
+    padding: 0 1rem; /* do not set width with this padding here */
+    width: 100%;
+}
+
+#login-form {
+    align-items: center;
+}
+
+
+#login-form > input {
+    padding: 0.6rem; /* 0.5rem equals 8px if font size is 16px */
+    margin: 0.4rem 0;
+    width: 60%;
+}
+
+
+#login-btn {
+    background-color: #4c99af;
+    color: white;
+    pointer-events: auto;
+    padding: 0.6rem;
+    margin: 0.4rem 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    width: 60%;
+}
+
+#login-btn:hover {
+    background-color: #236180;
+}
+
+
+#sign-up-form {
+    align-items: center;
+}
+
+
+#sign-up-form > input {
+    padding: 0.6rem;
+    margin: 0.4rem 0;
+    width: 60%;
+}
+
+
+
+#sign-up-btn {
+    background-color: #4c99af;
+    color: white;
+    pointer-events: auto;
+    padding: 0.6rem;
+    margin: 0.4rem 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    width: 60%;
+}
+
+#sign-up-btn:hover {
+    background-color: #236180;
+}
+
+
+
+/* fixed styles below */
+
+/* hidden must be last */
+.hidden {
+    display: none;
+}
+
+
+/* responsive design for PC */
+@media (min-width: 1080px) {
+    header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    aside {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex-grow: 1;
+    }
+}
+
+
+/* exceptional dark mode */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --text-color: #f9f9f9;
-    --bg-color: #333;
-  }
+    /* pass */
 }
+
