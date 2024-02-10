@@ -11,13 +11,13 @@
 <body>
     <div id="app" class="flex-column">
 
-        <header class="flex-row-between">
+        <header id="header" class="flex-row-between">
             <p>ロゴ</p>
             <p>検索</p>
             <p>メニュー</p>
         </header>
     
-        <nav id="nav">
+        <nav>
             <ul class="flex-row">
                 <li>メニュー１</li>
                 <li>メニュー２</li>
@@ -27,13 +27,15 @@
 
         <div id="aside-and-main" class="flex-row-around">
 
-            <aside>
+            <aside class="flex-column">
                 <h1>サイドバー</h1>
                 <p>サイドバー</p>
                 <p>サイドバー</p>
             </aside>
 
-            {% block content %}{% endblock content %}
+            <main id="main" class="flex-column">
+                {% block content %}{% endblock content %}
+            </main>
         </div>
         
         <footer id="footer">
