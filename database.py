@@ -11,7 +11,7 @@ env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
 
 db_file = 'database.sqlite'
 
-remote_db_dir = "/home/site/wwwroot/db_dir/"
+remote_db_dir = "/mount/db_dir/"
 
 if env in os.environ:
     if not os.path.exists(remote_db_dir):
@@ -40,8 +40,6 @@ def load_db():
             print(f"Copyed {remote_db} to {local_db}")
         except:
             print("Source file not found")
-    else:
-        pass
 
 def save_db():
     if env in os.environ:
@@ -50,8 +48,6 @@ def save_db():
             print(f"Copyed {local_db} to {remote_db}")
         except:
             print("Source file not found")
-    else:
-        pass
 
 
 db_connection = f'sqlite:///{local_db}'
