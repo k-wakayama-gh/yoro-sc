@@ -1,15 +1,13 @@
 # Git
-git remote add origin <URL>
 
+# First commit
 git remote add origin https://k-wakayama-gh:<ACCESSTOKEN>@github.com/k-wakayama-gh/fastapi_test.git
-
-# first commit
 git add .
 git commit -m "comment"
 git push -u origin main
 git push
 
-# second commit and later
+# Second commit and later
 git add .
 git commit -m "comment"
 git push

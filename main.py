@@ -35,7 +35,10 @@ def on_startup():
 
 @app.on_event("shutdown")
 def on_shutdown():
-    save_db()
+    try:
+        save_db()
+    except:
+        print("error: failed to save db")
 
 # run
 if __name__ == '__main__':
