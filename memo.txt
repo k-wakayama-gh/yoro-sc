@@ -1,4 +1,4 @@
-# Git
+# Git and GiuHub
 
 # First commit
 git remote add origin https://k-wakayama-gh:<ACCESSTOKEN>@github.com/k-wakayama-gh/fastapi_test.git
