@@ -21,12 +21,14 @@ else:
 # switch on database server and sqlite file
 if env_db in os.environ:
     db_connection_string = os.getenv(env_db)
+    connect_args={'check_same_thread': True}
 else:
     db_connection_string = f"sqlite:///{db_file}"
+    connect_args={'check_same_thread': False}
 
 
 # database settings
-engine = create_engine(db_connection_string, echo=False, connect_args={'check_same_thread': False})
+engine = create_engine(db_connection_string, echo=False, connect_args=connect_args)
 
 
 # def: create the database
