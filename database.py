@@ -40,6 +40,7 @@ remote_db = f"{remote_db_dir}{db_file}"
 local_db = db_file
 
 
+# load and save db in persist directory
 def make_remote_db_dir():
     if env in os.environ:
         if not os.path.exists(remote_db_dir):
@@ -49,21 +50,20 @@ def make_remote_db_dir():
             print(f"Directory {remote_db_dir} already exists.")
 
 
-# # load and save db
-# def load_db():
-#     make_remote_db_dir()
-#     if os.path.exists(remote_db_dir):
-#         shutil.copy(remote_db, local_db)
-#         print(f"Copyed {remote_db} to {local_db}")
-#     else:
-#         print("Remote directory not found")
+def load_db():
+    make_remote_db_dir()
+    if os.path.exists(remote_db_dir):
+        shutil.copy(remote_db, local_db)
+        print(f"Copyed {remote_db} to {local_db}")
+    else:
+        print("Remote directory not found")
 
 
-# def save_db():
-#     make_remote_db_dir()
-#     if os.path.exists(remote_db_dir):
-#         shutil.copy(local_db, remote_db)
-#         print(f"Copyed {local_db} to {remote_db}")
-#     else:
-#         print("Remote directory not found")
+def save_db():
+    make_remote_db_dir()
+    if os.path.exists(remote_db_dir):
+        shutil.copy(local_db, remote_db)
+        print(f"Copyed {local_db} to {remote_db}")
+    else:
+        print("Remote directory not found")
 
