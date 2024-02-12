@@ -6,28 +6,35 @@ import os
 import shutil
 
 
-# env1 = "IN_DOCKER_CONTAINER"
-env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
+# env_docker = "IN_DOCKER_CONTAINER"
+env_mount = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
+env_db = "DB_CONNECTION_STRING"
 
 
-if env in os.environ:
+# switch on production and development
+if env_mount in os.environ:
     db_file = "/home/site/wwwroot/db_dir/database.sqlite"
 else:
     db_file = "database.sqlite"
 
 
-db_connection = f"sqlite:///{db_file}"
+# switch on database server and sqlite file
+if env_db in os.environ:
+    db_connection_string = os.getenv(env_db)
+else:
+    db_connection_string = f"sqlite:///{db_file}"
 
 
 # database settings
-engine = create_engine(db_connection, echo=False, connect_args={'check_same_thread': False})
+engine = create_engine(db_connection_string, echo=False, connect_args={'check_same_thread': False})
 
 
-# def : create the database
+# def: create the database
 def create_database():
     SQLModel.metadata.create_all(engine)
 
 
+# def: database session for dependency injection
 def get_session():
     with Session(engine) as session:
         yield session
@@ -42,7 +49,7 @@ local_db = db_file
 
 # load and save db in persist directory
 def make_remote_db_dir():
-    if env in os.environ:
+    if env_mount in os.environ:
         if not os.path.exists(remote_db_dir):
             os.makedirs(remote_db_dir)
             print(f"Directory {remote_db_dir} has been created.")
