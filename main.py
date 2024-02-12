@@ -27,18 +27,11 @@ app.mount('/static', StaticFiles(directory='static'), name='static')
 # create database on startup
 @app.on_event("startup")
 def on_startup():
-    try:
-        load_db()
-    except:
-        print("error: failed to load db")
     create_database()
 
 @app.on_event("shutdown")
 def on_shutdown():
-    try:
-        save_db()
-    except:
-        print("error: failed to save db")
+    pass
 
 # run
 if __name__ == '__main__':

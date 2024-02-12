@@ -9,44 +9,14 @@ import shutil
 # env1 = "IN_DOCKER_CONTAINER"
 env = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
 
-db_file = 'database.sqlite'
 
-remote_db_dir = "/home/site/wwwroot/db_dir/"
-
-local_db = db_file
-remote_db = f"{remote_db_dir}{db_file}"
-
-
-def make_remote_db_dir():
-    if env in os.environ:
-        if not os.path.exists(remote_db_dir):
-            os.makedirs(remote_db_dir)
-            print(f"Directory {remote_db_dir} has been created.")
-        else:
-            print(f"Directory {remote_db_dir} already exists.")
+if env in os.environ:
+    db_file = "/home/site/wwwroot/db_dir/database.sqlite"
+else:
+    db_file = "database.sqlite"
 
 
-# load and save db
-def load_db():
-    make_remote_db_dir()
-    if os.path.exists(remote_db_dir):
-        shutil.copy(remote_db, local_db)
-        print(f"Copyed {remote_db} to {local_db}")
-    else:
-        print("Remote directory not found")
-
-
-def save_db():
-    make_remote_db_dir()
-    if os.path.exists(remote_db_dir):
-        shutil.copy(local_db, remote_db)
-        print(f"Copyed {local_db} to {remote_db}")
-    else:
-        print("Remote directory not found")
-
-
-
-db_connection = f'sqlite:///{local_db}'
+db_connection = f"sqlite:///{db_file}"
 
 
 # database settings
@@ -62,4 +32,38 @@ def get_session():
     with Session(engine) as session:
         yield session
 
+
+
+
+remote_db_dir = "/home/site/wwwroot/db_dir/"
+remote_db = f"{remote_db_dir}{db_file}"
+local_db = db_file
+
+
+def make_remote_db_dir():
+    if env in os.environ:
+        if not os.path.exists(remote_db_dir):
+            os.makedirs(remote_db_dir)
+            print(f"Directory {remote_db_dir} has been created.")
+        else:
+            print(f"Directory {remote_db_dir} already exists.")
+
+
+# # load and save db
+# def load_db():
+#     make_remote_db_dir()
+#     if os.path.exists(remote_db_dir):
+#         shutil.copy(remote_db, local_db)
+#         print(f"Copyed {remote_db} to {local_db}")
+#     else:
+#         print("Remote directory not found")
+
+
+# def save_db():
+#     make_remote_db_dir()
+#     if os.path.exists(remote_db_dir):
+#         shutil.copy(local_db, remote_db)
+#         print(f"Copyed {local_db} to {remote_db}")
+#     else:
+#         print("Remote directory not found")
 
