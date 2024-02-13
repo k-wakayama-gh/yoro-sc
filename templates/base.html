@@ -11,31 +11,69 @@
 <body>
     <div id="app" class="flex-column">
 
-        <header id="header" class="flex-row-between">
-            <p>ロゴ</p>
-            <p>検索</p>
-            <p>メニュー</p>
+        <header id="header">
+            <section id="header-section" class="flex-row-between">
+                <section id="nav-section">
+                    <nav id="nav-mobile" class="flex-row">
+                        <p>メニュー</p>
+                    </nav>
+                    <nav id="nav-pc" class="flex-row hidden">
+                        <p>メニュー１</p>
+                        <p>メニュー２</p>
+                        <p>メニュー３</p>
+                    </nav>
+                </section>
+                <section id="user-info-section">
+                    <p>user</p>
+                </section>
+            </section>
         </header>
-    
-        <nav>
-            <ul class="flex-row">
-                <li>メニュー１</li>
-                <li>メニュー２</li>
-                <li>メニュー３</li>
-            </ul>
-        </nav>
+
+
+        
+        <section id="page-directory-section" class="flex-row">
+            <span id="margin-left-span" style="margin-left: 1rem; margin-right: 0;"></span>
+            <span>ホーム</span>
+            <span>＞</span>
+            <span>教室申込</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+            <span>＞</span>
+            <span>2024年度前期</span>
+        </section>
 
         <div id="aside-and-main" class="flex-row-around">
+            
+            <main id="main" class="flex-column">
+                {% block content %}{% endblock content %}
+            </main>
 
-            <aside class="flex-column">
+            
+            <aside id="aside" class="flex-column hidden">
                 <h1>サイドバー</h1>
                 <p>サイドバー</p>
                 <p>サイドバー</p>
             </aside>
-
-            <main id="main" class="flex-column">
-                {% block content %}{% endblock content %}
-            </main>
         </div>
         
         <footer id="footer">

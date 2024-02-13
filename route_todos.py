@@ -62,11 +62,9 @@ async def display_todos(session: Annotated[Session, Depends(get_session)], commo
 
 # display todos async
 @router.get("/todos", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
-async def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
-    todos = session.exec(select(Todo).offset(commons.offset).limit(commons.limit)).all()
+async def display_todos(request: Request):
     context = {
         "request": request,
-        "todos": todos,
     }
     return templates.TemplateResponse("todos.html", context)
 
@@ -94,7 +92,7 @@ async def read_todo(*, session: Session = Depends(get_session), todo_id: int):
 
 
 
-# update
+# patch
 @router.patch("/todos/{todo_id}", response_model=TodoRead, tags=["Todo"])
 async def update_todo(
     todo_id: int,
@@ -118,7 +116,7 @@ async def update_todo(
 
 
 
-# update is_done
+# patch: is_done
 @router.patch("/todos/is-done/{todo_id}", response_model=TodoRead, tags=["Todo"])
 async def update_todo(todo_id: int, todo_update: ToDoUpdateIsDone):
     with session:

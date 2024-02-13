@@ -53,6 +53,14 @@
     text-align: center;
 }
 
+.bg {
+    background-color: var(--bg-color);
+}
+
+.bg-accent {
+    background-color: var(--bg-color-accent);
+}
+
 h1, h2 {
     color: var(--text-color);
 }
@@ -92,24 +100,21 @@ body {
     background-color: var(--bg-color);
 }
 
-article {
-    background-color: var(--bg-color-accent);
-}
-
-section {
-    background-color: var(--bg-color-accent);
-}
-
 #app {
-    padding: 0 1rem; /* do not set width with this padding here */
     align-items: center;
     font-family: sans-serif;
     font-size: medium;
 }
 
 header {
-    width: 100%;
+    width: 100vw;
     position: relative;
+    background-color: #373737;
+    color: #ccc;
+}
+
+#header-section {
+    padding: 0 1rem;
 }
 
 footer {
@@ -126,7 +131,6 @@ aside {
     display: none;
     flex-grow: 1;
     padding: 1rem;
-    margin: 1rem;
     background-color: var(--bg-color-accent);
 }
 
@@ -134,12 +138,30 @@ aside {
 main {
     flex-grow: 4;
     padding: 1rem;
-    margin: 0rem; /* already 1rem on #app and 1rem on PC */
+    margin-right: 0rem; /* already 1rem on #app and 1rem on PC */
     background-color: var(--bg-color-accent);
 }
 
 #aside-and-main {
     width: 100%;
+}
+
+#page-directory-section {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: small;
+    overflow-wrap: break-word;
+    word-break: keep-all;
+    width: 100%;
+    overflow-x: scroll;
+}
+
+#page-directory-section > span {
+    margin-right: 1rem;
+}
+
+nav > p {
+    margin-right: 1rem;
 }
 
 
@@ -217,13 +239,25 @@ main {
 
 /* responsive design for PC */
 @media (min-width: 1080px) {
-    header {
+    #app {
+        padding: 0 1rem; /* do not set width with this padding here */
+    }
+    
+    #header-section {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
     }
 
-    aside {
+    #nav-mobile {
+        display: none;
+    }
+
+    #nav-pc {
+        display: flex;
+    }
+
+    #aside {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -231,7 +265,17 @@ main {
     }
 
     main {
-        margin: 1rem;
+        margin-right: 1rem;
+    }
+
+    nav {
+        display: flex;
+        position: relative;
+        width: 100%;
+    }
+
+    #margin-left-span {
+        display: none;
     }
 }
 
@@ -239,5 +283,8 @@ main {
 /* exceptional dark mode */
 @media (prefers-color-scheme: dark) {
     /* pass */
+    a:visited {
+        color: #dcac1d;
+    }
 }
 
