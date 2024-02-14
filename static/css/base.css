@@ -147,8 +147,8 @@ main {
 }
 
 #page-directory-section {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     font-size: small;
     overflow-wrap: break-word;
     word-break: keep-all;
@@ -274,7 +274,7 @@ nav > p {
         width: 100%;
     }
 
-    #margin-left-span {
+    #span-margin-left {
         display: none;
     }
 }
