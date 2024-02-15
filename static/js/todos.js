@@ -52,7 +52,7 @@ async function displayTodos() {
                     <!-- Editフォーム -->
                     <div class="edit-form hidden" data-todo-id="${todo.id}">
                         <input type="text" class="edit-title" placeholder="New Title" value="${todo.title}">
-                        <textarea class="edit-content" placeholder="New Content" oninput="autoResize(this)">${todo.content}</textarea>
+                        <textarea class="edit-content" placeholder="New Content" onclick="autoResize(this)" oninput="autoResize(this)">${todo.content}</textarea>
                         <button class="confirm-edit-btn">Save</button>
                         <button class="cancel-edit-btn">Cancel</button>
                     </div>
