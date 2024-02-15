@@ -1,221 +1,27 @@
-/* todos.css */
+/* lessons.css */
 
-:root {
-  --text-color: #333;
-  --bg-color: #f9f9f9;
-  --bg-color-accent: #fff;
+.lesson-list-li {
+    border: 10px;
+    border-color: aqua;
+    background-color: gray;
+    box-sizing: border-box;
 }
 
-body {
-    display: block;
-    padding: 0;
-    margin: 0;
-    overflow-y: scroll;
-    width: 100%;
-    color: var(--text-color);
-    background-color: var(--bg-color);
-}
-
-#app {
+.flex-wrap {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 0 2%; /* do not set width with padding here */
-    font-family: sans-serif;
-    font-size: medium;
-}
-
-main {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 100%;
-}
-
-
-h1, h2 {
-    color: var(--text-color);
-    text-align: center;
-}
-
-
-input,
-textarea {
-    font-size: medium;
-}
-
-
-#todo-list-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-
-/* ToDoリストのスタイル */
-#todo-list {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    list-style: none;
-    padding: 0; /* ulのデフォル値をトリセット */
-    margin: 0; /* ulのデフォルト値をリセット */
-}
-
-#todo-list li {
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: var(--bg-color-accent);
-}
-
-
-#add-todo-form-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-/* フォームのスタイル */
-#add-todo-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin: 10px 0;
-}
-
-#add-todo-form input[type="text"],
-#add-todo-form textarea,
-#add-todo-form button {
-    margin: 5px 0;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    min-width: 100%;
-    max-width: 100%;
-    box-sizing: border-box; /* ボックスモデルの設定 */
-}
-
-#add-todo-form button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-}
-
-#add-todo-form button:hover {
-    background-color: #45a049;
-}
-
-
-.hidden {
-    display: none;
-}
-
-
-footer {
-    display: block;
-    padding: 20px 0;
-    margin-top: 30px;
-    width: 100vw;
-    background-color: #333;
-    color: white;
-    text-align: center;
-}
-
-
-button {
-    cursor: pointer;
-}
-
-
-.toggle-status-btn,
-.edit-btn,
-.delete-btn,
-.confirm-edit-btn,
-.cancel-edit-btn,
-.confirm-delete-btn,
-.cancel-edit-btn {
-    margin-right: 6px;
-}
-
-
-.edit-form input {
-    margin-top: 16px;
-    margin-bottom: 10px;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    min-width: 100%;
-    max-width: 100%;
-    box-sizing: border-box; /* ボックスモデルの設定 */
-}
-
-.edit-form textarea {
-    margin-bottom: 10px;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    min-width: 100%;
-    max-width: 100%;
-    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
+    flex-wrap: wrap;
 }
 
 
 
-#login-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
 
-
-textarea {
-    resize: none;
-}
-
-
-/* レスポンシブデザイン */
 @media (min-width: 1080px) {
-    /* PC向けのスタイル */
-    main {
-        width: 40%; /* PCサイズ向けに幅を調整 */
+    #lesson-list {
+        display: flex;
+        flex-wrap: wrap;
     }
-}
-
-/* ダークモード */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-color: #f0f0f0;
-    --bg-color: #141414;
-    --bg-color-accent: #1e1e1e;
-  }
-
-  #todo-list li {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-
-  #add-todo-form input[type="text"], #add-todo-form textarea, #add-todo-form button {
-    border: 1px solid #555;  /* より暗いボーダーカラー */
-  }
-
-  #add-todo-form button {
-    background-color: #008000;  /* ダークグリーン */
-  }
-
-  #add-todo-form button:hover {
-    background-color: #006400;  /* より濃いダークグリーン */
-  }
-
-  footer {
-    background-color: #444;  /* より暗いフッター背景色 */
-  }
-  
-  input, textarea {
-    color: var(--text-color);
-    background-color: var(--bg-color-accent);
-  }
-
+    
+    .lesson-list-li {
+        width: 20rem;
+    }
 }

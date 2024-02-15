@@ -11,15 +11,15 @@
     <link rel="stylesheet" href="/static/css/todos.css">
 </head>
 <body>
+    <header id="header" class="flex-row">
+        <button type="button" id="logout-btn">Logout</button>
+        <button type="button" id="toggle-dark-mode-btn">DarkMode</button>
+        <section id="login-status-section" class="hidden">
+            <p>user</p>
+        </section>
+    </header>
+    
     <div id="app" class="flex-column">
-        <header id="header" class="flex-row">
-            <button type="button" id="logout-btn">Logout</button>
-            <button type="button" id="toggle-dark-mode-btn">DarkMode</button>
-            <section id="login-status-section" class="hidden">
-                <p>Not loged in</p>
-            </section>
-        </header>
-        
         <main id="main" class="flex-column">
             <section id="login-form-section" class="on-logout hidden">
                 <h1>Login</h1>
@@ -66,11 +66,11 @@
         </main>
 
         <div class="space"></div>
-        
-        <footer id="footer">
-            <p>&copy; 2023 YourToDoApp. All rights reserved.</p>
-        </footer>
     </div>
+
+    <footer id="footer">
+        <p>&copy; 2023 YourToDoApp. All rights reserved.</p>
+    </footer>
 
     <script src="/static/js/todos.js"></script>
 </body>

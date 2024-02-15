@@ -33,7 +33,7 @@ async function displayTodos() {
     todos.forEach((todo) => {
         const listItem = `
             <li>
-                <strong>${todo.title}</strong>
+                <b>${todo.title}</b>
                 ${todo.content ? `<p class="todo-list-content">${todo.content}</p>` : ''}
                 <p>Status: ${todo.is_done ? 'Done' : 'Pending'}</p>
                 <section class="todo-action-section">
@@ -354,7 +354,7 @@ async function getUserData() {
     } else {
         // throw new Error(`HTTP error! Status: ${response.status}`);
         console.error("getUserData", error);
-        return [];
+        return "";
     };
 };
 

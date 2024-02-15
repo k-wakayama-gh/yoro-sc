@@ -92,22 +92,23 @@ button {
 }
 
 body {
-    padding: 0;
-    margin: 0;
+    align-items: center;
+    font-family: sans-serif;
+    font-size: medium;
     overflow-y: scroll;
     width: 100%;
     color: var(--text-color);
     background-color: var(--bg-color);
+    padding: 0;
+    margin: 0;
 }
 
 #app {
-    align-items: center;
-    font-family: sans-serif;
-    font-size: medium;
+    padding: 0;
 }
 
 header {
-    width: 100vw;
+    width: 100%;
     position: relative;
     background-color: #373737;
     color: #ccc;
@@ -120,7 +121,7 @@ header {
 footer {
     padding: 1rem 0;
     margin-top: 2rem;
-    width: 100vw;
+    width: 100%;
     background-color: #333;
     color: white;
     text-align: center;
@@ -158,6 +159,11 @@ main {
 
 #page-directory-section > span {
     margin-right: 1rem;
+}
+
+#page-directory-section::after {
+    content: "";
+    padding-right: 1rem;
 }
 
 nav > p {
@@ -275,6 +281,10 @@ nav > p {
     }
 
     #span-margin-left {
+        display: none;
+    }
+
+    #page-directory-section::after {
         display: none;
     }
 }
