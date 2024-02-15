@@ -130,17 +130,17 @@ footer {
 /* aside: subject to chagnge on responsive design */
 aside {
     display: none;
-    flex-grow: 1;
     padding: 1rem;
     background-color: var(--bg-color-accent);
+    width: 20rem;
 }
 
 /* main: subject to chagnge on responsive design */
 main {
-    flex-grow: 4;
     padding: 1rem;
     margin-right: 0rem; /* already 1rem on #app and 1rem on PC */
     background-color: var(--bg-color-accent);
+    width: 100%;
 }
 
 #aside-and-main {
@@ -267,7 +267,6 @@ nav > p {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        flex-grow: 1;
     }
 
     main {

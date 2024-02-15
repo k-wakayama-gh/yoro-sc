@@ -33,7 +33,7 @@ async function displayTodos() {
     todos.forEach((todo) => {
         const listItem = `
             <li>
-                <b>${todo.title}</b>
+                <strong>${todo.title}</strong>
                 ${todo.content ? `<p class="todo-list-content">${todo.content}</p>` : ''}
                 <p>Status: ${todo.is_done ? 'Done' : 'Pending'}</p>
                 <section class="todo-action-section">
