@@ -276,6 +276,7 @@ document.getElementById("add-todo-form").addEventListener("submit", async functi
 // login form
 document.getElementById('login-form').addEventListener('submit', async function (event) {
     event.preventDefault();
+    document.getElementById("login-btn").style.pointerEvents = "none"; // prevent double submit
     const loginForm = document.getElementById('login-form');
     
     const formData = new FormData(loginForm);
@@ -299,7 +300,9 @@ document.getElementById('login-form').addEventListener('submit', async function 
         console.log('success: login');
     } else {
         alert("error: login");
-    }
+    };
+    // reactivate submit button
+    document.getElementById("login-btn").style.pointerEvents = "auto";
 });
 
 
@@ -363,6 +366,7 @@ async function getUserData() {
 // sign up form
 document.getElementById("sign-up-form").addEventListener("submit", async function (event) {
     event.preventDefault(); // prevent the default form sending
+    document.getElementById("sign-up-btn").style.pointerEvents = "none"; // prevent double submit
     const signUpForm = document.getElementById("sign-up-form");
 
     // get the form data and define the sending data
@@ -387,6 +391,8 @@ document.getElementById("sign-up-form").addEventListener("submit", async functio
     .catch((error) => {
         console.error("error: create a new account", error);
     });
+    // reactivate submit button
+    document.getElementById("sign-up-btn").style.pointerEvents = "auto";
 });
 
 

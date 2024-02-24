@@ -36,7 +36,7 @@ class CommonQueryParams:
 
 # create
 @router.post("/todos", response_model=TodoRead, tags=["Todo"])
-async def create_todo(session: Annotated[Session, Depends(get_session)], todo: TodoCreate):
+def create_todo(session: Annotated[Session, Depends(get_session)], todo: TodoCreate):
     db_todo = Todo.model_validate(todo) # <= from_orm(...) on SQLModel version older than 0.0.14
     session.add(db_todo)
     session.commit()
@@ -47,7 +47,7 @@ async def create_todo(session: Annotated[Session, Depends(get_session)], todo: T
 
 # display todos with jinja: sync
 @router.get("/todos_jinja", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
-async def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
+def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
     todos = session.exec(select(Todo).offset(commons.offset).limit(commons.limit)).all() # Todo here must be a database model i.e. table: not TodoRead model
     # if not todos:
     #     raise HTTPException(status_code=404, detail="Not found")
@@ -62,7 +62,7 @@ async def display_todos(session: Annotated[Session, Depends(get_session)], commo
 
 # display todos async
 @router.get("/todos", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
-async def display_todos(request: Request):
+def display_todos(request: Request):
     context = {
         "request": request,
     }
@@ -72,7 +72,7 @@ async def display_todos(request: Request):
 
 # read list
 @router.get("/todos/json", response_model=list[TodoRead], tags=["Todo"])
-async def read_todos_list(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100)):
+def read_todos_list(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100)):
     todos = session.exec(select(Todo).offset(offset).limit(limit)).all()
     if not todos:
         raise HTTPException(status_code=404, detail="Not found")
@@ -83,7 +83,7 @@ async def read_todos_list(*, session: Session = Depends(get_session), offset: in
 
 # read one
 @router.get("/todos/json/{todo_id}", response_model=TodoRead, tags=["Todo"])
-async def read_todo(*, session: Session = Depends(get_session), todo_id: int):
+def read_todo(*, session: Session = Depends(get_session), todo_id: int):
     todo = session.get(Todo, todo_id)
     if not todo:
         raise HTTPException(status_code=404, detail="Not found")
@@ -94,7 +94,7 @@ async def read_todo(*, session: Session = Depends(get_session), todo_id: int):
 
 # patch
 @router.patch("/todos/{todo_id}", response_model=TodoRead, tags=["Todo"])
-async def update_todo(
+def update_todo(
     todo_id: int,
     todo_update: TodoUpdate,
     session: Session = Depends(get_session)
@@ -118,7 +118,7 @@ async def update_todo(
 
 # patch: is_done
 @router.patch("/todos/is-done/{todo_id}", response_model=TodoRead, tags=["Todo"])
-async def update_todo(todo_id: int, todo_update: ToDoUpdateIsDone):
+def update_todo(todo_id: int, todo_update: ToDoUpdateIsDone):
     with session:
         db_todo = session.get(Todo, todo_id)# todoテーブルをTodo.idで検索する
         if not db_todo:
@@ -138,7 +138,7 @@ async def update_todo(todo_id: int, todo_update: ToDoUpdateIsDone):
 
 # delete
 @router.delete("/todos/{todo_id}", tags=["Todo"])
-async def delete_todo(session: Annotated[Session, Depends(get_session)], todo_id: int):
+def delete_todo(session: Annotated[Session, Depends(get_session)], todo_id: int):
     todo = session.get(Todo, todo_id)
     if not todo:
         raise HTTPException(status_code=404, detail="Not found")
@@ -149,7 +149,7 @@ async def delete_todo(session: Annotated[Session, Depends(get_session)], todo_id
 
 
 @router.get("/my/todos/json", response_model=list[TodoRead])
-async def read_my_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
+def read_my_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
     with session:
         user = session.exec(select(User).where(User.username == current_user.username)).first()
         my_todos = user.todos
@@ -158,7 +158,7 @@ async def read_my_todos(current_user: Annotated[UserRead, Depends(get_current_ac
 
 
 @router.post("/my/todos", response_model=list[TodoRead])
-async def create_my_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)], todo_create: TodoCreate):
+def create_my_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)], todo_create: TodoCreate):
     with session:
         new_todo = Todo.model_validate(todo_create)
         user = session.exec(select(User).where(User.username == current_user.username)).first()

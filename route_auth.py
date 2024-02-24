@@ -109,7 +109,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 
 
 # def: get user information from access token
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -131,7 +131,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
 
 # def: eliminate inactive user
-async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
+def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
@@ -140,7 +140,7 @@ async def get_current_active_user(current_user: Annotated[User, Depends(get_curr
 
 # login to get access token by sending username and password as a form data
 @router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password", headers={"WWW-Authenticate": "Bearer"})
@@ -151,20 +151,20 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
 
 
 @router.get("/users/me", response_model=UserRead)
-async def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
+def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
     return current_user
 
 
 
 @router.get("/users/me/items/")
-async def read_own_items(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
+def read_own_items(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
     return [{"item_id": "Foo", "owner": current_user.username}]
 
 
 
 # return username
 @router.get("/my/username")
-async def get_username(current_user: Annotated[User, Depends(get_current_active_user)]):
+def get_username(current_user: Annotated[User, Depends(get_current_active_user)]):
     username = current_user.username
     return username
 
