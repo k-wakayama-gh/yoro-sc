@@ -37,7 +37,7 @@ def create_db_user(user_in: UserIn):
 
 # create
 @router.post("/users", response_model=UserRead, tags=["User"])
-async def create_user(user_in: UserIn):
+def create_user(user_in: UserIn):
     with session:
         db_user = create_db_user(user_in)
         session.add(db_user)

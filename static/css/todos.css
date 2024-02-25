@@ -68,6 +68,10 @@ button {
     cursor: pointer;
 }
 
+a:visited {
+    color: #dcac1d;
+}
+
 body {
     font-family: sans-serif;
     font-size: medium;

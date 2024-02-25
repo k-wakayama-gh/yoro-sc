@@ -307,16 +307,14 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
 
 // logout
-const logoutBtn = document.getElementById('logout-btn');
-logoutBtn.addEventListener('click', async function (event) {
+document.getElementById("logout-btn").addEventListener("click", async function (event) {
     event.preventDefault();
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem("accessToken");
     localStorage.removeItem("username");
     console.log("success: logout");
     alert("success: logout");
     location.reload();
-    }
-);
+});
 
 
 // textareaの高さを自動調整
@@ -333,11 +331,9 @@ function loadAccessToken() {
     try {
         const token = localStorage.getItem("accessToken");
         return token;
-    }
-    catch (error) {
-        console.error("Not found:", error);
-        return [];
-    }
+    } catch (error) {
+        console.error("Failed to load access token:", error);
+    };
 };
 
 
@@ -357,7 +353,6 @@ async function getUserData() {
     } else {
         // throw new Error(`HTTP error! Status: ${response.status}`);
         console.error("getUserData", error);
-        return "";
     };
 };
 

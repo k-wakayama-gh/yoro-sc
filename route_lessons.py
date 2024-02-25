@@ -1,7 +1,7 @@
 # --- route_lessons.py ---
 
 # modules
-from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form
+from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
@@ -11,6 +11,7 @@ from typing import Optional, Annotated
 from database import engine, get_session
 from models.lessons import Lesson, LessonCreate, LessonRead, LessonUpdate, LessonDelete
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete
+from route_auth import get_current_active_user
 
 # FastAPI instance and API router
 app = FastAPI()
@@ -45,8 +46,8 @@ def create_lesson(lesson_create: LessonCreate):
 
 
 # display lessons
-@router.get("/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
-async def display_lessons(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
+@router.get("/jinja/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
+def display_lessons(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
     lessons = session.exec(select(Lesson).offset(commons.offset).limit(commons.limit)).all() # Lesson here must be a database model i.e. table: not LessonRead model
     # if not lessons:
     #     raise HTTPException(status_code=404, detail="Not found")
@@ -56,6 +57,18 @@ async def display_lessons(session: Annotated[Session, Depends(get_session)], com
         "title": "教室一覧",
     }
     return templates.TemplateResponse("lessons.html", context) # this context includes lesson.id even if it is not loaded in the html corresponding response_model
+
+
+
+
+# display lessons async
+@router.get("/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
+def display_lessons(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("lessons.html", context)
+
 
 
 
@@ -109,5 +122,33 @@ def delete_lesson(*, session: Session = Depends(get_session), lesson_id: int):
     session.delete(lesson)
     session.commit()
     return {"deleted": lesson}
+
+
+
+
+# read:  my lessons with auth
+@router.get("/json/my/todos", response_model=list[LessonRead])
+def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
+    with session:
+        user = session.exec(select(User).where(User.username == current_user.username)).first()
+        result = user.lessons
+        return result
+
+
+
+# create: my lessons with auth
+@router.post("/my/lessons/{id}", response_model=list[LessonRead])
+def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)], id: int):
+    with session:
+        new_lesson = session.exec(select(Lesson).where(Lesson.id == id)).first()
+        user = session.exec(select(User).where(User.username == current_user.username)).first()
+        if user is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+        user.lessons.append(new_lesson)
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        result = user.lessons
+        return result
 
 
