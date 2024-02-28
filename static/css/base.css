@@ -244,7 +244,7 @@ nav > p {
 
 
 /* responsive design for PC */
-@media (min-width: 1080px) {
+@media (min-width: 80rem) {
     #app {
         padding: 0 1rem; /* do not set width with this padding here */
     }

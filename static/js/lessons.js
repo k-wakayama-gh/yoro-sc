@@ -30,33 +30,29 @@ async function displayLessons() {
     // clear the previous lesson list
     lessonList.textContent = "";
 
-    lessons.forEach((lesson) => {
+    lessons.forEach(function (lesson) {
         const listItem = `
-            <li>
-                <strong>${lesson.title}</strong>
-                ${lesson.content ? `<p class="lesson-list-content">${lesson.content}</p>` : ''}
-                <p>Status: ${lesson.is_done ? 'Done' : 'Pending'}</p>
-                <section class="lesson-action-section">
-                    <!-- Pending状態変更ボタン -->
-                    <button class="toggle-status-btn" data-lesson-id="${ lesson.id }" data-is-done="${ lesson.is_done }">Toggle Status</button>
-                    <!-- Editボタン -->
-                    <button class="edit-btn" data-lesson-id="${lesson.id}">Edit</button>
-                    <!-- Deleteボタン -->
-                    <button class="delete-btn" data-lesson-id="${lesson.id}">Delete</button>
-                    <!-- 確認用メッセージ -->
-                    <div class="delete-form hidden" data-lesson-id="${lesson.id}">
-                        <p>Are you sure you want to delete this ToDo?</p>
-                        <button class="confirm-delete-btn">Confirm</button>
-                        <button class="cancel-delete-btn">Cancel</button>
+            <li class="lesson-list-li flex-column">
+                <div class="flex-row-between lesson-number-etc">
+                    <div class="lesson-number"><div>${lesson.number}</div></div>
+                    <div class="lesson-name"><div class="flex-row">${lesson.title}</div></div>
+                    <div class="lesson-day">${lesson.day}</div>
+                </div>
+
+                <div class="flex-row lesson-img-etc">
+                    <div class="lesson-img">img</div>
+                    
+                    <div class="lesson-time-etc" class="flex-column">
+                        <div class="lesson-time">${lesson.time}</div>
+                        <div class="lesson-place">${lesson.place}</div>
+                        <div class="lesson-fee">${lesson.price}（全10回分）</div>
+                        <div class="see-details"><a href="#">see details ></a></div>
                     </div>
-                    <!-- Editフォーム -->
-                    <div class="edit-form hidden" data-lesson-id="${lesson.id}">
-                        <input type="text" class="edit-title" placeholder="New Title" value="${lesson.title}">
-                        <textarea class="edit-content" placeholder="New Content" onclick="autoResize(this)" oninput="autoResize(this)">${lesson.content}</textarea>
-                        <button class="confirm-edit-btn">Save</button>
-                        <button class="cancel-edit-btn">Cancel</button>
-                    </div>
-                </section>
+                </div>
+
+                <p class="lesson-description">${lesson.description}</p>
+
+                <button class="lesson-sign-up-btn">申し込みをする</button>
             </li>
         `;
         lessonList.insertAdjacentHTML("beforeend", listItem);
@@ -87,7 +83,7 @@ async function fetchAndDisplayLessons() {
 
 // on loading page: fetch and render lesson list
 document.addEventListener("DOMContentLoaded", function () {
-    setDarkMode();
+    //setDarkMode();
     fetchAndDisplayLessons();
 });
 

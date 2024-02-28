@@ -126,8 +126,8 @@ def delete_lesson(*, session: Session = Depends(get_session), lesson_id: int):
 
 
 
-# read:  my lessons with auth
-@router.get("/json/my/todos", response_model=list[LessonRead])
+# read: my lessons
+@router.get("/json/my/lessons", response_model=list[LessonRead])
 def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
     with session:
         user = session.exec(select(User).where(User.username == current_user.username)).first()
@@ -141,6 +141,8 @@ def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active
 def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)], id: int):
     with session:
         new_lesson = session.exec(select(Lesson).where(Lesson.id == id)).first()
+        if new_lesson.year != 2024 or new_lesson.season != 1:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
         user = session.exec(select(User).where(User.username == current_user.username)).first()
         if user is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")

@@ -30,7 +30,7 @@ async function displayTodos() {
     // clear the previous todo list
     todoList.textContent = "";
 
-    todos.forEach((todo) => {
+    todos.forEach(function(todo) {
         const listItem = `
             <li>
                 <strong>${todo.title}</strong>
@@ -112,7 +112,7 @@ async function toggleIsDone(todoId, sendingData) {
 
 // function: attach toggle is_done event listeners
 function toggleIsDoneEventListeners() {
-    document.querySelectorAll(".toggle-status-btn").forEach(button => {
+    document.querySelectorAll(".toggle-status-btn").forEach(function(button) {
         button.addEventListener("click", async function () {
             const todoId = this.dataset.todoId;
             const currentIsDone = this.dataset.isDone === "true" ? true : false; // small letter "true"
@@ -151,7 +151,7 @@ async function patchTodo(todoId, sendingData) {
 
 // function: event listeners for "patchTodo" 
 function patchTodoEventListeners() {
-    document.querySelectorAll(".edit-btn").forEach(button => {
+    document.querySelectorAll(".edit-btn").forEach(function(button) {
         button.addEventListener("click", function () {
             const todoId = this.dataset.todoId;
             const editForm = document.querySelector(`.edit-form[data-todo-id="${todoId}"]`);
@@ -206,7 +206,7 @@ async function deleteTodo(todoId) {
 
 // function: event listeners for "deleteTodo"
 function deleteTodoEventListeners() {
-    document.querySelectorAll(".delete-btn").forEach(button => {
+    document.querySelectorAll(".delete-btn").forEach(function(button) {
         button.addEventListener("click", function () {
             const todoId = this.dataset.todoId;
             const deleteForm = document.querySelector(`.delete-form[data-todo-id="${todoId}"]`);

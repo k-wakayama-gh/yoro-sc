@@ -68,6 +68,10 @@ button {
     cursor: pointer;
 }
 
+a {
+    color: #20a7cd;
+}
+
 a:visited {
     color: #dcac1d;
 }

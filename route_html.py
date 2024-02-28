@@ -43,4 +43,9 @@ def coffee(request: Request):
     return templates.TemplateResponse('coffee.html', context)
 
 
+# warm cold start
+@router.get("/warmup", tags=["html"])
+def warmup():
+    return {"warmup": "ok"}
+
 

@@ -1,5 +1,14 @@
 /* lessons.css */
 
+button {
+	background: none;
+	border: 1px solid;
+	outline: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
 .flex-wrap {
     display: flex;
     flex-wrap: wrap;
@@ -26,7 +35,7 @@
 }
 
 .lesson-number {
-    border-radius: 25%;
+    border-radius: 10%;
     background-color: orange;
     width: 3rem;
     height: 3rem;
@@ -77,28 +86,36 @@
     align-items: center;
     background-color: aliceblue;
     margin-bottom: 0.5rem;
+    margin-right: 1rem;
 }
 
 
 .lesson-sign-up-btn {
     font-size: large;
-    font-weight: 600;
+    font-weight: bold;
     padding: 1rem 0;
+    border: 1px solid gray;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: rgb(51, 165, 118);
+    color: whitesmoke;
+}
+
+.lesson-sign-up-btn:hover {
+    background-color: rgb(50, 179, 123);
 }
 
 
-
-@media (min-width: 1080px) {
+@media (min-width: 80rem) {
     #lesson-list {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        gap: 3rem 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 2rem;
+        column-gap: 2rem;
     }
 
     .lesson-list-li {
-        width: 30%;
+        width: auto;
     }
 
     #aside {
