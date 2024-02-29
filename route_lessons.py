@@ -45,9 +45,9 @@ def create_lesson(lesson_create: LessonCreate):
 
 
 
-# display lessons
+# display lessons sync
 @router.get("/jinja/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
-def display_lessons(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
+def display_lessons_sync(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
     lessons = session.exec(select(Lesson).offset(commons.offset).limit(commons.limit)).all() # Lesson here must be a database model i.e. table: not LessonRead model
     # if not lessons:
     #     raise HTTPException(status_code=404, detail="Not found")
@@ -73,8 +73,8 @@ def display_lessons(request: Request):
 
 
 # read list as json
-@router.get("/lessons/json", response_model=list[LessonRead], tags=["Lesson"])
-def read_lessons_list(session: Annotated[Session, Depends(get_session)], offset: int = 0, limit: int = Query(default=100, le=100)):
+@router.get("/json/lessons", response_model=list[LessonRead], tags=["Lesson"])
+def read_lessons_json(session: Annotated[Session, Depends(get_session)], offset: int = 0, limit: int = Query(default=100, le=100)):
     lessons = session.exec(select(Lesson).offset(offset).limit(limit)).all()
     # if not lessons:
     #     raise HTTPException(status_code=404, detail="Not found")
@@ -136,7 +136,7 @@ def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active
 
 
 
-# create: my lessons with auth
+# create: sign up to a lessons with auth
 @router.post("/my/lessons/{id}", response_model=list[LessonRead])
 def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)], id: int):
     with session:
@@ -153,4 +153,23 @@ def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_acti
         result = user.lessons
         return result
 
+
+
+# display my lessons async
+@router.get("/my/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
+def display_my_lessons(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("my/lessons.html", context)
+
+
+
+# display superuser lessons async for management
+@router.get("/superuser/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
+def display_superuser_lessons(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("superuser/lessons.html", context)
 

@@ -18,11 +18,11 @@ class LessonBase(SQLModel):
     year: int
     season: int
     number: int
-    title: str = Field(index=True)
-    teacher: str = Field(index=True)
-    day: Optional[str]
-    time: Optional[str]
-    price: Optional[int]
+    title: str
+    teacher: str
+    day: str
+    time: str
+    price: str
     description: Optional[str]
 
 

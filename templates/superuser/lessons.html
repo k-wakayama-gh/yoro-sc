@@ -7,7 +7,8 @@
     <meta name="author" content="K.W.">
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/lessons.css">
-    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/superuser/lessons.css">
+    <title>教室管理画面</title>
 </head>
 <body>
     <header id="header">
@@ -35,9 +36,11 @@
             <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
             <span>ホーム</span>
             <span>＞</span>
-            <span>教室申込</span>
+            <span>管理者画面</span>
             <span>＞</span>
-            <span>2024年度前期</span>
+            <span>教室</span>
+            <span>＞</span>
+            <span>すべて</span>
         </section>
 
         <button id="logout-btn">Logout</button>
@@ -169,6 +172,24 @@
                         
                     </ul>
                 </section>
+
+                <div class="space"></div>
+
+                <section id="add-lesson-section">
+                    <h1>教室を追加する</h1>
+                    <form id="add-lesson-form" class="flex-column">
+                        <input type="text" name="year" placeholder="年度">
+                        <input type="text" name="season" placeholder="前期=>1, 後期=>2">
+                        <input type="text" name="number" placeholder="教室番号">
+                        <input type="text" name="title" placeholder="教室名">
+                        <input type="text" name="teacher" placeholder="講師">
+                        <input type="text" name="day" placeholder="曜日（１文字）">
+                        <input type="text" name="time" placeholder="時間">
+                        <input type="text" name="price" placeholder="参加費">
+                        <input type="text" name="description" placeholder="コメント">
+                        <button id="add-lesson-btn" type="submit">教室を追加する</button>
+                    </form>
+                </section>
             </main>
 
             
@@ -185,8 +206,10 @@
     </footer>
 
     <script src="/static/js/base.js"></script>
-    <script src="/static/js/auth.js"></script>
     <script src="/static/js/lessons.js"></script>
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/superuser/lessons.js"></script>
+    <script src="/static/js/render.js"></script>
 </body>
 </html>
 

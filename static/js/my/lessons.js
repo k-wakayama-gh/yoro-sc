@@ -1,21 +1,21 @@
-// todos.js
+// lessons.js
 
 
-// function: get todo list data depending on user
-async function fetchTodos() {
+// function: get lesson list data depending on user
+async function fetchLessons() {
     const token = loadAccessToken();
-    const response = await fetch("/my/todos/json", {
+    const response = await fetch("/json/my/lessons", {
         method: "GET",
         headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
     });
     if (response.ok) {
-        const todos = await response.json();
-        console.log("success: fetched todo list");
+        const result = await response.json();
+        console.log("success: fetchLessons()");
         renderOnLogin();
-        return todos;
+        return result;
     } else {
         // throw new Error(`HTTP error! Status: ${response.status}`);
-        console.error("error: fetchTodos()");
+        console.error("error: fetchLessons()");
         renderOnLogout();
         return []; // empty <=> length == 0
     };
@@ -23,46 +23,42 @@ async function fetchTodos() {
 
 
 
-// function: render and display todo list
-async function displayTodos() {
-    const todos = await fetchTodos();
-    const todoList = document.getElementById("todo-list");
-    // clear the previous todo list
-    todoList.textContent = "";
+// function: render lesson list
+async function renderLessons() {
+    const lessons = await fetchLessons();
+    const lessonList = document.getElementById("lesson-list");
+    // clear the previous lesson list
+    lessonList.textContent = "";
 
-    todos.forEach(function(todo) {
+    lessons.forEach(function (lesson) {
         const listItem = `
-            <li>
-                <strong>${todo.title}</strong>
-                ${todo.content ? `<p class="todo-list-content">${todo.content}</p>` : ''}
-                <p>Status: ${todo.is_done ? 'Done' : 'Pending'}</p>
-                <section class="todo-action-section">
-                    <!-- Pending状態変更ボタン -->
-                    <button class="toggle-status-btn" data-todo-id="${ todo.id }" data-is-done="${ todo.is_done }">Toggle Status</button>
-                    <!-- Editボタン -->
-                    <button class="edit-btn" data-todo-id="${todo.id}">Edit</button>
-                    <!-- Deleteボタン -->
-                    <button class="delete-btn" data-todo-id="${todo.id}">Delete</button>
-                    <!-- 確認用メッセージ -->
-                    <div class="delete-form hidden" data-todo-id="${todo.id}">
-                        <p>Are you sure you want to delete this ToDo?</p>
-                        <button class="confirm-delete-btn">Confirm</button>
-                        <button class="cancel-delete-btn">Cancel</button>
+            <li class="lesson-list-li flex-column">
+                <div class="flex-row-between lesson-number-etc">
+                    <div class="lesson-number"><div>${lesson.number}</div></div>
+                    <div class="lesson-name"><div class="flex-row">${lesson.title}</div></div>
+                    <div class="lesson-day">${lesson.day}</div>
+                </div>
+
+                <div class="flex-row lesson-img-etc">
+                    <div class="lesson-img">img</div>
+                    
+                    <div class="lesson-time-etc" class="flex-column">
+                        <div class="lesson-time">${lesson.time}</div>
+                        <div class="lesson-place">${lesson.place}</div>
+                        <div class="lesson-fee">${lesson.price}（全10回分）</div>
+                        <div class="see-details"><a href="#">see details ></a></div>
                     </div>
-                    <!-- Editフォーム -->
-                    <div class="edit-form hidden" data-todo-id="${todo.id}">
-                        <input type="text" class="edit-title" placeholder="New Title" value="${todo.title}">
-                        <textarea class="edit-content" placeholder="New Content" onclick="autoResize(this)" oninput="autoResize(this)">${todo.content}</textarea>
-                        <button class="confirm-edit-btn">Save</button>
-                        <button class="cancel-edit-btn">Cancel</button>
-                    </div>
-                </section>
+                </div>
+
+                <p class="lesson-description">${lesson.description}</p>
+
+                <button class="lesson-sign-up-btn">申し込みをする</button>
             </li>
         `;
-        todoList.insertAdjacentHTML("beforeend", listItem);
+        lessonList.insertAdjacentHTML("beforeend", listItem);
     });
-    if (todos.length !== 0) {
-        console.log("rendered todo list");
+    if (lessons.length !== 0) {
+        console.log("rendered lesson list");
     };
 };
 
@@ -71,31 +67,31 @@ async function displayTodos() {
 // function: attach event listeners to dynamically created elements
 function attachEventListeners() {
     toggleIsDoneEventListeners();
-    patchTodoEventListeners();
-    deleteTodoEventListeners();
+    patchLessonEventListeners();
+    deleteLesson();
 };
 
 
 
-// function: fetch and render todo list data and attach event listeners
-async function fetchAndDisplayTodos() {
-    await displayTodos();
+// function: fetch and render lesson list data and attach event listeners
+async function fetchAndDisplayLessons() {
+    await renderLessons();
     attachEventListeners();
 };
 
 
 
-// on loading page: fetch and render todo list
-document.addEventListener("DOMContentLoaded", async function () {
-    setDarkMode();
-    await fetchAndDisplayTodos();
+// on loading page: fetch and render lesson list
+document.addEventListener("DOMContentLoaded", function () {
+    //setDarkMode();
+    fetchAndDisplayLessons();
 });
 
 
 
 // function: patch: toggle is_done
-async function toggleIsDone(todoId, sendingData) {
-    await fetch(`/todos/is-done/${todoId}`, {
+async function toggleIsDone(lessonId, sendingData) {
+    await fetch(`/lessons/is-done/${lessonId}`, {
         method: "PATCH",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(sendingData)
@@ -112,9 +108,9 @@ async function toggleIsDone(todoId, sendingData) {
 
 // function: attach toggle is_done event listeners
 function toggleIsDoneEventListeners() {
-    document.querySelectorAll(".toggle-status-btn").forEach(function(button) {
+    document.querySelectorAll(".toggle-status-btn").forEach( function (button) {
         button.addEventListener("click", async function () {
-            const todoId = this.dataset.todoId;
+            const lessonId = this.dataset.lessonId;
             const currentIsDone = this.dataset.isDone === "true" ? true : false; // small letter "true"
 
             const sendingData = {
@@ -122,9 +118,9 @@ function toggleIsDoneEventListeners() {
             };
             
             console.log("fetching data...");
-            await toggleIsDone(todoId, sendingData);
+            await toggleIsDone(lessonId, sendingData);
 
-            fetchAndDisplayTodos();
+            fetchAndDisplayLessons();
             console.log("success: rendered data.");
         });
     });
@@ -132,29 +128,28 @@ function toggleIsDoneEventListeners() {
 
 
 
-// function: patch a todo
-async function patchTodo(todoId, sendingData) {
-    await fetch(`/todos/${todoId}`, {
+// function: patch a lesson
+async function patchLesson(lessonId, sendingData) {
+    const response = await fetch(`/lessons/${lessonId}`, {
         method: "PATCH",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(sendingData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Success:", data);
-    })
-    .catch((error) => {
-        console.error("Error:", error);
     });
+    if (response.ok) {
+        const result = await response.json();
+        console.log("Success:", result);
+    } else {
+        console.error("Error: patchLesson()");
+    };
 };
 
 
-// function: event listeners for "patchTodo" 
-function patchTodoEventListeners() {
-    document.querySelectorAll(".edit-btn").forEach(function(button) {
+// function: event listeners for "patchLesson" 
+function patchLessonEventListeners() {
+    document.querySelectorAll(".edit-btn").forEach(button => {
         button.addEventListener("click", function () {
-            const todoId = this.dataset.todoId;
-            const editForm = document.querySelector(`.edit-form[data-todo-id="${todoId}"]`);
+            const lessonId = this.dataset.lessonId;
+            const editForm = document.querySelector(`.edit-form[data-lesson-id="${lessonId}"]`);
 
             editForm.classList.toggle("hidden");
             
@@ -171,9 +166,9 @@ function patchTodoEventListeners() {
                 sendingData.content = newContent;
                 
                 console.log('fetching data...');
-                await patchTodo(todoId, sendingData);
+                await patchLesson(lessonId, sendingData);
                 
-                fetchAndDisplayTodos();
+                fetchAndDisplayLessons();
                 console.log('rendered data.');
             });
 
@@ -188,43 +183,36 @@ function patchTodoEventListeners() {
 
 
 
-// function: delete a todo
-async function deleteTodo(todoId) {
-    await fetch(`/todos/${todoId}`, {
-        method: "DELETE"
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Success:", data);
-    })
-    .catch((error) => {
-        console.error("Error:", error);
-    });
-};
 
-
-
-// function: event listeners for "deleteTodo"
-function deleteTodoEventListeners() {
-    document.querySelectorAll(".delete-btn").forEach(function(button) {
+// function: delete lesson
+function deleteLesson() {
+    document.querySelectorAll(".delete-btn").forEach(function (button) {
         button.addEventListener("click", function () {
-            const todoId = this.dataset.todoId;
-            const deleteForm = document.querySelector(`.delete-form[data-todo-id="${todoId}"]`);
+            const deleteForm = document.querySelector(`.delete-form[data-lesson-id="${lessonId}"]`);
+            const lessonId = this.dataset.lessonId;
 
             deleteForm.classList.toggle("hidden");
             
             // send delete request and refresh on click "Confirm" button
             deleteForm.querySelector(".confirm-delete-btn").addEventListener("click", async function () {
                 
-                console.log('fetching data...');
-                await deleteTodo(todoId);
+                console.log("fetching data...");
+                const response = await fetch(`/my/lessons/${lessonId}`, {
+                    method: "DELETE"
+                });
+                if (response.ok) {
+                    result = await response.json();
+                    console.log("success:", result);
+                } else {
+                    console.error("error on deleteLessons()");
+                };
 
-                fetchAndDisplayTodos();
-                console.log('rendered data.');
+                fetchAndDisplayLessons();
+                console.log("rendered data.");
             });
 
             // hide this confirmation message on click "Cancel" button
-            deleteForm.querySelector(".cancel-delete-btn").addEventListener("click", () => {
+            deleteForm.querySelector(".cancel-delete-btn").addEventListener("click", function () {
                 deleteForm.classList.add("hidden");
             });
         });
@@ -234,50 +222,44 @@ function deleteTodoEventListeners() {
 
 
 
-// create: add todo from
-document.getElementById("add-todo-form").addEventListener("submit", async function (event) {
-    event.preventDefault(); // prevent default form submit
-    document.querySelector("#add-todo-form-btn").style.pointerEvents = "none"; // prevent double submit
+// create: add lesson => DONE
+document.querySelectorAll(".add-lesson-btn").forEach(function (button) {
+    button.addEventListener("submit", async function (event) {
+        event.preventDefault(); // prevent default form submit
+        document.querySelector(".add-lesson-btn").style.pointerEvents = "none"; // prevent double submit
 
-    // フォームのデータを取得
-    const formData = new FormData(document.getElementById("add-todo-form"));
-    
-    const sendingData = {
-        title: formData.get("title"),
-        content: formData.get("content")
-    };
+        const lessonId = this.dataset.lessonId;
+        
+        const sendingData = {};
 
-    // エンドポイントにPOSTリクエストを送信
-    const token = loadAccessToken();
-    await fetch("/my/todos", {
-        method: "POST",
-        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
-        body: JSON.stringify(sendingData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Success:", data);
-        fetchAndDisplayTodos();
-    })
-    .catch((error) => {
-        console.error("Error:", error);
+        // エンドポイントにPOSTリクエストを送信
+        const token = loadAccessToken();
+        const response = await fetch(`/my/lessons${lessonId}`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+            body: JSON.stringify(sendingData)
+        });
+        if (response.ok) {
+            const result = await response.json();
+            console.log("Success:", data);
+            fetchAndDisplayLessons();
+            return result;
+        } else {
+            console.error("Error:", error);
+        };
+        // reactivate submit button
+        document.querySelector(".add-lesson-btn").style.pointerEvents = "auto";
     });
-
-    // clear form after sending data
-    document.querySelector("#title").value = "";
-    document.querySelector("#content").value = "";
-    // reactivate submit button
-    document.querySelector("#add-todo-form-btn").style.pointerEvents = "auto";
 });
 
 
 
 
 // login form
-document.getElementById('login-form').addEventListener('submit', async function (event) {
+document.getElementById("login-form").addEventListener('submit', async function (event) {
     event.preventDefault();
     document.getElementById("login-btn").style.pointerEvents = "none"; // prevent double submit
-    const loginForm = document.getElementById('login-form');
+    const loginForm = document.getElementById("login-form");
     
     const formData = new FormData(loginForm);
     const username = formData.get('username');
@@ -292,7 +274,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
     if (response.ok) {
         const { access_token } = await response.json(); // { access_token } <=> response.access_token
-        localStorage.setItem('accessToken', access_token);
+        localStorage.setItem("accessToken", access_token);
         localStorage.setItem("username", username);
         
         location.reload();
@@ -300,7 +282,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
         console.log('success: login');
     } else {
         alert("error: login");
-    };
+    }
     // reactivate submit button
     document.getElementById("login-btn").style.pointerEvents = "auto";
 });
@@ -312,7 +294,7 @@ document.getElementById("logout-btn").addEventListener("click", async function (
     localStorage.removeItem("accessToken");
     localStorage.removeItem("username");
     console.log("success: logout");
-    alert("success: logout");
+    alert("ログアウトしました。");
     location.reload();
 });
 
@@ -332,36 +314,16 @@ function loadAccessToken() {
         const token = localStorage.getItem("accessToken");
         return token;
     } catch (error) {
-        console.error("Failed to load access token:", error);
+        console.error("Failed to load access token", error);
     };
 };
 
-
-
-// 使用しない
-async function getUserData() {
-    const token = loadAccessToken();
-    const response = await fetch("/my/username", {
-        method: "GET",
-        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
-    });
-    if (response.ok) {
-        const user = await response.json();
-        localStorage.setItem("username", user);
-        console.log("user: " + user);
-        return user;
-    } else {
-        // throw new Error(`HTTP error! Status: ${response.status}`);
-        console.error("getUserData", error);
-    };
-};
 
 
 
 // sign up form
 document.getElementById("sign-up-form").addEventListener("submit", async function (event) {
     event.preventDefault(); // prevent the default form sending
-    document.getElementById("sign-up-btn").style.pointerEvents = "none"; // prevent double submit
     const signUpForm = document.getElementById("sign-up-form");
 
     // get the form data and define the sending data
@@ -386,8 +348,6 @@ document.getElementById("sign-up-form").addEventListener("submit", async functio
     .catch((error) => {
         console.error("error: create a new account", error);
     });
-    // reactivate submit button
-    document.getElementById("sign-up-btn").style.pointerEvents = "auto";
 });
 
 
