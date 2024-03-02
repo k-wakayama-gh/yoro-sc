@@ -22,7 +22,7 @@ class LessonBase(SQLModel):
     teacher: str
     day: str
     time: str
-    price: str
+    price: int
     description: Optional[str]
 
 

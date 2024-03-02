@@ -74,11 +74,10 @@ def display_lessons(request: Request):
 
 # read list as json
 @router.get("/json/lessons", response_model=list[LessonRead], tags=["Lesson"])
-def read_lessons_json(session: Annotated[Session, Depends(get_session)], offset: int = 0, limit: int = Query(default=100, le=100)):
-    lessons = session.exec(select(Lesson).offset(offset).limit(limit)).all()
-    # if not lessons:
-    #     raise HTTPException(status_code=404, detail="Not found")
-    return lessons
+def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
+    with session:
+        lessons = session.exec(select(Lesson).offset(query.offset).limit(query.limit)).all()
+        return lessons
 
 
 
@@ -150,8 +149,8 @@ def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_acti
         session.add(user)
         session.commit()
         session.refresh(user)
-        result = user.lessons
-        return result
+        my_lessons = user.lessons
+        return my_lessons
 
 
 

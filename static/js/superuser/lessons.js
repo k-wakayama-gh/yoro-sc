@@ -34,7 +34,7 @@ document.getElementById("add-lesson-form").addEventListener("submit", async func
         console.log("Success:", result);
         fetchAndDisplayLessons();
     } else {
-        console.error("Error:", error);
+        console.error("Error on add lesson form");
     };
 
     // clear form after sending data

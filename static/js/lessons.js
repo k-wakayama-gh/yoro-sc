@@ -1,19 +1,18 @@
 // lessons.js
 
 
-// function: get lesson list data for 2024
+// function: get lesson list data for the current year and season
 async function fetchLessons() {
     const response = await fetch("/json/lessons", {
         method: "GET",
         headers: {"Content-Type": "application/json"},
     });
     if (response.ok) {
-        const result = await response.json();
-        console.log("success: fetchLessons() =>" + result);
+        const lessons = await response.json();
+        console.log("success: fetchLessons()");
         // renderOnLogin();
-        return result;
+        return lessons;
     } else {
-        // throw new Error(`HTTP error! Status: ${response.status}`);
         console.error("error: fetchLessons()");
         // renderOnLogout();
         return []; // empty <=> length == 0
@@ -43,7 +42,7 @@ async function renderLessons() {
                     
                     <div class="lesson-time-etc" class="flex-column">
                         <div class="lesson-time">${lesson.time}</div>
-                        <div class="lesson-fee">${lesson.price}（全10回分）</div>
+                        <div class="lesson-fee">${lesson.price}円（全10回分）</div>
                         <div class="see-details"><a href="#">see details ></a></div>
                     </div>
                 </div>
@@ -64,7 +63,7 @@ async function renderLessons() {
 
 // function: attach event listeners to dynamically created elements
 function attachEventListeners() {
-    ;
+    //;
 };
 
 

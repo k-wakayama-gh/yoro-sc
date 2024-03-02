@@ -1,7 +1,7 @@
 # --- route_html.py ---
 
 # modules
-from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form
+from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
@@ -12,6 +12,7 @@ from database import engine, get_session
 from models.items import Item, ItemCreate, ItemRead, ItemUpdate, ItemDelete
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete
 from models.todos import Todo, TodoCreate, TodoRead, TodoUpdate, TodoDelete
+from route_auth import get_current_active_user
 
 # FastAPI instance and API router
 app = FastAPI()
