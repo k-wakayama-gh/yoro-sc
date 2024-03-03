@@ -10,7 +10,7 @@ from database import engine, create_database, load_db, save_db
 import route_html, route_items, route_users, route_lessons, route_auth, route_todos
 
 # FastAPI instance
-app = FastAPI(docs_url = None, redoc_url = None, openapi_url = None)
+app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 
 # include API router
 app.include_router(route_html.router)

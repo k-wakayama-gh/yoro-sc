@@ -45,3 +45,4 @@ document.getElementById("add-lesson-form").addEventListener("submit", async func
     document.querySelector("#add-lesson-btn").style.pointerEvents = "auto";
 });
 
+

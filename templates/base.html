@@ -13,16 +13,17 @@
         <section id="header-section" class="flex-row-between">
             <section id="nav-section">
                 <nav id="nav-mobile" class="flex-row">
-                    <p>メニュー</p>
+                    <button id="menu-btn">メニュー</button>
                 </nav>
                 <nav id="nav-pc" class="flex-row hidden">
-                    <p>ホーム</p>
-                    <p>マイページ</p>
-                    <p>教室申し込み</p>
+                    <a href="/">ホーム</a>
+                    <a href="/todos">Todos</a>
+                    <a href="/lessons">Lessons</a>
                 </nav>
             </section>
             <section id="user-info-section">
-                <p>user</p>
+                <button id="logout-btn" class="hidden">Logout</button>
+                <button type="button" id="user-btn">user</button>
             </section>
         </section>
     </header>

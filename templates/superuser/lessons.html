@@ -18,13 +18,14 @@
                     <p>メニュー</p>
                 </nav>
                 <nav id="nav-pc" class="flex-row hidden">
-                    <p>ホーム</p>
-                    <p>マイページ</p>
-                    <p>教室申し込み</p>
+                    <a href="/">ホーム</a>
+                    <a href="/todos">Todos</a>
+                    <a href="/lessons">Lessons</a>
                 </nav>
             </section>
             <section id="user-info-section">
-                <p>user</p>
+                <button id="logout-btn" class="hidden">Logout</button>
+                <button type="button" id="user-btn">user</button>
             </section>
         </section>
     </header>
@@ -43,7 +44,6 @@
             <span>すべて</span>
         </section>
 
-        <button id="logout-btn">Logout</button>
 
         <div id="proper-body" class="flex-row-around">
             
@@ -77,99 +77,18 @@
                     <div class="space"></div>
 
                     <ul id="lesson-list" class="flex-column">
-
-                        <li class="lesson-list-li flex-column">
-                            <div class="flex-row-between lesson-number-etc">
-                                <div class="lesson-number"><div>１</div></div>
-                                <div class="lesson-name"><div class="flex-row">教室名</div></div>
-                                <div class="lesson-day">水</div>
-                            </div>
-
-                            <div class="flex-row lesson-img-etc">
-                                <div class="lesson-img">img</div>
-
-                                <div class="lesson-time-etc" class="flex-column">
-                                    <div class="lesson-time">10:00 〜 12:00</div>
-                                    <div class="lesson-place">総合体育館２階</div>
-                                    <div class="lesson-fee">5,000円（全10回分）</div>
-                                    <div class="see-details"><a href="#">see details ></a></div>
-                                </div>
-                            </div>
-
-                            <p class="lesson-description">comments comments comments comments</p>
-
-                            <button class="lesson-sign-up-btn">申し込みをする</button>
-                        </li>
-
-                        <li class="lesson-list-li flex-column">
-                            <div class="flex-row-between lesson-number-etc">
-                                <div class="lesson-number"><div>１０</div></div>
-                                <div class="lesson-name"><div class="flex-row">めっちゃ長い教室名がここに入るかもしれない</div></div>
-                                <div class="lesson-day">水</div>
-                            </div>
-
-                            <div class="flex-row lesson-img-etc">
-                                <div class="lesson-img">img</div>
-
-                                <div class="lesson-time-etc" class="flex-column">
-                                    <div class="lesson-time">10:00 〜 12:00</div>
-                                    <div class="lesson-place">総合体育館２階</div>
-                                    <div class="lesson-fee">5,000円（全10回分）</div>
-                                    <div class="see-details"><a href="#">see details ></a></div>
-                                </div>
-                            </div>
-
-                            <p class="lesson-description">comments comments comments comments</p>
-
-                            <button class="lesson-sign-up-btn">申し込みをする</button>
-                        </li>
-
-                        <li class="lesson-list-li flex-column">
-                            <div class="flex-row-between lesson-number-etc">
-                                <div class="lesson-number"><div>１</div></div>
-                                <div class="lesson-name"><div class="flex-row">教室名</div></div>
-                                <div class="lesson-day">水</div>
-                            </div>
-
-                            <div class="flex-row lesson-img-etc">
-                                <div class="lesson-img">img</div>
-
-                                <div class="lesson-time-etc" class="flex-column">
-                                    <div class="lesson-time">10:00 〜 12:00</div>
-                                    <div class="lesson-place">総合体育館２階</div>
-                                    <div class="lesson-fee">5,000円（全10回分）</div>
-                                    <div class="see-details"><a href="#">see details ></a></div>
-                                </div>
-                            </div>
-
-                            <p class="lesson-description">comments comments comments comments</p>
-
-                            <button class="lesson-sign-up-btn">申し込みをする</button>
-                        </li>
-
-                        <li class="lesson-list-li flex-column">
-                            <div class="flex-row-between lesson-number-etc">
-                                <div class="lesson-number"><div>１</div></div>
-                                <div class="lesson-name"><div class="flex-row">教室名</div></div>
-                                <div class="lesson-day">水</div>
-                            </div>
-
-                            <div class="flex-row lesson-img-etc">
-                                <div class="lesson-img">img</div>
-                                
-                                <div class="lesson-time-etc" class="flex-column">
-                                    <div class="lesson-time">10:00 〜 12:00</div>
-                                    <div class="lesson-place">総合体育館２階</div>
-                                    <div class="lesson-fee">5,000円（全10回分）</div>
-                                    <div class="see-details"><a href="#">see details ></a></div>
-                                </div>
-                            </div>
-
-                            <p class="lesson-description">comments comments comments comments</p>
-
-                            <button class="lesson-sign-up-btn">申し込みをする</button>
-                        </li>
-                        
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
+                        <li class="dummy-li"></li>
                     </ul>
                 </section>
 

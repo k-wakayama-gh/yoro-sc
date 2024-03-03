@@ -44,9 +44,12 @@ def get_session():
 
 
 
-remote_db_dir = "/home/site/wwwroot/db_dir/"
+# backup database.sqlite
+remote_db_dir = "/mount/"
 remote_db = f"{remote_db_dir}{db_file}"
-local_db = db_file
+
+local_db_dir = "/home/site/wwwroot/db_dir/"
+local_db = f"{local_db_dir}{db_file}"
 
 
 # load and save db in persist directory
@@ -75,4 +78,5 @@ def save_db():
         print(f"Copyed {local_db} to {remote_db}")
     else:
         print("Remote directory not found")
+
 

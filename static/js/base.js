@@ -7,3 +7,9 @@ function autoResize(textarea) {
     textarea.style.height = 'auto';
     textarea.style.height = (textarea.scrollHeight) + 'px';
 };
+
+
+document.getElementById("user-btn").addEventListener("click", function() {
+    document.getElementById("logout-btn").classList.toggle("hidden");
+});
+

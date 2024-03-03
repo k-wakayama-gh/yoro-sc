@@ -105,6 +105,30 @@ button {
     background-color: rgb(50, 179, 123);
 }
 
+.dummy-li {
+    border: 2px solid;
+    border-color: gray;
+    background-color: gray;
+    box-sizing: border-box;
+    padding: 0.6rem;
+    color: #1e1e1e;
+    height: 20rem;
+}
+
+.dummy-btn {
+    padding: 1rem 0;
+    cursor: auto;
+    font-size: medium;
+    background-color: aliceblue;
+}
+
+.lesson-cancel-btn {
+    padding: 1rem 0;
+    font-size: medium;
+    background-color: lightpink;
+}
+
+
 
 @media (min-width: 80rem) {
     #lesson-list {

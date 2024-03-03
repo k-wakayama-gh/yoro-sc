@@ -61,6 +61,14 @@
     background-color: var(--bg-color-accent);
 }
 
+a {
+    color: #20a7cd;
+}
+
+a:visited {
+    color: #dcac1d;
+}
+
 h1, h2 {
     color: var(--text-color);
 }
@@ -115,7 +123,7 @@ header {
 }
 
 #header-section {
-    padding: 0 1rem;
+    padding: 1rem 1rem;
 }
 
 footer {
@@ -166,12 +174,15 @@ main {
     padding-right: 1rem;
 }
 
-nav > p {
+nav > a {
     margin-right: 1rem;
 }
 
-
-
+#user-btn, #menu-btn {
+    border: none;
+    color: aliceblue;
+    background-color: gray;
+}
 
 
 
@@ -252,7 +263,7 @@ nav > p {
     #header-section {
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: space-between;
     }
 
     #nav-mobile {

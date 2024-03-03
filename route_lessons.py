@@ -130,13 +130,13 @@ def delete_lesson(*, session: Session = Depends(get_session), lesson_id: int):
 def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
     with session:
         user = session.exec(select(User).where(User.username == current_user.username)).first()
-        result = user.lessons
-        return result
+        my_lessons = user.lessons
+        return my_lessons
 
 
 
 # create: sign up to a lessons with auth
-@router.post("/my/lessons/{id}", response_model=list[LessonRead])
+@router.post("/lessons/{id}", response_model=list[LessonRead])
 def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)], id: int):
     with session:
         new_lesson = session.exec(select(Lesson).where(Lesson.id == id)).first()
@@ -145,10 +145,11 @@ def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_acti
         user = session.exec(select(User).where(User.username == current_user.username)).first()
         if user is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
-        user.lessons.append(new_lesson)
-        session.add(user)
-        session.commit()
-        session.refresh(user)
+        if not new_lesson in user.lessons:
+            user.lessons.append(new_lesson)
+            session.add(user)
+            session.commit()
+            session.refresh(user)
         my_lessons = user.lessons
         return my_lessons
 
@@ -171,4 +172,23 @@ def display_superuser_lessons(request: Request):
         "request": request,
     }
     return templates.TemplateResponse("superuser/lessons.html", context)
+
+
+
+# cancel a lesson
+@router.delete("/my/lessons/{lesson_id}", tags=["Lesson"])
+def delete_my_lesson(lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
+    with session:
+        cancel_lesson = session.get(Lesson, lesson_id)
+        if not cancel_lesson:
+            raise HTTPException(status_code=404, detail="Lesson not found")
+        if cancel_lesson.year != 2024 or cancel_lesson.season != 1:
+            raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="Outdated")
+        user = session.exec(select(User).where(User.username == current_user.username)).first()
+        if user is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        user.lessons.remove(cancel_lesson)
+        session.commit()
+        return {"deleted": cancel_lesson}
+
 

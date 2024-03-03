@@ -13,6 +13,7 @@ from models.items import Item, ItemCreate, ItemRead, ItemUpdate, ItemDelete
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete
 from models.todos import Todo, TodoCreate, TodoRead, TodoUpdate, TodoDelete
 from route_auth import get_current_active_user
+from database import save_db
 
 # FastAPI instance and API router
 app = FastAPI()
@@ -45,8 +46,15 @@ def coffee(request: Request):
 
 
 # warm cold start
-@router.get("/warmup", tags=["html"])
+@router.get("/warmup")
 def warmup():
     return {"warmup": "ok"}
 
+
+
+# backup database.sqlite
+@router.get("/backup-database")
+def backup_database():
+    save_db()
+    return {"backup database.sqlite": "ok"}
 
