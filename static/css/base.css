@@ -1,9 +1,9 @@
 /* base.css */
 
 :root {
-    --text-color: #333;
+    --text-color: #333333;
     --bg-color: #f4f4f4;
-    --bg-color-accent: #fff;
+    --bg-color-accent: #f0f0f0;
     --border-form: 1px solid #ccc;
     --btn-green: #45a049;
     --btn-green-hover: #4CAF50;
@@ -136,12 +136,22 @@ header {
     padding: 1rem;
 }
 
-#nav-mobile-content > a {
-    padding-bottom: 1rem;
+#nav-mobile-content > span {
+    margin-bottom: 1rem;
 }
 
-nav > a {
-    margin-right: 1rem;
+#nav-mobile-content > span > a {
+    text-decoration: none;
+    color: aliceblue;
+}
+
+#nav-pc > span {
+    margin-right: 2rem;
+}
+
+#nav-pc > span > a {
+    text-decoration: none;
+    color: aliceblue;
 }
 
 #user-btn, #menu-btn, #logout-btn {
