@@ -9,24 +9,7 @@
     <title>{{ title }}</title>
 </head>
 <body>
-    <header id="header">
-        <section id="header-section" class="flex-row-between">
-            <section id="nav-section">
-                <nav id="nav-mobile" class="flex-row">
-                    <button id="menu-btn">メニュー</button>
-                </nav>
-                <nav id="nav-pc" class="flex-row hidden">
-                    <span><a href="/">ホーム</a></span>
-                    <span><a href="/todos">Todos</a></span>
-                    <span><a href="/lessons">Lessons</a></span>
-                </nav>
-            </section>
-            <section id="user-info-section">
-                <button id="logout-btn" class="hidden">Logout</button>
-                <button type="button" id="user-btn">user</button>
-            </section>
-        </section>
-    </header>
+    {% include "header.html" %}
 
     <div id="app" class="flex-column">
         <section id="page-directory-section" class="flex-row">
@@ -60,16 +43,11 @@
             <span>2024年度前期</span>
         </section>
 
-        <div id="proper-body" class="flex-row-around">
+        <div id="proper-body" class="flex-row">
             <main id="main" class="flex-column">
                 {% block content %}{% endblock content %}
             </main>
-
-            <aside id="aside" class="flex-column hidden">
-                <h1>サイドバー</h1>
-                <p>サイドバー</p>
-                <p>サイドバー</p>
-            </aside>
+            {% include "aside.html" %}
         </div>
     </div>
 

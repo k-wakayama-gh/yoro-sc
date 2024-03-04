@@ -2,8 +2,8 @@
 
 :root {
     --text-color: #333333;
-    --bg-color: #f4f4f4;
-    --bg-color-accent: #f0f0f0;
+    --bg-color: #f0f0f0;
+    --bg-color-accent: #f4f4f4;
     --border-form: 1px solid #ccc;
     --btn-green: #45a049;
     --btn-green-hover: #4CAF50;
@@ -37,16 +37,16 @@
     justify-content: flex-start;
 }
 
-.flex-row-around {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}
-
 .flex-row-between {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.flex-row-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .align-center {
@@ -63,6 +63,15 @@
 
 .bg-accent {
     background-color: var(--bg-color-accent);
+}
+
+button {
+	background: none;
+	border: 1px solid;
+	outline: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
 a {
@@ -91,6 +100,8 @@ input, textarea {
     border: var(--border-form);
     border-radius: 5px;
     box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
+    padding: 0.6rem; /* 0.5rem == 8px if font size is 16px */
+    margin: 0.4rem 0;
 }
 
 textarea {
@@ -108,21 +119,15 @@ body {
     font-family: sans-serif;
     font-size: medium;
     overflow-y: scroll;
-    width: 100%;
     color: var(--text-color);
     background-color: var(--bg-color);
-    padding: 0;
     margin: 0;
-}
-
-#app {
-    padding: 0;
 }
 
 header {
     width: 100%;
     position: relative;
-    background-color: #373737;
+    background-color: #333333;
     color: #ccc;
 }
 
@@ -161,34 +166,6 @@ header {
     padding: 0.2rem 0.4rem;
 }
 
-footer {
-    padding: 1rem 0;
-    margin-top: 2rem;
-    width: 100%;
-    background-color: #333;
-    color: white;
-    text-align: center;
-}
-
-/* aside: subject to chagnge on responsive design */
-aside {
-    display: none;
-    padding: 1rem;
-    background-color: var(--bg-color-accent);
-    width: 20rem;
-}
-
-/* main: subject to chagnge on responsive design */
-main {
-    padding: 1rem;
-    margin-right: 0rem; /* already 1rem on #app and 1rem on PC */
-    background-color: var(--bg-color-accent);
-    width: 100%;
-}
-
-#proper-body {
-    width: 100%;
-}
 
 #page-directory-section {
     padding-top: 1rem;
@@ -196,8 +173,8 @@ main {
     font-size: small;
     overflow-wrap: break-word;
     word-break: keep-all;
-    width: 100%;
     overflow-x: scroll;
+    background-color: var(--bg-color-accent);
 }
 
 #page-directory-section > span {
@@ -210,18 +187,30 @@ main {
 }
 
 
+/* do not write width: 100%; on main and on the others that dont need it */
+main {
+    padding: 1rem;
+    background-color: var(--bg-color);
+}
 
-#login-form {
-    align-items: center;
+aside {
+    display: none;
+}
+
+footer {
+    padding: 1rem 0;
+    margin-top: 2rem;
+    width: 100%;
+    background-color: #333333;
+    color: aliceblue;
+    text-align: center;
 }
 
 
-#login-form > input {
-    padding: 0.6rem; /* 0.5rem equals 8px if font size is 16px */
-    margin: 0.4rem 0;
-    width: 60%;
+#auth-form-div {
+    text-align: center;
+    max-width: 40rem;
 }
-
 
 #login-btn {
     background-color: #4c99af;
@@ -232,25 +221,11 @@ main {
     border-radius: 5px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    width: 60%;
 }
 
 #login-btn:hover {
     background-color: #236180;
 }
-
-
-#sign-up-form {
-    align-items: center;
-}
-
-
-#sign-up-form > input {
-    padding: 0.6rem;
-    margin: 0.4rem 0;
-    width: 60%;
-}
-
 
 
 #sign-up-btn {
@@ -262,7 +237,6 @@ main {
     border-radius: 5px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    width: 60%;
 }
 
 #sign-up-btn:hover {
@@ -270,8 +244,6 @@ main {
 }
 
 
-
-/* fixed styles below */
 
 /* hidden must be last */
 .hidden {
@@ -281,8 +253,8 @@ main {
 
 /* responsive design for PC */
 @media (min-width: 80rem) {
-    #app {
-        padding: 0 1rem; /* do not set width with this padding here */
+    #proper-body {
+        margin: 0 1rem; /* do not set width with this padding here */
     }
     
     #header-section {
@@ -298,29 +270,13 @@ main {
     #nav-pc {
         display: flex;
     }
-
-    #aside {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-    }
-
-    main {
-        margin-right: 1rem;
-    }
-
-    nav {
-        display: flex;
-        position: relative;
-        width: 100%;
-    }
-
-    #span-margin-left {
-        display: none;
-    }
-
+    
     #page-directory-section::after {
         display: none;
+    }
+
+    #auth-form-div {
+        max-width: 60rem;
     }
 }
 

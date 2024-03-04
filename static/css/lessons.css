@@ -1,17 +1,7 @@
 /* lessons.css */
 
-button {
-	background: none;
-	border: 1px solid;
-	outline: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-}
-
-.flex-wrap {
-    display: flex;
-    flex-wrap: wrap;
+.dummy-li {
+    width: 100%;
 }
 
 #lesson-list {
@@ -131,22 +121,22 @@ button {
 
 
 @media (min-width: 80rem) {
+    #lesson-list-section {
+        align-items: center;
+    }
+
     #lesson-list {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* <=> 1fr 1fr 1fr */
         row-gap: 2rem;
         column-gap: 2rem;
     }
 
     .lesson-list-li {
-        width: auto;
+        width: 24rem;
     }
 
-    #aside {
-        display: none;
-    }
-
-    #main {
-        margin-right: 0;
+    .dummy-li {
+        width: 24rem;
     }
 }

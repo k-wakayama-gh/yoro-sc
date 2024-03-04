@@ -10,34 +10,7 @@
     <title>教室一覧</title>
 </head>
 <body>
-    <header id="header">
-        <section id="header-section" class="flex-row-between">
-            <section id="nav-section">
-                <nav id="nav-mobile" class="flex-row">
-                    <button id="menu-btn">メニュー</button>
-                </nav>
-                <nav id="nav-pc" class="flex-row hidden">
-                    <span><a href="/">ホーム</a></span>
-                    <span><a href="/todos">Todos</a></span>
-                    <span><a href="/lessons">Lessons</a></span>
-                    <span><a href="/my/lessons">My Lessons</a></span>
-                    <span><a href="/superuser/lessons">Super User Lessons</a></span>
-                </nav>
-            </section>
-            <section id="user-info-section">
-                <button id="logout-btn" class="hidden">Logout</button>
-                <button type="button" id="user-btn">user</button>
-            </section>
-        </section>
-        <nav id="nav-mobile-content" class="flex-column hidden">
-            <span><a href="/">ホーム</a></span>
-            <span><a href="/todos">Todos</a></span>
-            <span><a href="/lessons">Lessons</a></span>
-            <span><a href="/my/lessons">My Lessons</a></span>
-            <span><a href="/superuser/lessons">Super User Lessons</a></span>
-        </nav>
-    </header>
-
+    {% include "header.html" %}
 
     <div id="app" class="flex-column">
         
@@ -45,34 +18,14 @@
             <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
             <span><a href="/">ホーム</a></span>
             <span>＞</span>
-            <span><a href="/lessons">教室申込</a></span>
+            <span>教室申込</span>
         </section>
 
-        <div id="proper-body" class="flex-row-around">
+        <div id="proper-body" class="flex-row-center">
             
             <main id="main" class="flex-column">
-                
-                <section id="login-form-section" class="flex-column on-logout hidden">
-                    <h1>Login</h1>
-                    <form id="login-form" class="flex-column">
-                        <input type="text" name="username" placeholder="Username" required>
-                        <input type="password" name="password" placeholder="Password" required>
-                        <button type="submit" id="login-btn">Login</button>
-                    </form>
-                </section>
-        
-                <div class="space on-logout hidden"></div>
-                
-                <section id="sign-up-form-section" class="flex-column on-logout hidden">
-                    <h1>Create a new account</h1>
-                    <form id="sign-up-form" class="flex-column">
-                        <input type="text" name="username" placeholder="Username" required>
-                        <input type="password" name="password" placeholder="Password" required>
-                        <button type="submit" id="sign-up-btn">Create a new account</button>
-                    </form>
-                </section>
-        
-                <div class="space on-logout hidden"></div>
+
+                {% include "authform.html" %}
 
                 <section id="lesson-list-section" class="flex-column on-login">
                     <h1>2024年度前期　教室</h1>
@@ -95,13 +48,6 @@
                     </ul>
                 </section>
             </main>
-
-            
-            <aside id="aside" class="flex-column hidden">
-                <h1>サイドバー</h1>
-                <p>サイドバー</p>
-                <p>サイドバー</p>
-            </aside>
         </div>
     </div>
 

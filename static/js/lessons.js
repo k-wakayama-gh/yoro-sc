@@ -103,11 +103,11 @@ async function fetchMyLessons() {
     if (response.ok) {
         const myLessons = await response.json();
         console.log("success: fetchMyLessons()", myLessons);
-        // renderOnLogin();
+        renderOnLogin();
         return myLessons;
     } else {
         console.error("error: fetchMyLessons()");
-        // renderOnLogout();
+        renderOnLogout();
         return []; // empty <=> length == 0
     };
 };
@@ -138,21 +138,11 @@ function signUpLesson() {
                 console.log("success: signed up to a lesson", result);
             } else {
                 console.error("error: signUpLesson()");
+                alert("教室の申し込みに失敗しました。ログインしてください。")
             };
         });
     });
 };
 
-
-
-
-
-
-
-
-// function isDarkMode() {
-//     const isDarkMode = localStorage.getItem("isDarkMode");
-//     return isDarkMode;
-// };
 
 
