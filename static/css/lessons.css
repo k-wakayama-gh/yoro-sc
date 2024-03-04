@@ -1,7 +1,12 @@
 /* lessons.css */
 
-.dummy-li {
+#lesson-list-section {
+    max-width: 30rem;
     width: 100%;
+}
+
+#lesson-list-section > h1 {
+    text-align: center;
 }
 
 #lesson-list {
