@@ -35,24 +35,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 1440
 # codes below 000000000000000000000000000000000000
 
 
-# fake_users_db = {
-#     "johndoe": {
-#         "username": "johndoe",
-#         "full_name": "John Doe",
-#         "email": "johndoe@example.com",
-#         "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
-#         "disabled": False,
-#     },
-#     "alice": {
-#         "username": "alice",
-#         "full_name": "Alice Wonderson",
-#         "email": "alice@example.com",
-#         "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
-#         "disabled": True,
-#     },
-# }
-
-
 
 # verify password with hashed password
 def verify_password(plain_password, hashed_password):
@@ -168,16 +150,5 @@ def get_username(current_user: Annotated[User, Depends(get_current_active_user)]
     username = current_user.username
     return username
 
-
-
-
-# # refresh the expiring limit of access token
-# @router.post("/token/refresh", response_model=Token)
-# async def refresh_token(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
-#     username = current_user.username
-#     if username is None:
-#         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="authorization error")
-#     new_access_token = create_access_token(data={"sub": username}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-#     return {"access_token": new_access_token, "token_type": "bearer"}
 
 

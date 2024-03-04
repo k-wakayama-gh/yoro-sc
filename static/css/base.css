@@ -49,7 +49,11 @@
     justify-content: space-between;
 }
 
-.center {
+.align-center {
+    align-items: center;
+}
+
+.text-center {
     text-align: center;
 }
 
@@ -123,7 +127,28 @@ header {
 }
 
 #header-section {
-    padding: 1rem 1rem;
+    padding: 0 1rem;
+    min-height: 3rem;
+    align-items: center;
+}
+
+#nav-mobile-content {
+    padding: 1rem;
+}
+
+#nav-mobile-content > a {
+    padding-bottom: 1rem;
+}
+
+nav > a {
+    margin-right: 1rem;
+}
+
+#user-btn, #menu-btn, #logout-btn {
+    border: none;
+    color: aliceblue;
+    background-color: gray;
+    padding: 0.2rem 0.4rem;
 }
 
 footer {
@@ -172,16 +197,6 @@ main {
 #page-directory-section::after {
     content: "";
     padding-right: 1rem;
-}
-
-nav > a {
-    margin-right: 1rem;
-}
-
-#user-btn, #menu-btn {
-    border: none;
-    color: aliceblue;
-    background-color: gray;
 }
 
 

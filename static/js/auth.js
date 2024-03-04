@@ -8,13 +8,13 @@ document.getElementById("login-form").addEventListener('submit', async function 
     const loginForm = document.getElementById("login-form");
     
     const formData = new FormData(loginForm);
-    const username = formData.get('username');
-    const password = formData.get('password');
+    const username = formData.get("username");
+    const password = formData.get("password");
 
     // ログインはjsonでなくform dataを送信する
-    const response = await fetch('/token', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    const response = await fetch("/token", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
         body: `username=${username}&password=${password}`,
     });
 
@@ -55,25 +55,24 @@ document.getElementById("sign-up-form").addEventListener("submit", async functio
     // get the form data and define the sending data
     const formData = new FormData(signUpForm);
     
-    const sendingData = {
+    const body = {
         username: formData.get("username"),
         plain_password: formData.get("password")
     };
     
     // send a post request to the endpoint
-    await fetch("/users", {
+    const response = await fetch("/users", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(sendingData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("success: create a new account", data);
-        location.reload();
-    })
-    .catch((error) => {
-        console.error("error: create a new account", error);
+        body: JSON.stringify(body)
     });
+    if (response.ok) {
+        const result = await response.json();
+        console.log("success: create a new account", result);
+        location.reload();
+    } else {
+        console.error("error: create a new account");
+    };
 });
 
 
