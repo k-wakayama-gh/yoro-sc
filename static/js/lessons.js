@@ -18,6 +18,7 @@ async function fetchAndDisplayLessons() {
 // attach event listeners to dynamically created elements
 function attachEventListeners() {
     signUpLesson();
+    cancelLessonOnSmallBtn();
 };
 
 
@@ -32,10 +33,12 @@ async function renderLessons() {
     // clear the previous lesson list
     lessonList.textContent = "";
 
+    const cancelBtn = `<span class="lesson-cancel-btn-small" onclick="cancelLessonOnSmallBtn()">キャンセル</span>`;
+
     lessons.forEach(function (lesson) {
         let signUpBtn = "";
         if (myLessons.some(myLesson => myLesson.id == lesson.id)) {
-            signUpBtn = `<button class="dummy-btn">申し込み済み</button>`;
+            signUpBtn = `<button class="dummy-btn" style="position: relative;">申し込み済み${cancelBtn}</button>`;
         } else {
             signUpBtn = `<button class="lesson-sign-up-btn">申し込みをする</button>`;
         };
@@ -138,11 +141,41 @@ function signUpLesson() {
                 console.log("success: signed up to a lesson", result);
             } else {
                 console.error("error: signUpLesson()");
-                alert("教室の申し込みに失敗しました。ログインしてください。")
+                alert("エラーが発生しました。もう一度やり直してください。")
             };
         });
     });
 };
 
 
+
+
+
+// cancel a lesson
+function cancelLessonOnSmallBtn() {
+    document.querySelectorAll(".lesson-cancel-btn-small").forEach(function (button) {
+        button.addEventListener("click", async function () {
+            const token = loadAccessToken();
+            const lessonId = this.parentNode.parentNode.dataset.lessonId;
+
+            const body = {};
+
+            console.log("fetching data...");
+
+            const response = await fetch(`/my/lessons/${lessonId}`, {
+                method: "DELETE",
+                headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+                body: JSON.stringify(body),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                fetchAndDisplayLessons();
+                console.log("success: cancel a lesson", result);
+            } else {
+                console.error("error: cancelLesson()");
+            };
+        });
+    });
+};
 

@@ -123,6 +123,19 @@
     background-color: lightpink;
 }
 
+.lesson-cancel-btn-small {
+    position: absolute;
+    top: auto;
+    bottom: 0;
+    left: auto;
+    right: 0;
+    padding: 0 0.5rem;
+    font-size: smaller;
+    background-color: lightpink;
+    color: black;
+    border-radius: 3px;
+}
+
 
 
 @media (min-width: 80rem) {

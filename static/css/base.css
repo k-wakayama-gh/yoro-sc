@@ -20,55 +20,8 @@
     --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.space {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
-
-.flex-column {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.flex-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-}
-
-.flex-row-between {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.flex-row-center {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-grow: 1;
-}
-
-.grid-column {
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
-.align-center {
-    align-items: center;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.bg {
-    background-color: var(--bg-color);
-}
-
-.bg-accent {
-    background-color: var(--bg-color-accent);
+h1, h2, h3, p {
+    color: var(--text-color);
 }
 
 button {
@@ -86,10 +39,6 @@ a {
 
 a:visited {
     color: #dcac1d;
-}
-
-h1, h2 {
-    color: var(--text-color);
 }
 
 /* remove default list styles and the margin on the left */
@@ -116,7 +65,6 @@ textarea {
 }
 
 button {
-    font-size: small;
     cursor: pointer;
 }
 
@@ -126,9 +74,91 @@ body {
     overflow-y: scroll;
     color: var(--text-color);
     background-color: var(--bg-color);
-    box-sizing: border-box;
     margin: 0;
+    width: auto;
+    position: relative;
 }
+
+.space {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.flex-column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.flex-row-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.flex-row-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.grid-column {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.grid-column-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.bg {
+    background-color: var(--bg-color);
+}
+
+.bg-accent {
+    background-color: var(--bg-color-accent);
+}
+
+.a-btn {
+    border: 1px solid gray;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: antiquewhite;
+    text-decoration: none;
+    padding: 1rem;
+    max-width: 30rem;
+    width: 100%;
+    text-align: center;
+    color: #20a7cd;
+}
+
+.a-btn:visited {
+    color: #20a7cd;
+}
+
 
 header {
     width: 100%;

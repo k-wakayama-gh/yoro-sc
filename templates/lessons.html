@@ -21,14 +21,15 @@
             <span>教室申込</span>
         </section>
 
-        <div id="proper-body" class="flex-row-center">
+        <div id="proper-body" class="flex-row">
             
             <main id="main" class="flex-column align-center">
+                <h2>教室申し込みページ</h2>
 
                 {% include "authform.html" %}
 
                 <section id="lesson-list-section" class="flex-column">
-                    <h1>2024年度前期　教室</h1>
+                    <h1>2024年度　前期</h1>
 
                     <div class="space"></div>
 
@@ -47,6 +48,11 @@
                         <li class="dummy-li"></li>
                     </ul>
                 </section>
+
+                <div class="space"></div>
+                <div class="space"></div>
+
+                <a href="/my/lessons" class="a-btn">申し込み済みの教室を確認する</a>
             </main>
         </div>
     </div>

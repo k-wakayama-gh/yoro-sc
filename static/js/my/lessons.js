@@ -55,7 +55,7 @@ async function renderLessons() {
 
                 <p class="lesson-description">${lesson.description}</p>
 
-                <button class="lesson-cancel-btn">キャンセルする</button>
+                <button class="lesson-cancel-btn hidden">キャンセルする</button>
             </li>
         `;
         lessonList.insertAdjacentHTML("beforeend", listItem);
