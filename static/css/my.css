@@ -1,0 +1,8 @@
+.link-btn {
+    border: 1px solid gray;
+    box-sizing: border-box;
+    background-color: antiquewhite;
+    text-decoration: none;
+    padding: 1rem;
+}
+

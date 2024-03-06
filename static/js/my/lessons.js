@@ -30,6 +30,10 @@ async function renderLessons() {
     // clear the previous lesson list
     lessonList.textContent = "";
 
+    if (myLessons.length == 0) {
+        lessonList.insertAdjacentHTML("afterend", "<p class='text-center'>現在申し込み済みの教室はありません。</p>");
+    };
+
     myLessons.forEach(function (lesson) {
         const listItem = `
             <li class="lesson-list-li flex-column" data-lesson-id="${lesson.id}">
@@ -44,7 +48,7 @@ async function renderLessons() {
                     
                     <div class="lesson-time-etc" class="flex-column">
                         <div class="lesson-time">${lesson.time}</div>
-                        <div class="lesson-fee">${lesson.price}円（全10回分）</div>
+                        <div class="lesson-fee">${lesson.price.toLocaleString()}円（全10回分）</div>
                         <div class="see-details"><a href="#">詳しく見る ＞</a></div>
                     </div>
                 </div>
@@ -59,6 +63,16 @@ async function renderLessons() {
     if (myLessons.length !== 0) {
         console.log("rendered lesson list");
     };
+
+    const feeList = document.getElementById("fee-list");
+    feeList.textContent = "";
+    let totalFee = 0;
+    myLessons.forEach(function (lesson) {
+        totalFee = totalFee + lesson.price;
+        const fee = `<p>${lesson.title}：${lesson.price.toLocaleString()}円</p>`;
+        feeList.insertAdjacentHTML("beforeend", fee);
+    });
+    feeList.insertAdjacentHTML("beforeend", `<p style="font-weight: bold;">合計：${totalFee.toLocaleString()}円</p>`);
 };
 
 

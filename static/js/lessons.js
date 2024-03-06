@@ -103,11 +103,11 @@ async function fetchMyLessons() {
     if (response.ok) {
         const myLessons = await response.json();
         console.log("success: fetchMyLessons()", myLessons);
-        renderOnLogin();
+        // renderOnLogin();
         return myLessons;
     } else {
         console.error("error: fetchMyLessons()");
-        renderOnLogout();
+        // renderOnLogout();
         return []; // empty <=> length == 0
     };
 };

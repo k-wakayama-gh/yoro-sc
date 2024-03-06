@@ -148,7 +148,10 @@ def read_own_items(current_user: Annotated[UserRead, Depends(get_current_active_
 @router.get("/my/username")
 def get_username(current_user: Annotated[User, Depends(get_current_active_user)]):
     username = current_user.username
-    return username
-
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.username == username)).first()
+        if user is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        return username
 
 

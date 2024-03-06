@@ -36,6 +36,16 @@ def index(request: Request):
 
 
 
+# my page
+@router.get("/my", response_class=HTMLResponse, tags=["html"])
+def my(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("my.html", context)
+
+
+
 # coffee page
 @router.get("/coffee", response_class=HTMLResponse, tags=["html"])
 def coffee(request: Request):

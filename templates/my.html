@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A website created by K.W.">
+    <meta name="author" content="K.W.">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/my.css">
+    <title>マイページ</title>
+</head>
+<body>
+    {% include "header.html" %}
+
+    <div id="app" class="flex-column">
+        
+        <section id="page-directory-section" class="flex-row">
+            <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
+            <span><a href="/">ホーム</a></span>
+            <span>＞</span>
+            <span>マイページ</span>
+        </section>
+
+        <div id="proper-body" class="flex-row-center">
+            
+            <main id="main" class="flex-column align-center">
+
+                {% include "authform.html" %}
+
+                <section id="my-action-section" class="flex-colum on-login">
+                    <h1 class="text-center">スポーツ教室</h1>
+                    <div class="space"></div>
+                    <div><a class="link-btn" href="/my/lessons">申し込み済みの教室を確認する</a></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <p>（一社）養老スポーツクラブ</p>
+    </footer>
+
+    <script src="/static/js/base.js"></script>
+    <script src="/static/js/auth.js"></script>
+</body>
+</html>
+

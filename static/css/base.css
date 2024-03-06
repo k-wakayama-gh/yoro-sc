@@ -21,8 +21,8 @@
 }
 
 .space {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 .flex-column {
@@ -126,6 +126,7 @@ body {
     overflow-y: scroll;
     color: var(--text-color);
     background-color: var(--bg-color);
+    box-sizing: border-box;
     margin: 0;
 }
 
@@ -147,21 +148,31 @@ header {
 }
 
 #nav-mobile-content > span {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 #nav-mobile-content > span > a {
     text-decoration: none;
     color: aliceblue;
+    padding: 1rem;
+}
+
+#nav-mobile-content > span > a:hover {
+    background-color: gray;
 }
 
 #nav-pc > span {
-    margin-right: 2rem;
+    margin-right: 1rem;
 }
 
 #nav-pc > span > a {
     text-decoration: none;
     color: aliceblue;
+    padding: 1rem;
+}
+
+#nav-pc > span > a:hover {
+    background-color: gray;
 }
 
 #user-btn, #menu-btn, #logout-btn {
@@ -212,7 +223,7 @@ footer {
     margin-top: 2rem;
     width: 100%;
     background-color: #333333;
-    color: aliceblue;
+    color: #f0f0f0;
     text-align: center;
 }
 
@@ -280,10 +291,6 @@ footer {
 
     #nav-pc {
         display: flex;
-    }
-    
-    #page-directory-section::after {
-        display: none;
     }
 }
 

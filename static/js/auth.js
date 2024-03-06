@@ -1,6 +1,41 @@
 // auth.js
 
 
+// on loading page: fetch username
+document.addEventListener("DOMContentLoaded", function () {
+    displayUsername();
+});
+
+
+async function displayUsername() {
+    myUsername = await fetchMyUsername();
+    if (myUsername.length != 0) {
+        document.getElementById("user-btn").textContent = myUsername;
+    };
+}
+
+
+// fetch my username
+async function fetchMyUsername() {
+    const token = loadAccessToken();
+    const response = await fetch("/my/username", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+    });
+    if (response.ok) {
+        const result = await response.json();
+        console.log("success: fetchMyLessons()", result);
+        renderOnLogin();
+        return result;
+    } else {
+        console.error("error: fetchMyLessons()");
+        renderOnLogout();
+        return []; // empty <=> length == 0
+    };
+};
+
+
+
 // login form
 document.getElementById("login-form").addEventListener('submit', async function (event) {
     event.preventDefault();
@@ -89,5 +124,30 @@ function loadAccessToken() {
 };
 
 
+
+
+
+
+// switch rendering depending on login status: logout
+function renderOnLogout () {
+    document.querySelectorAll(".on-login").forEach(function (x) {
+        x.classList.add("hidden");
+    });
+    document.querySelectorAll(".on-logout").forEach(function (x) {
+        x.classList.remove("hidden");
+    });
+};
+
+
+
+// switch rendering depending on login status: login
+function renderOnLogin () {
+    document.querySelectorAll(".on-login").forEach(function (x) {
+        x.classList.remove("hidden");
+    });
+    document.querySelectorAll(".on-logout").forEach(function (x) {
+        x.classList.add("hidden");
+    });
+};
 
 
