@@ -37,7 +37,9 @@ async function renderLessons() {
 
     lessons.forEach(function (lesson) {
         let signUpBtn = "";
-        if (myLessons.some(myLesson => myLesson.id == lesson.id)) {
+        if (document.getElementById("user-btn").classList.contains("is-loged-out")) {
+            signUpBtn = "";
+        } else if (myLessons.some(myLesson => myLesson.id == lesson.id)) {
             signUpBtn = `<button class="dummy-btn" style="position: relative;">申し込み済み${cancelBtn}</button>`;
         } else {
             signUpBtn = `<button class="lesson-sign-up-btn">申し込みをする</button>`;

@@ -24,11 +24,12 @@ async function fetchMyUsername() {
     });
     if (response.ok) {
         const result = await response.json();
-        console.log("success: fetchMyLessons()", result);
+        console.log("success: fetchMyUsername()", result);
         renderOnLogin();
+        document.getElementById("user-btn").classList.remove("is-loged-out");
         return result;
     } else {
-        console.error("error: fetchMyLessons()");
+        console.error("error: fetchMyUsername()");
         renderOnLogout();
         return []; // empty <=> length == 0
     };

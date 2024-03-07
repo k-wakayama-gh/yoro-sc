@@ -92,8 +92,8 @@
     border: 1px solid gray;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: rgb(51, 165, 118);
-    color: whitesmoke;
+    background-color: rgb(51, 165, 108);
+    color: #f0f0f0;
 }
 
 .lesson-sign-up-btn:hover {
@@ -132,8 +132,10 @@
     padding: 0 0.5rem;
     font-size: smaller;
     background-color: lightpink;
-    color: black;
+    color: #101010;
+    border: 1px solid darkgray;
     border-radius: 3px;
+    cursor: pointer;
 }
 
 

@@ -25,19 +25,23 @@
 
                 <h2 class="text-center">（一社）養老スポーツクラブ</h2>
                 <div class="space"></div>
+
+                <div class="flex-column-center">
+                    {% include "login.html" %}
+                </div>
+                
                 <section id="top-section" class="flex-column-center">
+                    <p>2024年度前期教室の申し込みはこちら</p>
                     <a href="/lessons" class="a-btn">教室申し込みページ</a>
                     <div class="space"></div>
+                    <p>申し込んだ教室を確認する</p>
+                    <a href="/my/lessons" class="a-btn">申し込み済みの教室</a>
+                    <div class="space"></div>
+                    <p>マイページ</p>
                     <a href="/my" class="a-btn">マイページ</a>
                 </section>
 
                 <div class="space"></div>
-                <section class="flex-column-center">
-                    <button style="width: 20rem; height: 20rem; position: relative;" >
-                        申し込み済み
-                        <span style="position: absolute; left: auto; right: 0.5rem;">キャンセル</span>
-                    </button>
-                </section>
 
             </main>
 
@@ -47,9 +51,10 @@
     </div>
 
     <footer id="footer">
-        <p>フッター</p>
+        <p>（一社）養老スポーツクラブ</p>
     </footer>
 
     <script src="/static/js/base.js"></script>
+    <script src="/static/js/auth.js"></script>
 </body>
 </html>

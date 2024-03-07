@@ -23,10 +23,11 @@
 
         <div id="proper-body" class="flex-row">
             
-            <main id="main" class="flex-column align-center">
+            <main id="main" class="flex-column-center">
                 <h2>教室申し込みページ</h2>
+                <p class="on-logout hidden">教室の申し込みにはログイン（本人確認）が必要です</p>
 
-                {% include "authform.html" %}
+                {% include "login.html" %}
 
                 <section id="lesson-list-section" class="flex-column">
                     <h1>2024年度　前期</h1>

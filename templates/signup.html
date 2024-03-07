@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A website created by K.W.">
+    <meta name="author" content="K.W.">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <title>{{ title }}</title>
+</head>
+<body>
+    {% include "header.html" %}
+
+    <div id="app" class="flex-column">
+
+        <section id="page-directory-section" class="flex-row">
+            <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
+            <span><a href="/">ホーム</a></span>
+            <span>＞</span>
+            <span>利用者登録</span>
+        </section>
+
+        <div id="proper-body" class="flex-row">
+
+            <main id="main" class="flex-column">
+                <div class="auth-form-div flex-column on-logout">
+                    <section id="sign-up-form-section" class="flex-column">
+                        <h1>利用者登録</h1>
+                        <form id="sign-up-form" class="flex-column">
+                            <input type="text" name="last_name" placeholder="名前" required>
+                            <input type="text" name="post_code" placeholder="郵便番号" required>
+                            <input type="text" name="address" placeholder="住所" required>
+                            <input type="email" name="email" placeholder="メールアドレス">
+                            <input type="text" name="username" placeholder="ユーザー名" required>
+                            <input type="password" name="password" placeholder="パスワード" required>
+                            <button type="submit" id="sign-up-btn">以上の内容で登録する</button>
+                        </form>
+                    </section>
+                </div>
+
+                <div class="space"></div>
+
+            </main>
+
+            {% include "aside.html" %}
+
+        </div>
+    </div>
+
+    <footer id="footer">
+        <p>（一社）養老スポーツクラブ</p>
+    </footer>
+
+    <script src="/static/js/base.js"></script>
+</body>
+</html>
+
+
+

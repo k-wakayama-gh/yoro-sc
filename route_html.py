@@ -46,6 +46,16 @@ def my(request: Request):
 
 
 
+# user sign up page
+@router.get("/user/signup", response_class=HTMLResponse, tags=["html"])
+def user_signup(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("signup.html", context)
+
+
+
 # coffee page
 @router.get("/coffee", response_class=HTMLResponse, tags=["html"])
 def coffee(request: Request):

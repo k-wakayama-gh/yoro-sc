@@ -4,7 +4,7 @@
     --text-color: #333333;
     --bg-color: #f0f0f0;
     --bg-color-accent: #f4f4f4;
-    --border-form: 1px solid #ccc;
+    --border-form: 1px solid #bfbfbf;
     --btn-green: #45a049;
     --btn-green-hover: #4CAF50;
     --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -20,13 +20,13 @@
     --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2, h3, p {
+h1, h2, h3 {
     color: var(--text-color);
 }
 
 button {
 	background: none;
-	border: 1px solid;
+	border: 1px solid gray;
 	outline: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -55,8 +55,8 @@ input, textarea {
     border: var(--border-form);
     border-radius: 5px;
     box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
-    padding: 0.6rem; /* 0.5rem == 8px if font size is 16px */
-    margin: 0.4rem 0;
+    padding: 1rem; /* 0.5rem == 8px if font size is 16px */
+    margin: 0.5rem 0;
 }
 
 textarea {
@@ -74,7 +74,7 @@ body {
     overflow-y: scroll;
     color: var(--text-color);
     background-color: var(--bg-color);
-    margin: 0;
+    margin: auto;
     width: auto;
     position: relative;
 }
@@ -153,6 +153,7 @@ body {
     width: 100%;
     text-align: center;
     color: #20a7cd;
+    cursor: pointer;
 }
 
 .a-btn:visited {
@@ -168,7 +169,7 @@ header {
 }
 
 #header-section {
-    padding: 0 1rem;
+    padding: 0 0.5rem;
     min-height: 3rem;
     align-items: center;
 }
@@ -207,11 +208,17 @@ header {
 
 #user-btn, #menu-btn, #logout-btn {
     border: none;
-    color: aliceblue;
+    color: #f0f0f0;
     background-color: gray;
-    padding: 0.2rem 0.4rem;
+    padding: 0 1rem;
+    height: 2rem;
+    font-size: small;
+    border-radius: 3px;
 }
 
+#user-btn:hover, #menu-btn:hover, #logout-btn:hover {
+    background-color: darkgray;
+}
 
 #page-directory-section {
     padding-top: 1rem;
@@ -258,7 +265,7 @@ footer {
 }
 
 
-#auth-form-div {
+.auth-form-div {
     text-align: center;
     max-width: 30rem;
     width: 100%;
@@ -268,11 +275,12 @@ footer {
     background-color: #4c99af;
     color: white;
     pointer-events: auto;
-    padding: 0.6rem;
-    margin: 0.4rem 0;
+    padding: 1rem;
+    margin: 0.5rem 0;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid darkgray;
     box-sizing: border-box;
+    font-size: medium;
 }
 
 #login-btn:hover {
@@ -284,11 +292,12 @@ footer {
     background-color: #4c99af;
     color: white;
     pointer-events: auto;
-    padding: 0.6rem;
-    margin: 0.4rem 0;
+    padding: 1rem;
+    margin: 0.5rem 0;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid darkgray;
     box-sizing: border-box;
+    font-size: medium;
 }
 
 #sign-up-btn:hover {
