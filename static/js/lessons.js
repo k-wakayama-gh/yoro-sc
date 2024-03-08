@@ -44,12 +44,13 @@ async function renderLessons() {
         } else {
             signUpBtn = `<button class="lesson-sign-up-btn">申し込みをする</button>`;
         };
+        const dayColor = {"日": "red", "月": "gray", "火": "orange", "水": "cyan", "木": "green", "金": "yellow", "土": "blue"};
         const listItem = `
             <li class="lesson-list-li flex-column" data-lesson-id="${lesson.id}">
                 <div class="flex-row-between lesson-number-etc">
                     <div class="lesson-number"><div>${lesson.number}</div></div>
                     <div class="lesson-name"><div class="flex-row">${lesson.title}</div></div>
-                    <div class="lesson-day">${lesson.day}</div>
+                    <div class="lesson-day" style="background-color: ${dayColor[lesson.day]};">${lesson.day}</div>
                 </div>
 
                 <div class="flex-row lesson-img-etc">

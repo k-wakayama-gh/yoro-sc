@@ -211,7 +211,7 @@ header {
     color: #f0f0f0;
     background-color: gray;
     padding: 0 1rem;
-    height: 2rem;
+    min-height: 2rem;
     font-size: small;
     border-radius: 3px;
 }
