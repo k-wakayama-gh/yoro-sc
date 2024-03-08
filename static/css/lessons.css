@@ -1,9 +1,5 @@
 /* lessons.css */
 
-#lesson-list-section > h1 {
-    text-align: center;
-}
-
 #lesson-list {
     gap: 3rem;
 }
@@ -18,8 +14,8 @@
 }
 
 @media (min-width: 26rem) {
-    .lesson-list-li {
-        min-width: 24rem;
+    .lesson-list-li, .dummy-li {
+        width: 24rem;
     }
 }
 
@@ -109,7 +105,6 @@
     padding: 0.5rem;
     color: #1e1e1e;
     height: 20rem;
-    min-width: 24rem;
 }
 
 .dummy-btn {
