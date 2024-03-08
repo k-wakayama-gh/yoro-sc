@@ -15,7 +15,12 @@
     box-sizing: border-box;
     padding: 0.5rem;
     color: #1e1e1e;
-    min-width: 24rem;
+}
+
+@media (min-width: 26rem) {
+    .lesson-list-li {
+        min-width: 24rem;
+    }
 }
 
 .lesson-number-etc {
