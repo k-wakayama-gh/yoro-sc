@@ -137,12 +137,6 @@
     }
 }
 
-@media (max-width: 25.9rem) {
-    .lesson-list-li, .dummy-li, #lesson-list, #lesson-list-section {
-        width: 100%;
-    }
-}
-
 
 @media (min-width: 80rem) {
     #lesson-list {
