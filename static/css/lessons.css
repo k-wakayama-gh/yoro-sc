@@ -13,18 +13,6 @@
     color: #1e1e1e;
 }
 
-@media (min-width: 26rem) {
-    .lesson-list-li, .dummy-li {
-        min-width: 24rem;
-    }
-}
-
-@media (max-width: 26rem) {
-    .lesson-list-li, .dummy-li, #lesson-list, #lesson-list-section {
-        width: 100%;
-    }
-}
-
 .lesson-number-etc {
     min-height: 3rem;
     align-items: flex-start;
@@ -141,6 +129,19 @@
     cursor: pointer;
 }
 
+
+
+@media (min-width: 26rem) {
+    .lesson-list-li, .dummy-li {
+        min-width: 24rem;
+    }
+}
+
+@media (max-width: 25.9rem) {
+    .lesson-list-li, .dummy-li, #lesson-list, #lesson-list-section {
+        width: 100%;
+    }
+}
 
 
 @media (min-width: 80rem) {
