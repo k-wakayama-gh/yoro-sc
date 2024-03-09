@@ -94,7 +94,11 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center; /* this make elements inline like */
+}
+
+.flex-column-center > * {
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .flex-row {

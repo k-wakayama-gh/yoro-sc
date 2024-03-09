@@ -72,7 +72,7 @@ async function renderLessons() {
         const fee = `<p>${lesson.title}：${lesson.price.toLocaleString()}円</p>`;
         feeList.insertAdjacentHTML("beforeend", fee);
     });
-    feeList.insertAdjacentHTML("beforeend", `<p style="font-weight: bold;">合計：${totalFee.toLocaleString()}円</p>`);
+    // feeList.insertAdjacentHTML("beforeend", `<p style="font-weight: bold;">合計：${totalFee.toLocaleString()}円</p>`);
 };
 
 
