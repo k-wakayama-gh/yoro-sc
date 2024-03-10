@@ -73,7 +73,7 @@ def warmup():
 
 
 # backup database.sqlite
-@router.get("/backup-database")
+@router.get("/backupdatabase")
 def backup_database():
     save_db()
     return {"backup database.sqlite": "ok"}

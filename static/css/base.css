@@ -94,12 +94,13 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    align-items: center; /* all elements of this will be inline like */
 }
 
-.flex-column-center > * {
+/* .flex-column-center > * {
     margin-right: auto;
     margin-left: auto;
-}
+} */
 
 .flex-row {
     display: flex;
@@ -139,7 +140,7 @@ body {
 }
 
 .text-center {
-    text-align: center;
+    text-align: center; /* this will be inherited */
 }
 
 .bg {
