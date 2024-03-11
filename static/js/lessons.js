@@ -128,6 +128,8 @@ function signUpLesson() {
             const token = loadAccessToken();
             const lessonId = this.parentNode.dataset.lessonId;
 
+            this.textContent = "処理中...";
+
             const body = {};
 
             console.log("fetching data...");
@@ -160,6 +162,9 @@ function cancelLessonOnSmallBtn() {
         button.addEventListener("click", async function () {
             const token = loadAccessToken();
             const lessonId = this.parentNode.parentNode.dataset.lessonId;
+
+            this.parentNode.textContent = "処理中...";
+            this.textContent = "";
 
             const body = {};
 
