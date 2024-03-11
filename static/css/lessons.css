@@ -131,6 +131,14 @@
 
 
 
+@media (max-width: 26rem) {
+    .lesson-list-li, .dummy-li, #lesson-list, #lesson-list-section {
+        min-width: 100%;
+        /* width: inherit; */
+    }
+}
+
+
 @media (min-width: 26rem) {
     .lesson-list-li, .dummy-li {
         min-width: 24rem;
