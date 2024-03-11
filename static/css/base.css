@@ -322,7 +322,7 @@ footer {
 
 
 /* responsive design for PC */
-@media (min-width: 80rem) {
+@media screen and (min-width: 80rem) {
     #proper-body {
         margin: 0 1rem; /* do not set width with this padding here */
     }

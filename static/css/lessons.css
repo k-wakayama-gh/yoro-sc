@@ -131,7 +131,7 @@
 
 
 
-@media (max-width: 25rem) {
+@media screen and (max-width: 26rem) {
     .lesson-list-li, .dummy-li, #lesson-list, #lesson-list-section {
         min-width: 100%;
         /* width: inherit; */
@@ -139,14 +139,14 @@
 }
 
 
-@media (min-width: 26rem) {
+@media screen and (min-width: 26rem) {
     .lesson-list-li, .dummy-li {
         min-width: 24rem;
     }
 }
 
 
-@media (min-width: 80rem) {
+@media screen and (min-width: 80rem) {
     #lesson-list {
         display: grid;
         grid-template-columns: repeat(3, 1fr); /* <=> 1fr 1fr 1fr */
