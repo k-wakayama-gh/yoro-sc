@@ -4,3 +4,4 @@
 /others/
 alembic.ini
 database.sqlite
+secret.txt
