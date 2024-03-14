@@ -8,11 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 async function displayUsername() {
-    myUsername = await fetchMyUsername();
+    const myUsername = await fetchMyUsername();
     if (myUsername.length != 0) {
-        document.getElementById("user-btn").textContent = myUsername;
+        const shortName = myUsername.slice(0, 6);
+        document.getElementById("user-btn").textContent = shortName;
+        console.log("short name: ", shortName);
     };
-}
+};
 
 
 // fetch my username
@@ -60,8 +62,7 @@ document.getElementById("login-form").addEventListener('submit', async function 
         localStorage.setItem("username", username);
         
         location.reload();
-        // alert('ログイン成功');
-        console.log('success: login');
+        console.log("success: login");
     } else {
         alert("error: login");
     };
@@ -72,43 +73,13 @@ document.getElementById("login-form").addEventListener('submit', async function 
 
 
 // logout
-document.getElementById("logout-btn").addEventListener("click", async function (event) {
+document.getElementById("logout-btn").addEventListener("click", function (event) {
     event.preventDefault();
     localStorage.removeItem("accessToken");
     localStorage.removeItem("username");
     console.log("success: logout");
     alert("ログアウトしました。");
     location.reload();
-});
-
-
-
-// sign up form
-document.getElementById("sign-up-form").addEventListener("submit", async function (event) {
-    event.preventDefault(); // prevent the default form sending
-    const signUpForm = document.getElementById("sign-up-form");
-
-    // get the form data and define the sending data
-    const formData = new FormData(signUpForm);
-    
-    const body = {
-        username: formData.get("username"),
-        plain_password: formData.get("password")
-    };
-    
-    // send a post request to the endpoint
-    const response = await fetch("/users", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(body)
-    });
-    if (response.ok) {
-        const result = await response.json();
-        console.log("success: create a new account", result);
-        location.reload();
-    } else {
-        console.error("error: create a new account");
-    };
 });
 
 

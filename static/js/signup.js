@@ -1,19 +1,6 @@
 // signup.js
 
 
-
-// logout
-document.getElementById("logout-btn").addEventListener("click", function (event) {
-    event.preventDefault();
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("username");
-    console.log("success: logout");
-    alert("ログアウトしました。");
-    location.reload();
-});
-
-
-
 function autoInputUsername (input) {
     const email = input.value;
     document.getElementById("username-input").value = email;
@@ -79,22 +66,18 @@ document.getElementById("sign-up-check-btn").addEventListener("click", async fun
     document.getElementById("sign-up-btn").addEventListener("click", async function (event) {
         // event.preventDefault(); // prevent the default form sending
         document.getElementById("sign-up-btn").style.pointerEvents = "none"; // prevent double submit
-
-        const userDetails = {
+        
+        const body = {
+            username: username,
+            plain_password: plain_password,
             last_name: last_name,
-            first_name: last_name,
+            first_name: first_name,
             last_name_furigana: last_name_furigana,
             first_name_furigana: first_name_furigana,
             tel: tel,
             postal_code: postal_code,
             address: address,
             email: email,
-        };
-        
-        const body = {
-            username: username,
-            plain_password: plain_password,
-            userDetails,
         };
     
         // send a post request to the endpoint
@@ -106,14 +89,37 @@ document.getElementById("sign-up-check-btn").addEventListener("click", async fun
         if (response.ok) {
             const result = await response.json();
             console.log("success: create a new account", result);
-            location.reload();
+            // location.reload();
+            await login(username, plain_password);
         } else {
             console.error("error: create a new account");
+            alert("登録に失敗しました");
         };
-        document.getElementById("sign-up-btn").style.pointerEvents = "auto"; // reactivate sign up btn
-        alert("完了");
+        location.href="/lessons";
+        // document.getElementById("sign-up-btn").style.pointerEvents = "auto"; // reactivate sign up btn
+        // alert("完了");
     });
 });
+
+
+
+
+async function login (username, password) {
+    const response = await fetch("/token", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: `username=${username}&password=${password}`,
+    });
+    if (response.ok) {
+        const { access_token } = await response.json(); // { access_token } <=> response.access_token
+        localStorage.setItem("accessToken", access_token);
+        localStorage.setItem("username", username);
+        console.log("success: login");
+    } else {
+        alert("ログインに失敗しました");
+    };
+};
+
 
 
 
@@ -128,6 +134,18 @@ function loadAccessToken() {
     };
 };
 
+
+
+
+// logout
+document.getElementById("logout-btn").addEventListener("click", function (event) {
+    event.preventDefault();
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("username");
+    console.log("success: logout");
+    alert("ログアウトしました。");
+    location.reload();
+});
 
 
 
