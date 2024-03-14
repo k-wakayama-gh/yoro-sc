@@ -10,6 +10,7 @@ from typing import Optional, Annotated, Union
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+import os
 
 # my modules
 from database import engine, get_session
@@ -27,9 +28,14 @@ templates = Jinja2Templates(directory='templates')
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+env_my_secret_key = "MY_SECRET_KEY"
+if env_my_secret_key in os.environ:
+    SECRET_KEY = os.getenv(env_my_secret_key)
+else:
+    SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1440
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
 
 
 # codes below 000000000000000000000000000000000000
@@ -132,7 +138,7 @@ def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
 
 
 
-@router.get("/users/me", response_model=UserRead)
+@router.get("/users/me", response_model=UserRead, tags=["User"])
 def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
     return current_user
 
@@ -145,7 +151,7 @@ def read_own_items(current_user: Annotated[UserRead, Depends(get_current_active_
 
 
 # return username
-@router.get("/my/username")
+@router.get("/my/username", tags=["User"])
 def get_username(current_user: Annotated[User, Depends(get_current_active_user)]):
     username = current_user.username
     with Session(engine) as session:

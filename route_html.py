@@ -47,7 +47,7 @@ def my(request: Request):
 
 
 # user sign up page
-@router.get("/user/signup", response_class=HTMLResponse, tags=["html"])
+@router.get("/users/signup", response_class=HTMLResponse, tags=["html"])
 def user_signup(request: Request):
     context = {
         "request": request,

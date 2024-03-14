@@ -297,23 +297,6 @@ footer {
 }
 
 
-#sign-up-btn {
-    background-color: #4c99af;
-    color: white;
-    pointer-events: auto;
-    padding: 1rem;
-    margin: 0.5rem 0;
-    border-radius: 5px;
-    border: 1px solid darkgray;
-    box-sizing: border-box;
-    font-size: medium;
-}
-
-#sign-up-btn:hover {
-    background-color: #236180;
-}
-
-
 
 /* hidden must be last */
 .hidden {

@@ -20,3 +20,7 @@ class UserTodoLink(SQLModel, table=True):
     todo_id: Optional[int] = Field(default=None, foreign_key="todo.id", primary_key=True)
 
 
+class UserUserDetailLink(SQLModel, table=True):
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id", primary_key=True)
+    user_details_id: Optional[int] = Field(default=None, foreign_key="userdetail.id", primary_key=True)
+

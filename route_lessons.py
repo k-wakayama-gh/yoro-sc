@@ -21,7 +21,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory='templates')
 
 # database session
-session = Session(engine)
+# session = Session(engine)
 
 # common query parameters
 class CommonQueryParams:
@@ -36,7 +36,7 @@ class CommonQueryParams:
 # create
 @router.post("/lessons", response_model=LessonRead, tags=["Lesson"])
 def create_lesson(lesson_create: LessonCreate):
-    with session:
+    with Session(engine) as session:
         db_lesson = Lesson.model_validate(lesson_create)
         session.add(db_lesson)
         session.commit()
@@ -62,7 +62,7 @@ def display_lessons_sync(session: Annotated[Session, Depends(get_session)], comm
 
 
 # display lessons async
-@router.get("/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
+@router.get("/lessons", response_class=HTMLResponse, tags=["Lesson"], response_model=list[LessonRead])
 def display_lessons(request: Request):
     context = {
         "request": request,
@@ -75,7 +75,7 @@ def display_lessons(request: Request):
 # read list as json
 @router.get("/json/lessons", response_model=list[LessonRead], tags=["Lesson"])
 def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
-    with session:
+    with Session(engine) as session:
         lessons = session.exec(select(Lesson).offset(query.offset).limit(query.limit)).all()
         return lessons
 
@@ -86,7 +86,7 @@ def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
 @router.get("/lessons/{lesson_id}", response_model=LessonRead, tags=["Lesson"])
 def read_lesson(session: Annotated[Session, Depends(get_session)], lesson_id: int):
     lesson = session.get(Lesson, lesson_id)
-    if not lesson:
+    if lesson is None:
         raise HTTPException(status_code=404, detail="Not found")
     return lesson
 
@@ -95,7 +95,7 @@ def read_lesson(session: Annotated[Session, Depends(get_session)], lesson_id: in
 # update
 @router.patch("/lessons/{lesson_id}", response_model=LessonRead, tags=["Lesson"])
 def update_lesson(lesson_id: int, lesson_update: LessonUpdate):
-    with session:
+    with Session(engine) as session:
         db_lesson = session.get(Lesson, lesson_id)
         if not db_lesson:
             raise HTTPException(status_code=404, detail="Not found")
@@ -126,9 +126,9 @@ def delete_lesson(*, session: Session = Depends(get_session), lesson_id: int):
 
 
 # read: my lessons
-@router.get("/json/my/lessons", response_model=list[LessonRead])
+@router.get("/json/my/lessons", response_model=list[LessonRead], tags=["Lesson"])
 def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
-    with session:
+    with Session(engine) as session:
         user = session.exec(select(User).where(User.username == current_user.username)).first()
         my_lessons = user.lessons
         return my_lessons
@@ -136,9 +136,9 @@ def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active
 
 
 # create: sign up to a lessons with auth
-@router.post("/lessons/{id}", response_model=list[LessonRead])
+@router.post("/lessons/{id}", response_model=list[LessonRead], tags=["Lesson"])
 def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)], id: int):
-    with session:
+    with Session(engine) as session:
         new_lesson = session.exec(select(Lesson).where(Lesson.id == id)).first()
         if new_lesson.year != 2024 or new_lesson.season != 1:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
@@ -156,7 +156,7 @@ def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_acti
 
 
 # display my lessons async
-@router.get("/my/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
+@router.get("/my/lessons", response_class=HTMLResponse, tags=["Lesson"], response_model=list[LessonRead])
 def display_my_lessons(request: Request):
     context = {
         "request": request,
@@ -166,7 +166,7 @@ def display_my_lessons(request: Request):
 
 
 # display superuser lessons async for management
-@router.get("/superuser/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
+@router.get("/superuser/lessons", response_class=HTMLResponse, tags=["Lesson"], response_model=list[LessonRead])
 def display_superuser_lessons(request: Request):
     context = {
         "request": request,
@@ -178,7 +178,7 @@ def display_superuser_lessons(request: Request):
 # cancel a lesson
 @router.delete("/my/lessons/{lesson_id}", tags=["Lesson"])
 def delete_my_lesson(lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
-    with session:
+    with Session(engine) as session:
         cancel_lesson = session.get(Lesson, lesson_id)
         if not cancel_lesson:
             raise HTTPException(status_code=404, detail="Lesson not found")

@@ -1,0 +1,158 @@
+// signup.js
+
+
+
+// logout
+document.getElementById("logout-btn").addEventListener("click", function (event) {
+    event.preventDefault();
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("username");
+    console.log("success: logout");
+    alert("ログアウトしました。");
+    location.reload();
+});
+
+
+
+function autoInputUsername (input) {
+    const email = input.value;
+    document.getElementById("username-input").value = email;
+};
+
+
+
+// sign up form
+document.getElementById("sign-up-check-btn").addEventListener("click", async function () {
+
+    // set a stand alone form data
+    const formData = new FormData(document.getElementById("sign-up-form"));
+
+    const last_name = formData.get("last_name");
+    const first_name = formData.get("first_name");
+    const last_name_furigana = formData.get("last_name_furigana");
+    const first_name_furigana = formData.get("first_name_furigana");
+    const tel = formData.get("tel");
+    const postal_code = formData.get("postal_code");
+    const address = formData.get("address");
+    const email = formData.get("email");
+
+    const username = formData.get("username");
+    const plain_password = formData.get("password");
+
+    const signUpInfomation = `
+    <ul id="sign-up-check" class="grid-1-2" style="text-align: start; font-size: medium;">
+        <li>お名前</li>
+        <li>${last_name}　${first_name}</li>
+        <li>ふりがな</li>
+        <li>${last_name_furigana}　${first_name_furigana}</li>
+        <li>電話番号</li>
+        <li>${tel}</li>
+        <li>郵便番号</li>
+        <li>${postal_code}</li>
+        <li>住所</li>
+        <li>${address}</li>
+        <li>メールアドレス</li>
+        <li>${email}</li>
+        <li>ユーザー名</li>
+        <li>${username}</li>
+        <li>パスワード</li>
+        <li>${plain_password}</li>
+    </ul>
+    `;
+
+    document.getElementById("sign-up-check-div").textContent = "";
+    document.getElementById("sign-up-check-div").insertAdjacentHTML("beforeend", signUpInfomation);
+
+    document.getElementById("sign-up-form").classList.add("hidden");
+    document.getElementById("sign-up-check-div").classList.remove("hidden");
+    document.getElementById("sign-up-btn").classList.remove("hidden");
+    document.getElementById("sign-up-cancel-btn").classList.remove("hidden");
+
+    document.getElementById("sign-up-cancel-btn").addEventListener("click", function () {
+        document.getElementById("sign-up-form").classList.remove("hidden");
+        document.getElementById("sign-up-check-div").classList.add("hidden");
+        document.getElementById("sign-up-btn").classList.add("hidden");
+        document.getElementById("sign-up-cancel-btn").classList.add("hidden");
+    });
+    
+
+    document.getElementById("sign-up-btn").addEventListener("click", async function (event) {
+        // event.preventDefault(); // prevent the default form sending
+        document.getElementById("sign-up-btn").style.pointerEvents = "none"; // prevent double submit
+
+        const userDetails = {
+            last_name: last_name,
+            first_name: last_name,
+            last_name_furigana: last_name_furigana,
+            first_name_furigana: first_name_furigana,
+            tel: tel,
+            postal_code: postal_code,
+            address: address,
+            email: email,
+        };
+        
+        const body = {
+            username: username,
+            plain_password: plain_password,
+            userDetails,
+        };
+    
+        // send a post request to the endpoint
+        const response = await fetch("/users/signup", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(body),
+        });
+        if (response.ok) {
+            const result = await response.json();
+            console.log("success: create a new account", result);
+            location.reload();
+        } else {
+            console.error("error: create a new account");
+        };
+        document.getElementById("sign-up-btn").style.pointerEvents = "auto"; // reactivate sign up btn
+        alert("完了");
+    });
+});
+
+
+
+
+// load access token from local storage
+function loadAccessToken() {
+    try {
+        const token = localStorage.getItem("accessToken");
+        return token;
+    } catch (error) {
+        console.error("Failed to load access token", error);
+    };
+};
+
+
+
+
+
+
+// switch rendering depending on login status: logout
+function renderOnLogout () {
+    document.querySelectorAll(".on-login").forEach(function (x) {
+        x.classList.add("hidden");
+    });
+    document.querySelectorAll(".on-logout").forEach(function (x) {
+        x.classList.remove("hidden");
+    });
+};
+
+
+
+// switch rendering depending on login status: login
+function renderOnLogin () {
+    document.querySelectorAll(".on-login").forEach(function (x) {
+        x.classList.remove("hidden");
+    });
+    document.querySelectorAll(".on-logout").forEach(function (x) {
+        x.classList.add("hidden");
+    });
+};
+
+
