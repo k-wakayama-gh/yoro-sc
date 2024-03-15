@@ -82,8 +82,8 @@ body {
     padding-bottom: 1rem;
 }
 
-.spacer {
-    width: 100%; /* useless: margin-left and right: auto; too */
+.full-width {
+    width: 100%;
 }
 
 .flex-column {

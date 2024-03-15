@@ -64,7 +64,7 @@ document.getElementById("login-form").addEventListener('submit', async function 
         location.reload();
         console.log("success: login");
     } else {
-        alert("error: login");
+        alert("ログインに失敗しました。もう一度やり直してください。");
     };
     // reactivate submit button
     document.getElementById("login-btn").style.pointerEvents = "auto";

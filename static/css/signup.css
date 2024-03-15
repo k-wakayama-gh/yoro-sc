@@ -1,5 +1,10 @@
 /* signup.css */
 
+#sign-up-form {
+    max-width: 100%;
+}
+
+
 input:invalid:focus {
     border: 1px solid red;
 }
