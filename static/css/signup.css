@@ -4,6 +4,13 @@
     max-width: 100%;
 }
 
+#sign-up-form > input {
+    max-width: 100%;
+}
+
+.half-input {
+    max-width: 49%;
+}
 
 input:invalid:focus {
     border: 1px solid red;
@@ -35,7 +42,7 @@ input:invalid:focus {
     box-sizing: border-box;
 }
 
-button {
+#sign-up-check-btn {
     padding: 1rem;
     font-size: medium;
     background-color: green;
@@ -47,7 +54,7 @@ button {
     box-sizing: border-box;
 }
 
-button:hover {
+#sign-up-check-btn:hover {
     background-color: rgb(0, 162, 0);
 }
 
