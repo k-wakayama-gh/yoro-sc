@@ -4,7 +4,7 @@
     gap: 3rem;
 }
 
-.lesson-list-li {
+.lesson-list-li, .dummy-li, .lesson-poster {
     border: 2px solid;
     border-color: gray;
     background-color: white;
@@ -92,12 +92,6 @@
 }
 
 .dummy-li {
-    border: 2px solid;
-    border-color: gray;
-    background-color: gray;
-    box-sizing: border-box;
-    padding: 0.5rem;
-    color: #1e1e1e;
     height: 20rem;
 }
 

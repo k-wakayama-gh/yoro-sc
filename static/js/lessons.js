@@ -58,7 +58,7 @@ async function renderLessons() {
                     
                     <div class="lesson-time-etc" class="flex-column">
                         <div class="lesson-time">${lesson.time}</div>
-                        <div class="lesson-fee">${lesson.price}円（全10回分）</div>
+                        <div class="lesson-fee">${lesson.price.toLocaleString()}円（全10回分）</div>
                         <div class="see-details"><a href="#">詳しく見る ＞</a></div>
                     </div>
                 </div>
@@ -72,6 +72,8 @@ async function renderLessons() {
     });
     if (lessons.length !== 0) {
         console.log("rendered lesson list");
+        // const poster = `<li class="lesson-poster"></li>`;
+        // document.querySelector("#lesson-list:nth-child(1)").insertAdjacentHTML("afterend", poster);
     };
 };
 

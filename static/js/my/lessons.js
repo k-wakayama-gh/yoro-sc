@@ -30,6 +30,8 @@ async function renderLessons() {
     // clear the previous lesson list
     lessonList.textContent = "";
 
+    const dayColor = {"日": "red", "月": "gray", "火": "orange", "水": "cyan", "木": "green", "金": "yellow", "土": "blue"};
+
     if (myLessons.length == 0) {
         lessonList.insertAdjacentHTML("afterend", "<p class='text-center'>現在申し込み済みの教室はありません。</p>");
     };
@@ -40,7 +42,7 @@ async function renderLessons() {
                 <div class="flex-row-between lesson-number-etc">
                     <div class="lesson-number"><div>${lesson.number}</div></div>
                     <div class="lesson-name"><div class="flex-row">${lesson.title}</div></div>
-                    <div class="lesson-day">${lesson.day}</div>
+                    <div class="lesson-day" style="background-color: ${dayColor[lesson.day]};">${lesson.day}</div>
                 </div>
 
                 <div class="flex-row lesson-img-etc">
