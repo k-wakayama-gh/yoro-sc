@@ -73,12 +73,12 @@ input:invalid:focus {
 
 
 
-#sign-up-btn {
+#sign-up-btn, #sign-up-cancel-btn {
     background-color: #1b729e;
     color: white;
     pointer-events: auto;
     padding: 1rem;
-    margin: 0.5rem 0;
+    margin-top: 0.5rem;
     border-radius: 5px;
     border: 1px solid darkgray;
     box-sizing: border-box;

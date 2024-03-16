@@ -66,6 +66,7 @@ document.getElementById("sign-up-check-btn").addEventListener("click", async fun
     document.getElementById("sign-up-btn").addEventListener("click", async function (event) {
         // event.preventDefault(); // prevent the default form sending
         document.getElementById("sign-up-btn").style.pointerEvents = "none"; // prevent double submit
+        document.getElementById("sign-up-btn").textContent = "処理中...";
         
         const body = {
             username: username,
@@ -93,6 +94,7 @@ document.getElementById("sign-up-check-btn").addEventListener("click", async fun
             await login(username, plain_password);
         } else {
             console.error("error: create a new account");
+            document.getElementById("sign-up-btn"). textContent = "以上の内容で登録する";
             alert("登録に失敗しました");
         };
         location.href="/lessons";

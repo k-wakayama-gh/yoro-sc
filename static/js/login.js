@@ -43,6 +43,7 @@ async function fetchMyUsername() {
 document.getElementById("login-form").addEventListener('submit', async function (event) {
     event.preventDefault();
     document.getElementById("login-btn").style.pointerEvents = "none"; // prevent double submit
+    document.getElementById("login-btn").textContent = "ログイン中...";
     const loginForm = document.getElementById("login-form");
     
     const formData = new FormData(loginForm);
@@ -68,6 +69,7 @@ document.getElementById("login-form").addEventListener('submit', async function 
     };
     // reactivate submit button
     document.getElementById("login-btn").style.pointerEvents = "auto";
+    document.getElementById("login-btn").textContent = "ログインする";
 });
 
 
