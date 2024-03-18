@@ -30,17 +30,23 @@ async function renderLessons() {
     // clear the previous lesson list
     lessonList.textContent = "";
 
-    const dayColor = {"日": "red", "月": "gray", "火": "orange", "水": "cyan", "木": "green", "金": "yellow", "土": "blue"};
+    const dayColor = {"日": "red", "月": "gray", "火": "orange", "水": "#4193f6", "木": "3f8d57", "金": "#f19937", "土": "blue"};
 
     if (myLessons.length == 0) {
         lessonList.insertAdjacentHTML("afterend", "<p class='text-center'>現在申し込み済みの教室はありません。</p>");
     };
 
     myLessons.forEach(function (lesson) {
+        let numberColor = "gray";
+        if (lesson.number <= 1) {
+            numberColor = "#a44d3a";
+        } else {
+            numberColor = "#4379a6";
+        };
         const listItem = `
-            <li class="lesson-list-li flex-column" data-lesson-id="${lesson.id}">
+            <li class="lesson-list-li flex-column" style="border-color: ${numberColor};" data-lesson-id="${lesson.id}">
                 <div class="flex-row-between lesson-number-etc">
-                    <div class="lesson-number"><div>${lesson.number}</div></div>
+                    <div class="lesson-number"  style="background-color: ${numberColor};"><div>${lesson.number}</div></div>
                     <div class="lesson-name"><div class="flex-row">${lesson.title}</div></div>
                     <div class="lesson-day" style="background-color: ${dayColor[lesson.day]};">${lesson.day}</div>
                 </div>
@@ -50,8 +56,8 @@ async function renderLessons() {
                     
                     <div class="lesson-time-etc" class="flex-column">
                         <div class="lesson-time">${lesson.time}</div>
-                        <div class="lesson-fee">${lesson.price.toLocaleString()}円（全10回分）</div>
-                        <div class="see-details"><a href="#">詳しく見る ＞</a></div>
+                        <div class="lesson-fee">${lesson.price.toLocaleString()}円（全${lesson.lessons}回分）</div>
+                        <!-- <div class="see-details"><a href="#">詳しく見る ＞</a></div> -->
                     </div>
                 </div>
 

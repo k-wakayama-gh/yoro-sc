@@ -92,13 +92,13 @@ input:invalid:focus {
 
 
 #sign-up-cancel-btn {
-    background-color: rgb(211, 48, 27);
+    background-color: rgb(211, 58, 27);
     font-size: medium;
 }
 
 
 #sign-up-cancel-btn:hover {
-    background-color: rgb(221, 70, 50);
+    background-color: rgb(223, 82, 69);
 }
 
 .grid-1-2 {

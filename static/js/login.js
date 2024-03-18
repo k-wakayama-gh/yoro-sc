@@ -1,4 +1,4 @@
-// auth.js
+// login.js
 
 
 // on loading page: fetch username
@@ -17,7 +17,7 @@ async function displayUsername() {
 };
 
 
-// fetch my username
+// fetch my username and confirm login
 async function fetchMyUsername() {
     const token = loadAccessToken();
     const response = await fetch("/my/username", {
@@ -44,6 +44,7 @@ document.getElementById("login-form").addEventListener('submit', async function 
     event.preventDefault();
     document.getElementById("login-btn").style.pointerEvents = "none"; // prevent double submit
     document.getElementById("login-btn").textContent = "ログイン中...";
+    document.getElementById("login-failed-message").classList.add("hidden");
     const loginForm = document.getElementById("login-form");
     
     const formData = new FormData(loginForm);
@@ -61,15 +62,16 @@ document.getElementById("login-form").addEventListener('submit', async function 
         const { access_token } = await response.json(); // { access_token } <=> response.access_token
         localStorage.setItem("accessToken", access_token);
         localStorage.setItem("username", username);
-        
-        location.reload();
+
         console.log("success: login");
+        location.reload();
     } else {
-        alert("ログインに失敗しました。もう一度やり直してください。");
+        // alert("ログインに失敗しました。もう一度やり直してください。");
+        document.getElementById("login-failed-message").classList.remove("hidden");
+        // reactivate submit button
+        document.getElementById("login-btn").style.pointerEvents = "auto";
+        document.getElementById("login-btn").textContent = "ログインする";
     };
-    // reactivate submit button
-    document.getElementById("login-btn").style.pointerEvents = "auto";
-    document.getElementById("login-btn").textContent = "ログインする";
 });
 
 

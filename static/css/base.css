@@ -5,8 +5,6 @@
     --bg-color: #f0f0f0;
     --bg-color-accent: #f4f4f4;
     --border-form: 1px solid #bfbfbf;
-    --btn-green: #45a049;
-    --btn-green-hover: #4CAF50;
     --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -15,8 +13,6 @@
     --bg-color: #161616;
     --bg-color-accent: #1e1e1e;
     --border-form: 1px solid #888888;
-    --btn-green: #1b831b;
-    --btn-green-hover: #19a219;
     --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -156,21 +152,26 @@ body {
 }
 
 .a-btn {
-    border: 1px solid gray;
+    border: none;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: antiquewhite;
+    background-color: #0f82ac;
     text-decoration: none;
     padding: 1rem;
     width: 100%;
     max-width: 30rem;
     text-align: center;
-    color: #20a7cd;
+    color: white;
     cursor: pointer;
 }
 
+.a-btn:hover {
+    background-color: #2fafda;
+}
+
 .a-btn:visited {
-    color: #20a7cd;
+    /* color: #20a7cd; */
+    color: white;
 }
 
 
@@ -284,7 +285,7 @@ footer {
 }
 
 #login-btn {
-    background-color: #4c99af;
+    background-color: #2e7395;
     color: white;
     pointer-events: auto;
     padding: 1rem;
@@ -296,9 +297,23 @@ footer {
 }
 
 #login-btn:hover {
-    background-color: #236180;
+    background-color: #4c99af;
 }
 
+
+#login-failed-message {
+    color: orangered;
+    background-color: antiquewhite;
+}
+
+
+.important-btn {
+    background-color: #1a7c17;
+}
+
+.important-btn:hover {
+    background-color: #3c9537;
+}
 
 
 /* hidden must be last */

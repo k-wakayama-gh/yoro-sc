@@ -24,12 +24,15 @@ class LessonBase(SQLModel):
     time: str
     price: int
     description: Optional[str]
+    capacity: Optional[int]
+    lessons: Optional[int]
 
 
 
 # table
 class Lesson(LessonBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    capacity_left: Optional[int] = Field(default=None)
     
     users: List["users.User"] = Relationship(back_populates="lessons", link_model=link_table.UserLessonLink)
 
@@ -44,6 +47,7 @@ class LessonCreate(LessonBase):
 # read or out
 class LessonRead(LessonBase):
     id: int
+    capacity_left: Optional[int]
 
 
 
@@ -58,6 +62,8 @@ class LessonUpdate(SQLModel):
     time: Optional[str] = None
     price: Optional[int] = None
     description: Optional[str] = None
+    capacity: Optional[int] = None
+    lessons: Optional[int] = None
 
 
 

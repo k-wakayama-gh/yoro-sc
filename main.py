@@ -4,6 +4,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+import os
 
 # my modules
 from database import engine, create_database, load_db, save_db
@@ -40,6 +41,21 @@ if __name__ == '__main__':
 
 # --- security for docs ---
 
+# username and password for docs
+env_my_secret_username = "MY_SECRET_USERNAME"
+env_my_secret_password = "MY_SECRET_PASSWORD"
+
+if env_my_secret_username in os.environ:
+    MY_SECRET_USERNAME = os.getenv(env_my_secret_username)
+else:
+    MY_SECRET_USERNAME = "user"
+
+if env_my_secret_password in os.environ:
+    MY_SECRET_PASSWORD = os.getenv(env_my_secret_password)
+else:
+    MY_SECRET_PASSWORD = ""
+
+
 # modules
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
@@ -54,8 +70,8 @@ security = HTTPBasic()
 
 
 def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
-    correct_username = secrets.compare_digest(credentials.username, "user")
-    correct_password = secrets.compare_digest(credentials.password, "")
+    correct_username = secrets.compare_digest(credentials.username, MY_SECRET_USERNAME)
+    correct_password = secrets.compare_digest(credentials.password, MY_SECRET_PASSWORD)
     if not (correct_username and correct_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

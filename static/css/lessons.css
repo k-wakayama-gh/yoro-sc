@@ -4,13 +4,17 @@
     gap: 3rem;
 }
 
-.lesson-list-li, .dummy-li, .lesson-poster {
-    border: 2px solid;
+.lesson-list-li, .dummy-li {
+    border: 3px solid;
     border-color: gray;
     background-color: white;
     box-sizing: border-box;
     padding: 0.5rem;
     color: #1e1e1e;
+}
+
+.lesson-poster {
+    overflow: hidden;
 }
 
 .lesson-number-etc {
@@ -21,20 +25,22 @@
 }
 
 .lesson-number {
-    border-radius: 10%;
-    background-color: orange;
+    border-radius: 5px;
+    background-color: gray;
+    color: white;
     width: 3rem;
     height: 3rem;
-    text-align: center;
-    line-height: 3rem;
-    color: white;
-    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     /* transform: rotate(45deg); */
 }
 
-/* .lesson-number > div {
-    transform: rotate(-45deg);
-} */
+.lesson-number > div {
+    /* transform: rotate(-45deg); */
+    font-size: x-large;
+}
 
 .lesson-name {
     max-width: calc(100% - 6rem);
@@ -69,10 +75,31 @@
 
 .lesson-img {
     width: 6rem;
-    align-items: center;
+    height: 6rem;
     background-color: aliceblue;
     margin-bottom: 0.5rem;
     margin-right: 1rem;
+    overflow: hidden;
+}
+
+.lesson-img > img {
+    width: 100%;
+    height: auto;
+}
+
+.lesson-teacher {
+    font-size: small;
+}
+
+.lesson-teacher-name {
+    font-size: x-small;
+}
+
+.lesson-description {
+    background-color: #f0f0f0;
+    padding: 0.5rem;
+    font-size: small;
+    flex-grow: 1;
 }
 
 
@@ -147,11 +174,7 @@
         gap: 2rem;
     }
 
-    .lesson-list-li {
-        width: 24rem;
-    }
-
-    .dummy-li {
+    .lesson-list-li, .dummy-li, .lesson-poster {
         width: 24rem;
     }
 }

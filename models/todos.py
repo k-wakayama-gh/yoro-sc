@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 # base model
 class TodoBase(SQLModel):
-    title: str = Field(index=True)
+    title: str
     content: Optional[str] = Field(default=None)
     is_done: bool = Field(default=False) #is_done: bool = Noneにすると、patchでも空のリクエストがあるたびにboolの値をFalseにしようとする。Fieldを使うと最初だけFalseにしようとする。
 

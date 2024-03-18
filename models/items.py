@@ -9,9 +9,9 @@ from sqlmodel import SQLModel, Field, Relationship
 
 # base model
 class ItemBase(SQLModel):
-    item_name: str = Field(index=True)
-    price: int = Field(default=0, index=True)
-    description: Optional[str] =Field(default=None, index=True)
+    item_name: str
+    price: int = Field(default=0)
+    description: Optional[str] = Field(default=None)
 
 
 

@@ -22,6 +22,14 @@ function attachEventListeners() {
 };
 
 
+// merged into renderLessons()
+function addLessonPoster () {
+    const lessonList = document.querySelector("#lesson-list");
+    // console.log("lessonList:", lessonList);
+    const poster = `<li class="lesson-poster"></li>`;
+    document.querySelector("#lesson-list > :nth-child(1)").insertAdjacentHTML("afterend", poster);
+};
+
 
 
 // render lesson list
@@ -44,22 +52,40 @@ async function renderLessons() {
         } else {
             signUpBtn = `<button class="lesson-sign-up-btn">申し込みをする</button>`;
         };
-        const dayColor = {"日": "red", "月": "gray", "火": "orange", "水": "cyan", "木": "green", "金": "yellow", "土": "blue"};
+        let numberColor = "gray";
+        if (lesson.number <= 1) {
+            numberColor = "#a44d3a";
+        } else {
+            numberColor = "#4379a6";
+        };
+        let capacity_left = lesson.capacity;
+        if (lesson.capacity_left != null) {
+            capacity_left = lesson.capacity_left;
+        };
+        let capacity = "なし";
+        if (lesson.capacity != null) {
+            capacity = capacity_left + " / " + lesson.capacity + " 名";
+        };
+        const dayColor = {"日": "red", "月": "gray", "火": "orange", "水": "#4193f6", "木": "3f8d57", "金": "#f19937", "土": "blue"};
         const listItem = `
-            <li class="lesson-list-li flex-column" data-lesson-id="${lesson.id}">
+            <li class="lesson-list-li flex-column" style="border-color: ${numberColor};" data-lesson-id="${lesson.id}">
                 <div class="flex-row-between lesson-number-etc">
-                    <div class="lesson-number"><div>${lesson.number}</div></div>
+                    <div class="lesson-number" style="background-color: ${numberColor};"><div>${lesson.number}</div></div>
                     <div class="lesson-name"><div class="flex-row">${lesson.title}</div></div>
                     <div class="lesson-day" style="background-color: ${dayColor[lesson.day]};">${lesson.day}</div>
                 </div>
 
                 <div class="flex-row lesson-img-etc">
-                    <div class="lesson-img">img</div>
+                    <div class="lesson-teacher-etc flex-column">
+                        <div class="lesson-img"><img src="static/img/lessons/${lesson.teacher}.png"></div>
+                        <div class="lesson-teacher"><span class="lesson-teacher-name">講師　</span>${lesson.teacher}</div>
+                    </div>
                     
-                    <div class="lesson-time-etc" class="flex-column">
+                    <div class="lesson-time-etc flex-column">
                         <div class="lesson-time">${lesson.time}</div>
-                        <div class="lesson-fee">${lesson.price.toLocaleString()}円（全10回分）</div>
-                        <div class="see-details"><a href="#">詳しく見る ＞</a></div>
+                        <div class="lesson-fee">${lesson.price.toLocaleString()}円（全${lesson.lessons}回分）</div>
+                        <div class="lesson-capacity">定員残り ${capacity}</div>
+                        <!-- <div class="see-details"><a href="#">詳しく見る ＞</a></div> -->
                     </div>
                 </div>
 
@@ -72,8 +98,8 @@ async function renderLessons() {
     });
     if (lessons.length !== 0) {
         console.log("rendered lesson list");
-        // const poster = `<li class="lesson-poster"></li>`;
-        // document.querySelector("#lesson-list:nth-child(1)").insertAdjacentHTML("afterend", poster);
+        const poster = `<li class="lesson-poster"><img src="/static/img/lessons/lesson-poster.png" style="width:100%; height: auto;"></li>`;
+        document.querySelector("#lesson-list > :nth-child(1)").insertAdjacentHTML("afterend", poster);
     };
 };
 

@@ -11,9 +11,9 @@ env_mount = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
 env_db = "DB_CONNECTION_STRING"
 
 
-# switch on production and development
+# switch production and development
 if env_mount in os.environ:
-    db_file = "/home/site/wwwroot/db_dir/database.sqlite"
+    db_file = "/home/db_dir/database.sqlite"
 else:
     db_file = "database.sqlite"
 
@@ -45,10 +45,10 @@ def get_session():
 
 
 # backup database.sqlite
-remote_db_dir = "/mount/"
+remote_db_dir = "/mount/db_dir/"
 remote_db = f"{remote_db_dir}{db_file}"
 
-local_db_dir = "/home/site/wwwroot/db_dir/"
+local_db_dir = "/home/db_dir/"
 local_db = f"{local_db_dir}{db_file}"
 
 

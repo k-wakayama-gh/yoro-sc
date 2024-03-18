@@ -17,13 +17,12 @@ if TYPE_CHECKING:
 
 # base model
 class UserBase(SQLModel):
-    username: str = Field(unique=True)
+    username: str = Field(unique=True, min_length=4)
 
 
 # do not return this out!
 class UserIn(UserBase):
-    plain_password: str
-    pass
+    plain_password: str = Field(min_length=4)
 
 
 # never return this out!
@@ -47,7 +46,6 @@ class User(UserInDB, table=True):
 # create: do not return this out!
 class UserCreate(UserBase):
     plain_password: str
-    pass
 
 
 
