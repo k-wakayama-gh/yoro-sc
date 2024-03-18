@@ -77,7 +77,7 @@ async function renderLessons() {
 
                 <div class="flex-row lesson-img-etc">
                     <div class="lesson-teacher-etc flex-column">
-                        <div class="lesson-img"><img src="static/img/lessons/${lesson.teacher}.png"></div>
+                        <div class="lesson-img"><img src="/static/img/lessons/${lesson.teacher}.png"></div>
                         <div class="lesson-teacher"><span class="lesson-teacher-name">講師　</span>${lesson.teacher}</div>
                     </div>
                     

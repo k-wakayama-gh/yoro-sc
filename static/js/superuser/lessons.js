@@ -19,6 +19,7 @@ document.getElementById("add-lesson-form").addEventListener("submit", async func
         price: formData.get("price"),
         description: formData.get("description"),
         capacity: formData.get("capacity"),
+        lessons: formData.get("lessons"),
     };
 
     // エンドポイントにPOSTリクエストを送信
