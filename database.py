@@ -13,7 +13,7 @@ env_db = "DB_CONNECTION_STRING"
 
 # switch production and development
 if env_mount in os.environ:
-    db_dir = "/home/site/wwwroot/db_dir/"
+    db_dir = "/home/db_dir/"
 else:
     db_dir = ""
 
@@ -54,7 +54,7 @@ def get_session():
 
 # backup database.sqlite
 remote_db_dir = "/mount/db_dir/"
-remote_db = f"{remote_db_dir}{db_file}"
+remote_db = f"{remote_db_dir}yoro-sc.sqlite"
 
 local_db_dir = db_dir
 local_db = db_file
@@ -65,26 +65,16 @@ def make_remote_db_dir():
     if env_mount in os.environ:
         if not os.path.exists(remote_db_dir):
             os.makedirs(remote_db_dir)
-            print(f"Directory {remote_db_dir} has been created.")
-        else:
-            print(f"Directory {remote_db_dir} already exists.")
 
 
 def load_db():
     make_remote_db_dir()
     if os.path.exists(remote_db_dir):
         shutil.copy(remote_db, local_db)
-        print(f"Copyed {remote_db} to {local_db}")
-    else:
-        print("Remote directory not found")
 
 
 def save_db():
     make_remote_db_dir()
     if os.path.exists(remote_db_dir):
         shutil.copy(local_db, remote_db)
-        print(f"Copyed {local_db} to {remote_db}")
-    else:
-        print("Remote directory not found")
-
 

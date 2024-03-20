@@ -1,7 +1,7 @@
 # Git and GiuHub
 
 # First commit
-git remote add origin https://k-wakayama-gh:<ACCESSTOKEN>@github.com/k-wakayama-gh/fastapi_test.git
+git remote add origin https://k-wakayama-gh:<ACCESSTOKEN>@github.com/k-wakayama-gh/yoro-sc.git
 git add .
 git commit -m "comment"
 git push -u origin main
@@ -13,7 +13,7 @@ git commit -m "comment"
 git push
 
 # After token espired
-git remote set-url origin https://k-wakayama-gh:<ACCESSTOKEN>@github.com/k-wakayama-gh/fastapi_test.git
+git remote set-url origin https://k-wakayama-gh:<ACCESSTOKEN>@github.com/k-wakayama-gh/yoro-sc.git
 
 # Run this app
 python main.py
