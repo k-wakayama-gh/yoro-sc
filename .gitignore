@@ -1,8 +1,6 @@
 /__pycache__/
 /.github/
 /venv/
-/zzz/
-alembic.ini
 database.sqlite
 memo.txt
 secret.txt

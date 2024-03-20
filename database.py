@@ -13,9 +13,17 @@ env_db = "DB_CONNECTION_STRING"
 
 # switch production and development
 if env_mount in os.environ:
-    db_file = "/home/site/wwwroot/db_dir/database.sqlite"
+    db_dir = "/home/site/wwwroot/db_dir/"
 else:
-    db_file = "database.sqlite"
+    db_dir = ""
+
+
+db_file = f"{db_dir}database.sqlite"
+
+
+if not db_dir == "":
+    if not os.path.exists(db_dir):
+        os.makedirs(db_dir)
 
 
 # switch on database server and sqlite file
@@ -48,8 +56,8 @@ def get_session():
 remote_db_dir = "/mount/db_dir/"
 remote_db = f"{remote_db_dir}{db_file}"
 
-local_db_dir = "/home/db_dir/"
-local_db = f"{local_db_dir}{db_file}"
+local_db_dir = db_dir
+local_db = db_file
 
 
 # load and save db in persist directory
