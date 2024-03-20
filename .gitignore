@@ -1,7 +1,8 @@
 /__pycache__/
 /.github/
 /venv/
-/others/
+/zzz/
 alembic.ini
 database.sqlite
+memo.txt
 secret.txt

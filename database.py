@@ -13,7 +13,7 @@ env_db = "DB_CONNECTION_STRING"
 
 # switch production and development
 if env_mount in os.environ:
-    db_file = "/home/db_dir/database.sqlite"
+    db_file = "/home/site/wwwroot/db_dir/database.sqlite"
 else:
     db_file = "database.sqlite"
 
