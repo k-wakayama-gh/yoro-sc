@@ -96,7 +96,7 @@ def read_users_list(*, offset: int = 0, limit: int = Query(default=100, le=100),
 # read one
 @router.get("/user/{username}", response_model=UserRead, tags=["User"])
 def read_user(session: Annotated[Session, Depends(get_session)], username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
-    user = session.exec(select(User).where(User.username == username)).first()
+    user = session.exec(select(User).where(User.username == username)).one()
     if user is None:
         raise HTTPException(status_code=404, detail="Not found")
     if current_user.username != username:
@@ -109,7 +109,7 @@ def read_user(session: Annotated[Session, Depends(get_session)], username: str, 
 @router.get("/users/details/{username}", response_model=UserDetailRead, tags=["User"])
 def read_user_details(username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
-        user = session.exec(select(User).where(User.username == username)).first()
+        user = session.exec(select(User).where(User.username == username)).one()
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
         if current_user.username != username:
@@ -123,7 +123,7 @@ def read_user_details(username: str, current_user: Annotated[User, Depends(get_c
 @router.patch("/users/{username}", response_model=UserRead, tags=["User"])
 def update_user(session: Annotated[Session, Depends(get_session)], username: str, user_update: UserUpdate, current_user: Annotated[User, Depends(get_current_active_user)]):
     # db_user = session.get(User, user_id)
-    db_user = session.exec(select(User).where(User.username == username)).first()
+    db_user = session.exec(select(User).where(User.username == username)).one()
     if db_user is None:
         raise HTTPException(status_code=404, detail="Not found")
     if username != current_user.username:
@@ -142,16 +142,34 @@ def update_user(session: Annotated[Session, Depends(get_session)], username: str
 @router.delete("/users/delete/{username}", tags=["User"])
 def delete_user(username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
-        if current_user.username != username:
+        if current_user.username != username and current_user.username != "user":
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
-        user = session.exec(select(User).where(User.username == username)).first()
+        user = session.exec(select(User).where(User.username == username)).one()
         if user is None:
             raise HTTPException(status_code=404, detail="Not found")
-        user_details = session.exec(select(UserDetail).where(UserDetail.user_id == user.id)).first()
+        user_details = session.exec(select(UserDetail).where(UserDetail.user_id == user.id)).one()
         session.delete(user)
         session.delete(user_details)
         session.commit()
         return {"deleted": user.username}
 
+
+
+# json: get user details
+@router.get("/json/my/personalinfo", tags=["User"])
+def json_get_my_personal_info(current_user: Annotated[User, Depends(get_current_active_user)]):
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
+        user_details = session.exec(select(UserDetail).where(UserDetail.user_id == user.id)).one()
+        return user_details
+
+
+# display user details
+@router.get("/my/personalinfo", tags=["User"], response_class=HTMLResponse)
+def display_my_personal_info(request: Request):
+    context = {
+        'request': request,
+    }
+    return templates.TemplateResponse("my/personalinfo.html", context)
 
 

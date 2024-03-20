@@ -73,6 +73,7 @@ async function renderLessons() {
     });
     if (myLessons.length !== 0) {
         console.log("rendered lesson list");
+        document.getElementById("fee-list-section").classList.remove("hidden");
     };
 
     const feeList = document.getElementById("fee-list");

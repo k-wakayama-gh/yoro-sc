@@ -1,0 +1,28 @@
+/* my/personalinfo.css */
+
+
+#personal-info > li:nth-child(2n+1) {
+    color: #444444;
+    margin-bottom: 0.5rem;
+}
+
+
+#personal-info > li:nth-child(2n) {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: white;
+}
+
+
+@media screen and (max-width: 30rem) {
+    #personal-info {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 30rem) {
+    #personal-info {
+        min-width: 30rem;
+    }
+}
+

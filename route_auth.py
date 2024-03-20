@@ -32,7 +32,7 @@ env_my_secret_key = "MY_SECRET_KEY"
 if env_my_secret_key in os.environ:
     MY_SECRET_KEY = os.getenv(env_my_secret_key)
 else:
-    MY_SECRET_KEY = "fakesecretkey"
+    MY_SECRET_KEY = "fakesecretkeyfakesecretkeyfakesecretkeyfakesecretkeyfakesecretkey"
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7

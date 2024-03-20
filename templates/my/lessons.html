@@ -27,7 +27,7 @@
         <div id="proper-body" class="flex-row">
             
             <main id="main" class="flex-column-center">
-                <h2>申し込み済みの教室</h2>
+                <h2 style="color: darkgoldenrod;">申し込み済みの教室</h2>
 
                 {% include "login.html" %}
 
@@ -54,7 +54,7 @@
 
                 <div class="space"></div>
 
-                <section class="flex-colum on-login">
+                <section id="fee-list-section" class="flex-column hidden">
                     <h1 class="text-center">金額</h1>
                     <ul id="fee-list" class="flex-column">
                         <li class="dummy-li-1"></li>
@@ -67,7 +67,10 @@
                 <div class="space"></div>
                 
                 <a href="/lessons" class="a-btn">教室申し込みページ</a>
-                <p>キャンセルもここでできます↑</p>
+                <p>キャンセルもこちらでできます↑</p>
+
+                <div class="space"></div>
+                <a href="/my" class="a-btn">マイページ</a>
             </main>
         </div>
     </div>

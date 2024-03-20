@@ -23,12 +23,12 @@ function attachEventListeners() {
 
 
 // merged into renderLessons()
-function addLessonPoster () {
-    const lessonList = document.querySelector("#lesson-list");
-    // console.log("lessonList:", lessonList);
-    const poster = `<li class="lesson-poster"></li>`;
-    document.querySelector("#lesson-list > :nth-child(1)").insertAdjacentHTML("afterend", poster);
-};
+// function addLessonPoster () {
+//     const lessonList = document.querySelector("#lesson-list");
+//     // console.log("lessonList:", lessonList);
+//     const poster = `<li class="lesson-poster"></li>`;
+//     document.querySelector("#lesson-list > :nth-child(1)").insertAdjacentHTML("afterend", poster);
+// };
 
 
 
@@ -119,6 +119,7 @@ async function fetchLessons() {
         return lessons;
     } else {
         console.error("error: fetchLessons()");
+        document.querySelector(".not-allowed").classList.remove("hidden")
         // renderOnLogout();
         return []; // empty <=> length == 0
     };

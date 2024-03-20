@@ -151,7 +151,7 @@ def delete_todo(session: Annotated[Session, Depends(get_session)], todo_id: int)
 @router.get("/my/todos/json", response_model=list[TodoRead], tags=["Todo"])
 def read_my_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
     with Session(engine) as session:
-        user = session.exec(select(User).where(User.username == current_user.username)).first()
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
         my_todos = user.todos
         return my_todos
 
@@ -161,7 +161,7 @@ def read_my_todos(current_user: Annotated[UserRead, Depends(get_current_active_u
 def create_my_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)], todo_create: TodoCreate):
     with Session(engine) as session:
         new_todo = Todo.model_validate(todo_create)
-        user = session.exec(select(User).where(User.username == current_user.username)).first()
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
         if user is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
         user.todos.append(new_todo)

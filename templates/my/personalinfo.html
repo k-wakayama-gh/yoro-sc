@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A website created by K.W.">
+    <meta name="author" content="K.W.">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/my/personalinfo.css">
+    <title>利用者情報</title>
+</head>
+<body>
+    {% include "header.html" %}
+
+    <div id="app" class="flex-column">
+
+        <section id="page-directory-section" class="flex-row">
+            <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
+            <span><a href="/">ホーム</a></span>
+            <span>＞</span>
+            <span><a href="/my">マイページ</a></span>
+            <span>＞</span>
+            <span>個人情報</span>
+        </section>
+
+        <div id="proper-body" class="flex-row">
+
+            <main id="main" class="flex-column-center">
+
+                <h2>利用者情報</h2>
+
+                {% include "login.html" %}
+
+                <div class="space"></div>
+                
+                <section id="personal-info-section" class="flex-column-center full-width">
+                    <ul id="personal-info" class="flex-column">
+                        <li>お名前</li>
+                        <li>あああ</li>
+                        <li>ふりがな</li>
+                        <li>あああ</li>
+                        <li>電話番号</li>
+                        <li>あああ</li>
+                        <li>〒郵便番号</li>
+                        <li>あああ</li>
+                        <li>住所</li>
+                        <li>あああ</li>
+                        <li>ユーザー名</li>
+                        <li>あああ</li>
+                    </ul>
+                </section>
+
+                <div class="space"></div>
+
+            </main>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <p>（一社）養老スポーツクラブ</p>
+    </footer>
+
+    <script src="/static/js/base.js"></script>
+    <script src="/static/js/login.js"></script>
+</body>
+</html>

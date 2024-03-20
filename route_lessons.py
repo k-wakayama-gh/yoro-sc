@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
 from typing import Optional, Annotated
+from datetime import datetime
 
 # my modules
 from database import engine, get_session
@@ -31,6 +32,15 @@ class CommonQueryParams:
         self.limit = limit
 
 # routes below 000000000000000000000000000000000000
+
+# lesson application start date and time
+#start_time = datetime(year=2024, month=3, day=20, hour=7, minute=0, second=0)
+start_time = datetime(year=2024, month=4, day=10, hour=7, minute=0, second=0)
+
+# def: return current time
+# def current_time():
+#     current_time = datetime.now()
+#     return current_time
 
 
 # create
@@ -72,9 +82,12 @@ def display_lessons(request: Request):
 
 
 
-# read list as json
+# json: get lesson list
 @router.get("/json/lessons", response_model=list[LessonRead], tags=["Lesson"])
 def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
+    current_time = datetime.now()
+    if current_time < start_time:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
     with Session(engine) as session:
         lessons = session.exec(select(Lesson).offset(query.offset).limit(query.limit)).all()
         return lessons
@@ -114,7 +127,9 @@ def update_lesson(lesson_id: int, lesson_update: LessonUpdate):
 
 # delete
 @router.delete("/lessons/{lesson_id}", tags=["Lesson"])
-def delete_lesson(*, session: Session = Depends(get_session), lesson_id: int):
+def delete_lesson(*, session: Session = Depends(get_session), lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
+    if current_user.username != "user":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not allowed")
     lesson = session.get(Lesson, lesson_id)
     if not lesson:
         raise HTTPException(status_code=404, detail="Not found")
@@ -129,7 +144,9 @@ def delete_lesson(*, session: Session = Depends(get_session), lesson_id: int):
 @router.get("/json/my/lessons", response_model=list[LessonRead], tags=["Lesson"])
 def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
     with Session(engine) as session:
-        user = session.exec(select(User).where(User.username == current_user.username)).first()
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
+        if user is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="user not found")
         my_lessons = user.lessons
         return my_lessons
 
@@ -138,11 +155,14 @@ def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active
 # create: sign up to a lessons with auth
 @router.post("/lessons/{id}", response_model=list[LessonRead], tags=["Lesson"])
 def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)], id: int):
+    current_time = datetime.now()
+    if current_time < start_time:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
     with Session(engine) as session:
         new_lesson = session.exec(select(Lesson).where(Lesson.id == id)).first()
         if new_lesson.year != 2024 or new_lesson.season != 1:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
-        user = session.exec(select(User).where(User.username == current_user.username)).first()
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
         if user is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
         if not new_lesson in user.lessons:
@@ -184,7 +204,7 @@ def delete_my_lesson(lesson_id: int, current_user: Annotated[User, Depends(get_c
             raise HTTPException(status_code=404, detail="Lesson not found")
         if cancel_lesson.year != 2024 or cancel_lesson.season != 1:
             raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="Outdated")
-        user = session.exec(select(User).where(User.username == current_user.username)).first()
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
         user.lessons.remove(cancel_lesson)
