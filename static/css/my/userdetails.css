@@ -1,0 +1,47 @@
+/* my/personalinfo.css */
+
+
+#user-details > li:nth-child(2n+1) {
+    color: #444444;
+    margin-bottom: 0.5rem;
+}
+
+
+#user-details > li:nth-child(2n) {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: white;
+}
+
+
+#edit-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: inherit;
+    background-color: teal;
+    color: white;
+    box-sizing: border-box;
+    border: none;
+}
+
+#edit-btn:hover {
+    background-color: rgb(33, 177, 177);
+}
+
+
+@media screen and (max-width: 30rem) {
+    #user-details {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 30rem) {
+    #user-details {
+        min-width: 30rem;
+    }
+
+    #edit-btn {
+        max-width: 30rem;
+    }
+}
+

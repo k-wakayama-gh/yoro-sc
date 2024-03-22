@@ -119,7 +119,7 @@ async function fetchLessons() {
         return lessons;
     } else {
         console.error("error: fetchLessons()");
-        document.querySelector(".not-allowed").classList.remove("hidden")
+        document.querySelector(".not-allowed").classList.remove("hidden");
         // renderOnLogout();
         return []; // empty <=> length == 0
     };

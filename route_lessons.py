@@ -95,6 +95,18 @@ def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
 
 
 
+# json superuser: get lesson list
+@router.get("/json/superuser/lessons", response_model=list[LessonRead], tags=["Lesson"])
+def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()], current_user: Annotated[User, Depends(get_current_active_user)]):
+    if not current_user.username == "user":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="not allowed to access")
+    with Session(engine) as session:
+        lessons = session.exec(select(Lesson).offset(query.offset).limit(query.limit)).all()
+        return lessons
+
+
+
+
 # read one
 @router.get("/lessons/{lesson_id}", response_model=LessonRead, tags=["Lesson"])
 def read_lesson(session: Annotated[Session, Depends(get_session)], lesson_id: int):
@@ -156,7 +168,7 @@ def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active
 @router.post("/lessons/{id}", response_model=list[LessonRead], tags=["Lesson"])
 def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)], id: int):
     current_time = datetime.now()
-    if current_time < start_time:
+    if current_time < start_time and current_user.username != "user":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
     with Session(engine) as session:
         new_lesson = session.exec(select(Lesson).where(Lesson.id == id)).first()
@@ -209,6 +221,6 @@ def delete_my_lesson(lesson_id: int, current_user: Annotated[User, Depends(get_c
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
         user.lessons.remove(cancel_lesson)
         session.commit()
-        return {"deleted": cancel_lesson}
+        return {"removed": cancel_lesson}
 
 

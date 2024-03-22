@@ -128,7 +128,7 @@ def update_user(session: Annotated[Session, Depends(get_session)], username: str
         raise HTTPException(status_code=404, detail="Not found")
     if username != current_user.username:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
-    user_data = user_update.model_dump(exclude_unset=True) # pydanticのuser_update型でNULLなデータを除外する
+    user_data = user_update.model_dump(exclude_unset=True) # pydantic型をdict型に変換してNULLなデータを除外する
     for key, value in user_data.items():
         setattr(db_user, key, value) # user_dataのkey, valueをdb_userに割り当てる => 送られてきたuser_updateでNULLでないデータだけを上書きする
     session.add(db_user)
@@ -156,20 +156,23 @@ def delete_user(username: str, current_user: Annotated[User, Depends(get_current
 
 
 # json: get user details
-@router.get("/json/my/personalinfo", tags=["User"])
+@router.get("/json/my/userdetails", tags=["User"])
 def json_get_my_personal_info(current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.username == current_user.username)).one()
         user_details = session.exec(select(UserDetail).where(UserDetail.user_id == user.id)).one()
-        return user_details
+        user_details_dict = user_details.model_dump() # dict型に変更
+        user_details_dict["username"] = current_user.username
+        return user_details_dict
+
 
 
 # display user details
-@router.get("/my/personalinfo", tags=["User"], response_class=HTMLResponse)
+@router.get("/my/userdetails", tags=["User"], response_class=HTMLResponse)
 def display_my_personal_info(request: Request):
     context = {
         'request': request,
     }
-    return templates.TemplateResponse("my/personalinfo.html", context)
+    return templates.TemplateResponse("my/userdetails.html", context)
 
 
