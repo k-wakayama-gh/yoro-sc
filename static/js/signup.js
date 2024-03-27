@@ -67,6 +67,15 @@ document.getElementById("sign-up-check-btn").addEventListener("click", async fun
         // event.preventDefault(); // prevent the default form sending
         document.getElementById("sign-up-btn").style.pointerEvents = "none"; // prevent double submit
         document.getElementById("sign-up-btn").textContent = "処理中...";
+
+        // フォーム内で:invalidスタイルが適用されている要素の数を取得
+        let invalidElementsCount = document.querySelectorAll("form :invalid").length;
+        if (invalidElementsCount != 0) {
+            document.getElementById("sign-up-btn"). textContent = "以上の内容で登録する";
+            document.getElementById("sign-up-btn").style.pointerEvents = "auto";
+            alert("登録に失敗しました。入力内容に不備があります。");
+            throw new Error("内容に不備があります。");
+        };
         
         const body = {
             username: username,
@@ -92,12 +101,12 @@ document.getElementById("sign-up-check-btn").addEventListener("click", async fun
             console.log("success: create a new account", result);
             // location.reload();
             await login(username, plain_password);
+            location.href="/lessons";
         } else {
             console.error("error: create a new account");
             document.getElementById("sign-up-btn"). textContent = "以上の内容で登録する";
-            alert("登録に失敗しました");
+            alert("登録に失敗しました。入力内容に不備があります。");
         };
-        location.href="/lessons";
         // document.getElementById("sign-up-btn").style.pointerEvents = "auto"; // reactivate sign up btn
         // alert("完了");
     });
