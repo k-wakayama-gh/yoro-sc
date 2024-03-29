@@ -1,6 +1,7 @@
 /__pycache__/
 /.github/
 /venv/
+/zzz/
 database.sqlite
 memo.txt
 secret.txt

@@ -101,11 +101,11 @@ document.getElementById("sign-up-check-btn").addEventListener("click", async fun
             console.log("success: create a new account", result);
             // location.reload();
             await login(username, plain_password);
-            location.href="/lessons";
+            location.href="/signupcomplete";
         } else {
             console.error("error: create a new account");
             document.getElementById("sign-up-btn"). textContent = "以上の内容で登録する";
-            alert("登録に失敗しました。入力内容に不備があります。");
+            alert("登録に失敗しました。このユーザー名はすでに使用されています。");
         };
     });
 });

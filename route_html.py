@@ -56,13 +56,23 @@ def user_signup(request: Request):
 
 
 
-# coffee page
-@router.get("/coffee", response_class=HTMLResponse, tags=["html"])
-def coffee(request: Request):
+# sign up after complete page
+@router.get("/signupcomplete", response_class=HTMLResponse, tags=["html"])
+def signup_complete(request: Request):
     context = {
-        'request': request,
+        "request": request,
     }
-    return templates.TemplateResponse('coffee.html', context)
+    return templates.TemplateResponse("signupcomplete.html", context)
+
+
+
+# # coffee page
+# @router.get("/coffee", response_class=HTMLResponse, tags=["html"])
+# def coffee(request: Request):
+#     context = {
+#         'request': request,
+#     }
+#     return templates.TemplateResponse('coffee.html', context)
 
 
 # warm cold start
@@ -72,9 +82,9 @@ def warmup():
 
 
 
-# backup database.sqlite
-@router.get("/backupdatabase")
-def backup_database():
-    save_db()
-    return {"backup database.sqlite": "ok"}
+# # backup database.sqlite
+# @router.get("/backupdatabase")
+# def backup_database():
+#     save_db()
+#     return {"backup database.sqlite": "ok"}
 
