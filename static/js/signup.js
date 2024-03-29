@@ -72,7 +72,7 @@ document.getElementById("sign-up-check-btn").addEventListener("click", async fun
         let invalidElementsCount = document.querySelectorAll("form :invalid").length;
         if (invalidElementsCount != 0) {
             document.getElementById("sign-up-btn"). textContent = "以上の内容で登録する";
-            document.getElementById("sign-up-btn").style.pointerEvents = "auto";
+            document.getElementById("sign-up-btn").style.pointerEvents = "auto"; // reactivate sign up btn
             alert("登録に失敗しました。入力内容に不備があります。");
             throw new Error("内容に不備があります。");
         };
@@ -107,8 +107,6 @@ document.getElementById("sign-up-check-btn").addEventListener("click", async fun
             document.getElementById("sign-up-btn"). textContent = "以上の内容で登録する";
             alert("登録に失敗しました。入力内容に不備があります。");
         };
-        // document.getElementById("sign-up-btn").style.pointerEvents = "auto"; // reactivate sign up btn
-        // alert("完了");
     });
 });
 

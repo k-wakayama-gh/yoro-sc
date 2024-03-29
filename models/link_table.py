@@ -24,3 +24,8 @@ class UserUserDetailLink(SQLModel, table=True):
     user_id: Optional[int] = Field(default=None, foreign_key="user.id", primary_key=True)
     user_details_id: Optional[int] = Field(default=None, foreign_key="userdetail.id", primary_key=True)
 
+
+class UserUserChildLink(SQLModel, table=True):
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id", primary_key=True)
+    user_children_id: Optional[int] = Field(default=None, foreign_key="userchild.id", primary_key=True)
+

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A website created by K.W.">
+    <meta name="author" content="K.W.">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/signup.css">
+    <title>こども登録</title>
+</head>
+<body>
+    {% include "header.html" %}
+
+    <div id="app" class="flex-column">
+
+        <section id="page-directory-section" class="flex-row">
+            <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
+            <span><a href="/">ホーム</a></span>
+            <span>＞</span>
+            <span><a href="/my">マイページ</a></span>
+            <span>＞</span>
+            <span>こども登録</span>
+        </section>
+
+        <div id="proper-body" class="flex-row">
+
+            <main id="main" class="flex-column-center">
+                <div class="auth-form-div flex-column">
+                    <section id="sign-up-form-section" class="flex-column">
+                        <h1>こども登録</h1>
+                        <div class="space"></div>
+                        <p id="show-children-form" style="text-align: start; color: #FFA07A;">●「こども運動教室」へ申し込みをする方はこちら</p>
+                        <form id="children-form">
+                        </form>
+                        <div class="form-text">お子さんのお名前<span class="form-annotation">必須</span></div>
+                        <div class="flex-row-between">
+                            <input type="text" name="last_name" placeholder="姓" required class="half-input">
+                            <input type="text" name="first_name" placeholder="名" required class="half-input">
+                        </div>
+                        <div class="space"></div>
+                        <div class="form-text">お子さんのふりがな<span class="form-annotation">必須</span></div>
+                        <div class="flex-row-between">
+                            <input type="text" inputmode="kana-name" name="last_name_furigana" placeholder="ふりがな (姓)" required class="half-input">
+                            <input type="text" inputmode="kana-name" name="first_name_furigana" placeholder="ふりがな (名)" required class="half-input">
+                        </div>
+                        <div class="space"></div>
+                        </form>
+                        <div id="sign-up-check-div" class="hidden"></div>
+                        <button type="click" id="sign-up-btn" class="hidden">以上の内容で登録する</button>
+                        <div class="space"></div>
+                        <button type="click" id="sign-up-cancel-btn" class="hidden">内容を変更する</button>
+                    </section>
+                </div>
+
+                <div class="space"></div>
+
+            </main>
+
+            {% include "aside.html" %}
+
+        </div>
+    </div>
+
+    <footer id="footer">
+        <p>（一社）養老スポーツクラブ</p>
+    </footer>
+
+    <script src="/static/js/base.js"></script>
+    <script src="/static/js/my/childrensignup.js"></script>
+</body>
+</html>

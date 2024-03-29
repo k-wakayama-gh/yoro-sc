@@ -10,7 +10,7 @@ from typing import Optional, Annotated
 # my modules
 from database import engine, get_session
 from models.items import Item, ItemCreate, ItemRead, ItemUpdate, ItemDelete
-from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserIn, UserInDB, UserDetail, UserWithUserDetailCreate, UserDetailRead
+from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserIn, UserInDB, UserDetail, UserWithUserDetailCreate, UserDetailRead, UserChild, UserChildCreate
 from route_auth import get_hashed_password
 from route_auth import get_current_active_user
 
@@ -36,19 +36,19 @@ def create_db_user(user_in: UserIn):
 
 
 
-# create
-@router.post("/users", response_model=UserRead, tags=["User"])
-def create_user(user_in: UserIn):
-    with Session(engine) as session:
-        db_user = create_db_user(user_in)
-        session.add(db_user)
-        session.commit()
-        session.refresh(db_user)
-        return db_user
+# # create
+# @router.post("/users", response_model=UserRead, tags=["User"])
+# def create_user(user_in: UserIn):
+#     with Session(engine) as session:
+#         db_user = create_db_user(user_in)
+#         session.add(db_user)
+#         session.commit()
+#         session.refresh(db_user)
+#         return db_user
 
 
 
-# create
+# create: user with user_details
 @router.post("/users/signup", response_model=UserRead, tags=["User"])
 def create_user_with_details(user_in: UserWithUserDetailCreate):
     with Session(engine) as session:
@@ -65,7 +65,6 @@ def create_user_with_details(user_in: UserWithUserDetailCreate):
         return db_user
 
 
-
 # create user with details converting plain password into hashed password
 def create_db_user_with_details(user_in: UserWithUserDetailCreate):
     hashed_password = get_hashed_password(user_in.plain_password)
@@ -76,6 +75,35 @@ def create_db_user_with_details(user_in: UserWithUserDetailCreate):
 def create_db_user_details(user_in: UserWithUserDetailCreate):
     db_user_details = UserDetail(**user_in.model_dump())
     return db_user_details
+
+
+# create: my user children
+@router.post("/user/create/children", tags=["User"])
+def create_my_user_children(children: list[UserChildCreate], current_user: Annotated[User, Depends(get_current_active_user)]):
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
+        for child in children:
+            child = UserChild.model_validate(child)
+            user.user_children.append(child)
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        return children
+
+
+# delete: my user children
+@router.delete("/user/delete/children{child_id}", tags=["User"])
+def delete_my_user_children(child_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
+        if user is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Require login")
+        child = session.exec(select(UserChild).where(UserChild.id == child_id and UserChild.user_id == user.id)).first()
+        if child is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+        session.delete(child)
+        session.commit()
+        return {"removed": "done"}
 
 
 
@@ -174,5 +202,15 @@ def display_my_personal_info(request: Request):
         'request': request,
     }
     return templates.TemplateResponse("my/userdetails.html", context)
+
+
+
+# children signup page
+@router.get("/my/childrensignup", tags=["User"], response_class=HTMLResponse)
+def display_children_signup_page(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("my/childrensignup.html", context)
 
 

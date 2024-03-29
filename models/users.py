@@ -40,6 +40,7 @@ class User(UserInDB, table=True):
     lessons: List["lessons.Lesson"] = Relationship(back_populates="users", link_model=link_table.UserLessonLink)
     todos: List["todos.Todo"] = Relationship(back_populates="users", link_model=link_table.UserTodoLink)
     user_details: Optional["UserDetail"] = Relationship(back_populates="user", link_model=link_table.UserUserDetailLink)
+    user_children: List["UserChild"] = Relationship(back_populates="user", link_model=link_table.UserUserChildLink)
 
 
 
@@ -109,4 +110,28 @@ class UserDetailRead(UserDetailBase):
 class UserWithUserDetailRead(UserRead, UserDetailRead):
     pass
 
+
+
+
+# user children
+
+class UserChildBase(SQLModel):
+    child_first_name: str
+    child_last_name: str
+    child_first_name_furigana: str
+    child_last_name_furigana: str
+
+
+class UserChild(UserChildBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+    user: Optional["User"] = Relationship(back_populates="user_children", link_model=link_table.UserUserChildLink)
+
+
+
+# class UserChildCreate(SQLModel):
+#     user_children: List["UserChildBase"]
+
+class UserChildCreate(UserChildBase):
+    pass
 
