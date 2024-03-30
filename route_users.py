@@ -52,6 +52,10 @@ def create_db_user(user_in: UserIn):
 @router.post("/users/signup", response_model=UserRead, tags=["User"])
 def create_user_with_details(user_in: UserWithUserDetailCreate):
     with Session(engine) as session:
+        username = user_in.username
+        existing_user = session.exec(select(User).where(User.username == username)).first()
+        if existing_user:
+            raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="The username already exists")
         db_user = create_db_user(user_in)
         db_user_details = create_db_user_details(user_in)
         db_user.user_details = db_user_details
