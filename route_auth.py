@@ -64,7 +64,7 @@ def get_hashed_password(password):
 # def: get user by username
 def get_user(username: str):
     with Session(engine) as session:
-        user = session.exec(select(User).where(User.username == username)).first()
+        user = session.exec(select(User).where(User.username == username)).one()
     return user
 
 
@@ -96,7 +96,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 
 
 
-# def: get user information from access token
+# def: get user from access token
 def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -138,26 +138,14 @@ def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
 
 
 
-@router.get("/users/me", response_model=UserRead, tags=["User"])
-def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
-    return current_user
+# @router.get("/users/me", response_model=UserRead, tags=["User"])
+# def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
+#     return current_user
 
 
 
-@router.get("/users/me/items/")
-def read_own_items(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
-    return [{"item_id": "Foo", "owner": current_user.username}]
-
-
-
-# return username
-@router.get("/my/username", tags=["User"])
-def get_username(current_user: Annotated[User, Depends(get_current_active_user)]):
-    username = current_user.username
-    with Session(engine) as session:
-        user = session.exec(select(User).where(User.username == username)).first()
-        if user is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-        return username
+# @router.get("/users/me/items/")
+# def read_own_items(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
+#     return [{"item_id": "Foo", "owner": current_user.username}]
 
 

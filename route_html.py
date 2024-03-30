@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
 from typing import Optional, Annotated
+from datetime import datetime
 
 # my modules
 from database import engine, get_session
@@ -13,7 +14,7 @@ from models.items import Item, ItemCreate, ItemRead, ItemUpdate, ItemDelete
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete
 from models.todos import Todo, TodoCreate, TodoRead, TodoUpdate, TodoDelete
 from route_auth import get_current_active_user
-from database import save_db
+from database import make_backup_db
 
 # FastAPI instance and API router
 app = FastAPI()
@@ -30,7 +31,7 @@ templates = Jinja2Templates(directory='templates')
 def index(request: Request):
     context = {
         "request": request,
-        "title": "タイトル",
+        "title": "ホーム｜(一社)養老スポーツクラブ",
     }
     return templates.TemplateResponse("index.html", context)
 
@@ -56,7 +57,7 @@ def user_signup(request: Request):
 
 
 
-# sign up after complete page
+# after sign up complete page
 @router.get("/signupcomplete", response_class=HTMLResponse, tags=["html"])
 def signup_complete(request: Request):
     context = {
@@ -82,9 +83,16 @@ def warmup():
 
 
 
-# # backup database.sqlite
-# @router.get("/backupdatabase")
-# def backup_database():
-#     save_db()
-#     return {"backup database.sqlite": "ok"}
+# backup database.sqlite
+@router.get("/backupdatabase")
+def backup_database():
+    make_backup_db()
+    return {"backup database.sqlite to yoro-sc.sqlite": "ok"}
+
+
+
+@router.get("/now", tags=["test"])
+def show_current_datetime():
+    current_datetime = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+    return {"now": current_datetime}
 

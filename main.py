@@ -7,8 +7,8 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 # my modules
-from database import engine, create_database, load_db, save_db
-import route_html, route_items, route_users, route_lessons, route_auth, route_todos
+from database import engine, create_database
+import route_html, route_items, route_users, route_lessons, route_auth, route_todos, route_test
 
 # FastAPI instance
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
@@ -20,6 +20,7 @@ app.include_router(route_users.router)
 app.include_router(route_lessons.router)
 app.include_router(route_auth.router)
 app.include_router(route_todos.router)
+app.include_router(route_test.router)
 
 
 # static files settings

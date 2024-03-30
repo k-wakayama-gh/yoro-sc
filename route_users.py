@@ -36,7 +36,7 @@ def create_db_user(user_in: UserIn):
 
 
 
-# # create
+# # create: user
 # @router.post("/users", response_model=UserRead, tags=["User"])
 # def create_user(user_in: UserIn):
 #     with Session(engine) as session:
@@ -151,15 +151,15 @@ def read_user_details(username: str, current_user: Annotated[User, Depends(get_c
 
 
 
-# patch
+# patch: username and password
 @router.patch("/users/{username}", response_model=UserRead, tags=["User"])
 def update_user(session: Annotated[Session, Depends(get_session)], username: str, user_update: UserUpdate, current_user: Annotated[User, Depends(get_current_active_user)]):
+    if username != current_user.username and username != "user":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
     # db_user = session.get(User, user_id)
     db_user = session.exec(select(User).where(User.username == username)).one()
     if db_user is None:
         raise HTTPException(status_code=404, detail="Not found")
-    if username != current_user.username and username != "user":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
     user_data = user_update.model_dump(exclude_unset=True) # pydantic型をdict型に変換してNULLなデータを除外する
     for key, value in user_data.items():
         setattr(db_user, key, value) # user_dataのkey, valueをdb_userに割り当てる => 送られてきたuser_updateでNULLでないデータだけを上書きする
@@ -170,6 +170,7 @@ def update_user(session: Annotated[Session, Depends(get_session)], username: str
 
 
 
+# patch: user details
 @router.patch("/userdetails/{username}", tags=["User"], response_model=UserDetailRead)
 def patch_userdetails(username: str, new_user_details: UserDetailCreate, current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
@@ -191,7 +192,7 @@ def patch_userdetails(username: str, new_user_details: UserDetailCreate, current
 
 
 
-# delete
+# delete: user with details
 @router.delete("/users/delete/{username}", tags=["User"])
 def delete_user(username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
@@ -205,6 +206,21 @@ def delete_user(username: str, current_user: Annotated[User, Depends(get_current
         session.delete(user_details)
         session.commit()
         return {"deleted": user.username}
+
+
+
+
+
+# return username
+@router.get("/my/username", tags=["User"])
+def get_username(current_user: Annotated[User, Depends(get_current_active_user)]):
+    username = current_user.username
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.username == username)).first()
+        if user is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        return username
+
 
 
 

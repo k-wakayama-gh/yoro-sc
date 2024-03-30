@@ -4,6 +4,7 @@
 from sqlmodel import SQLModel, create_engine, Session
 import os
 import shutil
+from datetime import datetime
 
 
 # env_docker = "IN_DOCKER_CONTAINER"
@@ -21,7 +22,7 @@ else:
 db_file = f"{db_dir}database.sqlite"
 
 
-if not db_dir == "":
+if db_dir != "":
     if not os.path.exists(db_dir):
         os.makedirs(db_dir)
 
@@ -52,29 +53,32 @@ def get_session():
 
 
 
+
 # backup database.sqlite
-remote_db_dir = "/mount/db_dir/"
-remote_db = f"{remote_db_dir}yoro-sc.sqlite"
-
-local_db_dir = db_dir
-local_db = db_file
-
-
-# load and save db in persist directory
 def make_remote_db_dir():
     if env_mount in os.environ:
-        if not os.path.exists(remote_db_dir):
-            os.makedirs(remote_db_dir)
+        backup_db_dir = "/mount/db_dir/"
+        if not os.path.exists(backup_db_dir):
+            os.makedirs(backup_db_dir)
 
 
-def load_db():
-    make_remote_db_dir()
-    if os.path.exists(remote_db_dir):
-        shutil.copy(remote_db, local_db)
+# def override_current_db():
+#     make_remote_db_dir()
+#     backup_db_dir = "/mount/db_dir/"
+#     if os.path.exists(backup_db_dir):
+#         backup_db = f"{backup_db_dir}yoro-sc.sqlite"
+#         current_db = db_file
+#         shutil.copy2(backup_db, current_db)
 
 
-def save_db():
-    make_remote_db_dir()
-    if os.path.exists(remote_db_dir):
-        shutil.copy(local_db, remote_db)
+def make_backup_db():
+    backup_db_dir = "/mount/db_dir/"
+    if os.path.exists(backup_db_dir) and env_mount in os.environ:
+        current_datetime = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+        backup_db = f"{backup_db_dir}yoro-sc_{current_datetime}.sqlite"
+        current_db = db_file
+        shutil.copy2(current_db, backup_db)
+    else:
+        make_remote_db_dir()
+
 
