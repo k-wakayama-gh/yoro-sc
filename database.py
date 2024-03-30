@@ -4,7 +4,7 @@
 from sqlmodel import SQLModel, create_engine, Session
 import os
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 # env_docker = "IN_DOCKER_CONTAINER"
@@ -74,7 +74,7 @@ def make_remote_db_dir():
 def make_backup_db():
     backup_db_dir = "/mount/db_dir/"
     if os.path.exists(backup_db_dir) and env_mount in os.environ:
-        current_datetime = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+        current_datetime = (datetime.utcnow() + timedelta(hours=9)).strftime("%Y-%m-%dT%H-%M-%S")
         backup_db = f"{backup_db_dir}yoro-sc_{current_datetime}.sqlite"
         current_db = db_file
         shutil.copy2(current_db, backup_db)

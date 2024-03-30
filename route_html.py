@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
 from typing import Optional, Annotated
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # my modules
 from database import engine, get_session
@@ -93,6 +93,6 @@ def backup_database():
 
 @router.get("/now", tags=["test"])
 def show_current_datetime():
-    current_datetime = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+    current_datetime = (datetime.utcnow() + timedelta(hours=9)).strftime("%Y-%m-%dT%H-%M-%S")
     return {"now": current_datetime}
 
