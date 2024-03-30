@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
 from typing import Optional, Annotated
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 # my modules
 from database import engine, get_session
@@ -34,8 +34,9 @@ class CommonQueryParams:
 # routes below 000000000000000000000000000000000000
 
 # lesson application start date and time
-#start_time = datetime(year=2024, month=3, day=20, hour=7, minute=0, second=0)
-start_time = datetime(year=2024, month=4, day=10, hour=7, minute=0, second=0)
+test_start_time = datetime(year=2024, month=3, day=31, hour=4, minute=50, second=0, tzinfo=timezone(timedelta(hours=9)))
+
+start_time = datetime(year=2024, month=4, day=10, hour=7, minute=0, second=0, tzinfo=timezone(timedelta(hours=9)))
 
 # def: return current time
 # def current_time():
@@ -85,7 +86,7 @@ def display_lessons(request: Request):
 # json: get lesson list
 @router.get("/json/lessons", response_model=list[LessonRead], tags=["Lesson"])
 def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
-    current_time = datetime.now()
+    current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
     if current_time < start_time:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
     with Session(engine) as session:
@@ -98,8 +99,11 @@ def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
 # json superuser: get lesson list
 @router.get("/json/superuser/lessons", response_model=list[LessonRead], tags=["Lesson"])
 def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()], current_user: Annotated[User, Depends(get_current_active_user)]):
+    current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
+    if current_time < test_start_time:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
     if not current_user.username == "user":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="not allowed to access")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not allowed to access")
     with Session(engine) as session:
         lessons = session.exec(select(Lesson).offset(query.offset).limit(query.limit)).all()
         return lessons
@@ -167,7 +171,7 @@ def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active
 # create: sign up to a lessons with auth
 @router.post("/lessons/{id}", response_model=list[LessonRead], tags=["Lesson"])
 def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)], id: int):
-    current_time = datetime.now()
+    current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
     if current_time < start_time and current_user.username != "user":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
     with Session(engine) as session:
