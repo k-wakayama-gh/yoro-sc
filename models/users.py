@@ -94,8 +94,15 @@ class UserDetail(UserDetailBase, table=True):
 
 
 
-class UserDetailCreate(UserDetailBase):
-    pass
+class UserDetailCreate(SQLModel):
+    email: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    first_name_furigana: Optional[str] = None
+    last_name_furigana: Optional[str] = None
+    tel: Optional[str] = None
+    postal_code: Optional[str] = None
+    address: Optional[str] = None
 
 
 class UserWithUserDetailCreate(UserIn, UserDetailCreate):
@@ -104,7 +111,7 @@ class UserWithUserDetailCreate(UserIn, UserDetailCreate):
 
 
 class UserDetailRead(UserDetailBase):
-    pass
+    username: str
 
 
 class UserWithUserDetailRead(UserRead, UserDetailRead):

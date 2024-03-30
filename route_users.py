@@ -10,7 +10,7 @@ from typing import Optional, Annotated
 # my modules
 from database import engine, get_session
 from models.items import Item, ItemCreate, ItemRead, ItemUpdate, ItemDelete
-from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserIn, UserInDB, UserDetail, UserWithUserDetailCreate, UserDetailRead, UserChild, UserChildCreate
+from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserIn, UserInDB, UserDetail, UserWithUserDetailCreate, UserDetailRead, UserDetailCreate, UserChild, UserChildCreate
 from route_auth import get_hashed_password
 from route_auth import get_current_active_user
 
@@ -91,7 +91,7 @@ def create_my_user_children(children: list[UserChildCreate], current_user: Annot
             user.user_children.append(child)
         session.add(user)
         session.commit()
-        session.refresh(user)
+        session.refresh(children)
         return children
 
 
@@ -158,7 +158,7 @@ def update_user(session: Annotated[Session, Depends(get_session)], username: str
     db_user = session.exec(select(User).where(User.username == username)).one()
     if db_user is None:
         raise HTTPException(status_code=404, detail="Not found")
-    if username != current_user.username:
+    if username != current_user.username and username != "user":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
     user_data = user_update.model_dump(exclude_unset=True) # pydantic型をdict型に変換してNULLなデータを除外する
     for key, value in user_data.items():
@@ -167,6 +167,27 @@ def update_user(session: Annotated[Session, Depends(get_session)], username: str
     session.commit()
     session.refresh(db_user)
     return db_user
+
+
+
+@router.patch("/userdetails/{username}", tags=["User"], response_model=UserDetailRead)
+def patch_userdetails(username: str, new_user_details: UserDetailCreate, current_user: Annotated[User, Depends(get_current_active_user)]):
+    with Session(engine) as session:
+        if username != current_user.username and username != "user":
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
+        user = session.exec(select(User).where(User.username == username)).one()
+        if user is None:
+            raise HTTPException(status_code=404, detail="User not found")
+        user_details = user.user_details
+        proper_new_user_details = new_user_details.model_dump(exclude_unset=True)
+        for key, value in proper_new_user_details.items():
+            setattr(user_details, key, value)
+        session.add(user)
+        session.commit()
+        session.refresh(user_details)
+        user_details_out = user_details.model_dump()
+        user_details_out["username"] = username
+        return user_details_out
 
 
 
@@ -188,7 +209,7 @@ def delete_user(username: str, current_user: Annotated[User, Depends(get_current
 
 
 # json: get user details
-@router.get("/json/my/userdetails", tags=["User"])
+@router.get("/json/my/userdetails", tags=["User"], response_model=UserDetailRead)
 def json_get_my_personal_info(current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.username == current_user.username)).one()
