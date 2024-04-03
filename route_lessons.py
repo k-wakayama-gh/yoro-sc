@@ -96,8 +96,8 @@ def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
 
 
 
-# json superuser: get lesson list
-@router.get("/json/superuser/lessons", response_model=list[LessonRead], tags=["Lesson"])
+# json admin: get lesson list
+@router.get("/json/admin/lessons", response_model=list[LessonRead], tags=["Lesson"])
 def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()], current_user: Annotated[User, Depends(get_current_active_user)]):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
     if current_time < test_start_time:
@@ -201,13 +201,13 @@ def display_my_lessons(request: Request):
 
 
 
-# display superuser lessons async for management
-@router.get("/superuser/lessons", response_class=HTMLResponse, tags=["Lesson"], response_model=list[LessonRead])
+# display admin lessons async for management
+@router.get("/admin/lessons", response_class=HTMLResponse, tags=["Lesson"], response_model=list[LessonRead])
 def display_superuser_lessons(request: Request):
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("superuser/lessons.html", context)
+    return templates.TemplateResponse("admin/lessons.html", context)
 
 
 

@@ -142,3 +142,6 @@ class UserChild(UserChildBase, table=True):
 class UserChildCreate(UserChildBase):
     pass
 
+class UserChildRead(UserChildBase):
+    pass
+

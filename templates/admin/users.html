@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A website created by K.W.">
+    <meta name="author" content="K.W.">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/admin/users.css">
+    <title>ユーザー一覧</title>
+</head>
+<body>
+    {% include "header.html" %}
+
+    <div id="app" class="flex-column">
+
+        <section id="page-directory-section" class="flex-row">
+            <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
+            <span><a href="/">ホーム</a></span>
+            <span>＞</span>
+            <span><a href="/admin">管理者ページ</a></span>
+            <span>＞</span>
+            <span>ユーザー一覧</span>
+        </section>
+
+        <div id="proper-body" class="flex-row">
+
+            <main id="main" class="flex-column-center">
+                <section id="user-list-section">
+                    <table id="user-list-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>ユーザー名</th>
+                                <th>氏名</th>
+                                <th>ふりがな</th>
+                                <th>電話番号</th>
+                                <th>郵便番号</th>
+                                <th>住所</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>あああ</td>
+                                <td>いいい</td>
+                                <td>ううう</td>
+                                <td>えええ</td>
+                                <td>おおお</td>
+                                <td>かかか</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>あああ</td>
+                                <td>いいい</td>
+                                <td>ううう</td>
+                                <td>えええ</td>
+                                <td>おおお</td>
+                                <td>かかか</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>あああ</td>
+                                <td>いいい</td>
+                                <td>ううう</td>
+                                <td>えええ</td>
+                                <td>おおお</td>
+                                <td>かかか</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <div class="space"></div>
+
+            </main>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <p>（一社）養老スポーツクラブ</p>
+    </footer>
+
+    <script src="/static/js/base.js"></script>
+    <script src="/static/js/login.js"></script>
+</body>
+</html>

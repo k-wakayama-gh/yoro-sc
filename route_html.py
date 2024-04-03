@@ -67,6 +67,17 @@ def signup_complete(request: Request):
 
 
 
+# admin top page
+@router.get("/admin", response_class=HTMLResponse, tags=["html"])
+def signup_complete(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("admin.html", context)
+
+
+
+
 # # coffee page
 # @router.get("/coffee", response_class=HTMLResponse, tags=["html"])
 # def coffee(request: Request):

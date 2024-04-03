@@ -3,6 +3,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
     renderMyUserDetails();
+    renderMyChildren();
 });
 
 
@@ -36,7 +37,7 @@ async function renderMyUserDetails() {
     };
 
     userDetailsList.insertAdjacentHTML("beforeend", listItem);
-    displayEditForm(userDetails);
+    // displayEditForm(userDetails);
 };
 
 
@@ -54,6 +55,58 @@ async function fetchMyUserDetails() {
         return userDetails;
     } else {
         console.error("error: fetchMyUserDetails()");
+        return [];
+    };
+};
+
+
+
+
+
+
+// render my children
+async function renderMyChildren() {
+    const children = await fetchMyChildren();
+    const childrenList = document.getElementById("user-children");
+
+    // clear the previous children list
+    childrenList.textContent = "";
+
+    let count = 1;
+
+    for (const child of children) {
+        const listItem = `
+            <p class="numbering">${count}</p>
+            <li>お名前</li>
+            <li>${child.child_last_name}　${child.child_first_name}</li>
+            <li>ふりがな</li>
+            <li>${child.child_last_name_furigana}　${child.child_first_name_furigana}</li>
+            <div class="hidden"></div>
+        `;
+        childrenList.insertAdjacentHTML("beforeend", listItem);
+        count ++;
+    };
+
+    if (children.length == 0) {
+        childrenList.insertAdjacentHTML("beforeend", `<p style="text-align: center;">お子さんの情報は登録されていません</p>`);
+    };
+};
+
+
+
+// get my user details
+async function fetchMyChildren() {
+    const token = loadAccessToken();
+    const response = await fetch("/json/my/children", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+    });
+    if (response.ok) {
+        const result = await response.json();
+        console.log("success: fetchMyChildren()", result);
+        return result;
+    } else {
+        console.error("error: fetchMyChildren()");
         return [];
     };
 };

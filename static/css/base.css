@@ -30,6 +30,8 @@ button {
     box-sizing: border-box;
     cursor: pointer;
     touch-action: manipulation;
+    padding: 1rem;
+    font-size: medium;
 }
 
 a {
@@ -153,9 +155,10 @@ body {
 
 .a-btn {
     border: none;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     box-sizing: border-box;
-    background-color: #0f82ac;
+    /* background-color: #0f82ac; */
+    background-color: teal;
     text-decoration: none;
     padding: 1rem;
     width: 100%;
@@ -163,10 +166,12 @@ body {
     text-align: center;
     color: white;
     cursor: pointer;
+    font-size: medium;
 }
 
 .a-btn:hover {
-    background-color: #2fafda;
+    /* background-color: #2fafda; */
+    background-color: rgb(33, 177, 177);
 }
 
 .a-btn:visited {
@@ -227,6 +232,7 @@ header {
     padding: 0 1rem;
     min-height: 2rem;
     border-radius: 3px;
+    font-size: small;
 }
 
 #user-btn:hover, #menu-btn:hover, #logout-btn:hover {
@@ -308,7 +314,10 @@ footer {
 
 
 .important-btn {
-    background-color: #1a7c17;
+    /* background-color: #1a7c17; */
+    background-color: #1f6c15;
+    border-radius: 5px;
+    border: 1px solid darkgray;
 }
 
 .important-btn:hover {

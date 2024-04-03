@@ -1,0 +1,41 @@
+/* my/childrensignup.css */
+
+#select-number-of-children {
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+#select-number-of-children > span {
+    background-color: lightgray;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+#select-number-of-children > span:hover {
+    background-color: cornflowerblue;
+    color: white;
+}
+
+.selected {
+    background-color: cornflowerblue;
+    color: white;
+}
+
+.numbering {
+    background-color: lightgray;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    border-radius: 5px;
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+}
+

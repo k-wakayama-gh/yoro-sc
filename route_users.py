@@ -10,7 +10,7 @@ from typing import Optional, Annotated
 # my modules
 from database import engine, get_session
 from models.items import Item, ItemCreate, ItemRead, ItemUpdate, ItemDelete
-from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserIn, UserInDB, UserDetail, UserWithUserDetailCreate, UserDetailRead, UserDetailCreate, UserChild, UserChildCreate
+from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserIn, UserInDB, UserDetail, UserWithUserDetailCreate, UserDetailRead, UserDetailCreate, UserChild, UserChildCreate, UserChildRead
 from route_auth import get_hashed_password
 from route_auth import get_current_active_user
 
@@ -81,8 +81,10 @@ def create_db_user_details(user_in: UserWithUserDetailCreate):
     return db_user_details
 
 
+
+
 # create: my user children
-@router.post("/user/create/children", tags=["User"])
+@router.post("/my/children", tags=["User"])
 def create_my_user_children(children: list[UserChildCreate], current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.username == current_user.username)).one()
@@ -91,12 +93,18 @@ def create_my_user_children(children: list[UserChildCreate], current_user: Annot
             user.user_children.append(child)
         session.add(user)
         session.commit()
-        session.refresh(children)
+        session.refresh(user)
+        for child in user.user_children:
+            child.user_id = user.id
+        session.add(user)
+        session.commit()
+        session.refresh(user)
         return children
 
 
+
 # delete: my user children
-@router.delete("/user/delete/children{child_id}", tags=["User"])
+@router.delete("/my/children{child_id}", tags=["User"])
 def delete_my_user_children(child_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.username == current_user.username)).one()
@@ -116,11 +124,11 @@ def delete_my_user_children(child_id: int, current_user: Annotated[User, Depends
 @router.get("/users", response_model=list[UserRead], tags=["User"])
 def read_users_list(*, offset: int = 0, limit: int = Query(default=100, le=100), current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
-        users = session.exec(select(User).offset(offset).limit(limit)).all()
         if current_user.username != "user":
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
+        users = session.exec(select(User).offset(offset).limit(limit)).all()
         # if not users:
-        #     raise HTTPException(status_code=404, detail="Not found") # should return empty list if no users
+        #     raise HTTPException(status_code=404, detail="Not found") # rather than this it should return empty list if no users
         return users
 
 
@@ -131,7 +139,7 @@ def read_user(session: Annotated[Session, Depends(get_session)], username: str, 
     user = session.exec(select(User).where(User.username == username)).one()
     if user is None:
         raise HTTPException(status_code=404, detail="Not found")
-    if current_user.username != username:
+    if current_user.username != "user":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
     return user
 
@@ -141,20 +149,20 @@ def read_user(session: Annotated[Session, Depends(get_session)], username: str, 
 @router.get("/users/details/{username}", response_model=UserDetailRead, tags=["User"])
 def read_user_details(username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
+        if current_user.username != "user":
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
         user = session.exec(select(User).where(User.username == username)).one()
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
-        if current_user.username != username:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
         user_details = user.user_details
         return user_details
 
 
 
-# patch: username and password
+# patch: username and password -> require edit to get_hashed_password
 @router.patch("/users/{username}", response_model=UserRead, tags=["User"])
 def update_user(session: Annotated[Session, Depends(get_session)], username: str, user_update: UserUpdate, current_user: Annotated[User, Depends(get_current_active_user)]):
-    if username != current_user.username and username != "user":
+    if current_user.username != "user":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
     # db_user = session.get(User, user_id)
     db_user = session.exec(select(User).where(User.username == username)).one()
@@ -224,15 +232,25 @@ def get_username(current_user: Annotated[User, Depends(get_current_active_user)]
 
 
 
-# json: get user details
+# json: get my user details
 @router.get("/json/my/userdetails", tags=["User"], response_model=UserDetailRead)
-def json_get_my_personal_info(current_user: Annotated[User, Depends(get_current_active_user)]):
+def json_get_my_userdetails(current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.username == current_user.username)).one()
         user_details = session.exec(select(UserDetail).where(UserDetail.user_id == user.id)).one()
         user_details_dict = user_details.model_dump() # dict型に変更
         user_details_dict["username"] = current_user.username
         return user_details_dict
+
+
+
+# json: get my user children
+@router.get("/json/my/children", tags=["User"], response_model=list[UserChildRead])
+def json_get_my_children(current_user: Annotated[User, Depends(get_current_active_user)]):
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
+        children = session.exec(select(UserChild).where(UserChild.user_id == user.id)).all()
+        return children
 
 
 
@@ -254,4 +272,22 @@ def display_children_signup_page(request: Request):
     }
     return templates.TemplateResponse("my/childrensignup.html", context)
 
+
+
+# admin only: display: users
+@router.get("/admin/users", tags=["User"], response_class=HTMLResponse)
+def display_users(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("admin/users.html", context)
+
+
+@router.get("/json/admin/users", tags=["User"])
+def get_user_list_json(current_user: Annotated[User, Depends(get_current_active_user)]):
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
+        if user.username != "user":
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+        return {"response": "ok"}
 

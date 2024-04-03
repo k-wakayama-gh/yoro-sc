@@ -1,13 +1,13 @@
 /* my/personalinfo.css */
 
 
-#user-details > li:nth-child(2n+1) {
+#user-details > li:nth-child(2n+1), #user-children > li:nth-child(2n) {
     color: #444444;
     margin-bottom: 0.5rem;
 }
 
 
-#user-details > li:nth-child(2n) {
+#user-details > li:nth-child(2n), #user-children > li:nth-child(2n+1) {
     padding: 1rem;
     margin-bottom: 1.5rem;
     background-color: white;
@@ -29,14 +29,22 @@
 }
 
 
+.numbering {
+    width: 100%;
+    border-radius: 5px;
+    background-color: lightgray;
+    text-align: center;
+}
+
+
 @media screen and (max-width: 30rem) {
-    #user-details {
+    #user-details, #user-children {
         width: 100%;
     }
 }
 
 @media screen and (min-width: 30rem) {
-    #user-details {
+    #user-details, #user-children {
         min-width: 30rem;
     }
 

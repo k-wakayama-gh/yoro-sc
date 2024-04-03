@@ -1,4 +1,4 @@
-// superuser/lessons.js
+// admin/lessons.js
 
 // create: add lesson from
 document.getElementById("add-lesson-form").addEventListener("submit", async function (event) {
@@ -149,7 +149,7 @@ async function renderLessons() {
 // get lessons
 async function fetchLessons() {
     const token = loadAccessToken();
-    const response = await fetch("/json/superuser/lessons", {
+    const response = await fetch("/json/admin/lessons", {
         method: "GET",
         headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
     });
