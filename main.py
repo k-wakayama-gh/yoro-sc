@@ -17,8 +17,9 @@ app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 
 # migrate database
 def migrate_database():
-    alembic_cfg = Config("alembic.ini")
-    command.upgrade(alembic_cfg, "head")
+    if "WEBSITES_ENABLE_APP_SERVICE_STORAGE" in os.environ:
+        alembic_cfg = Config("alembic_product.ini")
+        command.upgrade(alembic_cfg, "head")
 
 # include API router
 app.include_router(route_html.router)
@@ -36,6 +37,7 @@ app.mount('/static', StaticFiles(directory='static'), name='static')
 # create database on startup
 @app.on_event("startup")
 def on_startup():
+    migrate_database()
     create_database()
 
 @app.on_event("shutdown")
