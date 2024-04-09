@@ -35,7 +35,7 @@ class UserInDB(UserBase):
 class User(UserInDB, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     is_active: Optional[bool] = Field(default=True)
-    # is_super_user: Optional[bool] = Field(default=False)
+    is_admin: Optional[bool] = Field(default=False)
     
     lessons: List["lessons.Lesson"] = Relationship(back_populates="users", link_model=link_table.UserLessonLink)
     todos: List["todos.Todo"] = Relationship(back_populates="users", link_model=link_table.UserTodoLink)
@@ -61,8 +61,10 @@ class UserUsername(SQLModel):
 
 
 # patch
-class UserUpdate(UserBase):
-    pass
+class UserUpdate(SQLModel):
+    username: Optional[str] = None
+    is_active: Optional[bool] = None
+    is_admin: Optional[bool] = None
 
 
 

@@ -5,6 +5,8 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 import os
+from alembic import command
+from alembic.config import Config
 
 # my modules
 from database import engine, create_database
@@ -12,6 +14,11 @@ import route_html, route_items, route_users, route_lessons, route_auth, route_to
 
 # FastAPI instance
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
+
+# migrate database
+def migrate_database():
+    alembic_cfg = Config("alembic.ini")
+    command.upgrade(alembic_cfg, "head")
 
 # include API router
 app.include_router(route_html.router)
@@ -29,6 +36,7 @@ app.mount('/static', StaticFiles(directory='static'), name='static')
 # create database on startup
 @app.on_event("startup")
 def on_startup():
+    migrate_database()
     create_database()
 
 @app.on_event("shutdown")
