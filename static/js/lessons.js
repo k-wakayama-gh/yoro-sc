@@ -53,6 +53,10 @@ async function renderLessons() {
             signUpBtn = `<button class="lesson-sign-up-btn">申し込みをする</button>`;
         };
 
+        // if (lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
+        //     signUpBtn = `<button class="dummy-btn-1" style="position: relative;">定員に達しました</button>`;
+        // };
+
         let numberColor = "gray";
         if (lesson.number <= 1) {
             numberColor = "#a44d3a";
