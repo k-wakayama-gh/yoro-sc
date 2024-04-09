@@ -49,8 +49,6 @@ async function renderLessons() {
             signUpBtn = "";
         } else if (myLessons.some(myLesson => myLesson.id == lesson.id)) {
             signUpBtn = `<button class="dummy-btn" style="position: relative;">申し込み済み${cancelBtn}</button>`;
-        } else if (lesson.capacity_left <= 0) {
-            signUpBtn = `<button class="dummy-btn-1" style="position: relative;">定員に達しました</button>`;
         } else {
             signUpBtn = `<button class="lesson-sign-up-btn">申し込みをする</button>`;
         };
