@@ -168,7 +168,7 @@ def read_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active
 
 
 
-# create: sign up to a lessons with auth
+# post: sign up to a lessons with auth
 @router.post("/lessons/{id}", response_model=list[LessonRead], tags=["Lesson"])
 def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)], id: int):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
@@ -186,6 +186,10 @@ def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_acti
             session.add(user)
             session.commit()
             session.refresh(user)
+        new_lesson.capacity_left = new_lesson.capacity - len(new_lesson.users)
+        session.add(new_lesson)
+        session.commit()
+        session.refresh(new_lesson)
         my_lessons = user.lessons
         return my_lessons
 
@@ -225,6 +229,10 @@ def delete_my_lesson(lesson_id: int, current_user: Annotated[User, Depends(get_c
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
         user.lessons.remove(cancel_lesson)
         session.commit()
+        cancel_lesson.capacity_left = cancel_lesson.capacity - len(cancel_lesson.users)
+        session.add(cancel_lesson)
+        session.commit()
+        session.refresh(cancel_lesson)
         return {"removed": cancel_lesson}
 
 
