@@ -108,7 +108,7 @@ async function renderLessons() {
         };
         const dayColor = {"日": "red", "月": "gray", "火": "orange", "水": "#4193f6", "木": "3f8d57", "金": "#f19937", "土": "blue"};
         const listItem = `
-            <li class="lesson-list-li flex-column" style="border-color: ${numberColor};" data-lesson-id="${lesson.id}">
+            <li class="lesson-list-li flex-column" style="border-color: ${numberColor};" data-lesson-id="${lesson.id}" data-lesson-number="${lesson.number}">
                 <div class="flex-row-between lesson-number-etc">
                     <div class="lesson-number" style="background-color: ${numberColor};"><div>${lesson.number}</div></div>
                     <div class="lesson-name"><div class="flex-row">${lesson.title}</div></div>
@@ -194,6 +194,7 @@ function signUpLesson() {
         button.addEventListener("click", async function () {
             const token = loadAccessToken();
             const lessonId = this.parentNode.dataset.lessonId;
+            // const lessonNumber = this.parentNode.dataset.lessonNumber;
 
             this.textContent = "処理中...";
 
@@ -223,7 +224,7 @@ function signUpLesson() {
 
 // sign up to a children lesson
 function signupChildrenLesson() {
-    console.log("aaa")
+    console.log("aaa");
 };
 
 

@@ -155,7 +155,9 @@ def read_user_details(username: str, current_user: Annotated[User, Depends(get_c
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
         user_details = user.user_details
-        return user_details
+        user_details_dict = user_details.model_dump()
+        user_details_dict["username"] = current_user.username
+        return user_details_dict
 
 
 
@@ -182,7 +184,7 @@ def update_user(session: Annotated[Session, Depends(get_session)], username: str
 @router.patch("/userdetails/{username}", tags=["User"], response_model=UserDetailRead)
 def patch_userdetails(username: str, new_user_details: UserDetailCreate, current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
-        if username != current_user.username and username != "user":
+        if username != current_user.username and current_user.username != "user":
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
         user = session.exec(select(User).where(User.username == username)).one()
         if user is None:
