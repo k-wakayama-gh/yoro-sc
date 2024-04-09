@@ -221,6 +221,11 @@ function signUpLesson() {
 
 
 
+// sign up to a children lesson
+function signupChildrenLesson() {
+    console.log("aaa")
+};
+
 
 
 // cancel a lesson
