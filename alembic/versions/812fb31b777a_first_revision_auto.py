@@ -54,6 +54,7 @@ def downgrade() -> None:
     sa.Column('hashed_password', sa.VARCHAR(), nullable=False),
     sa.Column('id', sa.INTEGER(), nullable=False),
     sa.Column('is_active', sa.BOOLEAN(), nullable=True),
+    sa.Column('is_admin', sa.BOOLEAN(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('username')
     )
@@ -100,4 +101,13 @@ def downgrade() -> None:
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    # op.create_table(
+    #     "userchild",
+    #     sa.Column("id", sa.Integer, primary_key=True),
+    #     sa.Column("user_id", sa.Integer, sa.ForeignKey("user.id")),
+    #     sa.Column("child_first_name", sa.String),
+    #     sa.Column("child_last_name", sa.String),
+    #     sa.Column("child_first_name_furigana", sa.String),
+    #     sa.Column("child_last_name_furigana", sa.String)
+    # )
     # ### end Alembic commands ###

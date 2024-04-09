@@ -65,6 +65,7 @@ class UserUpdate(SQLModel):
     username: Optional[str] = None
     is_active: Optional[bool] = None
     is_admin: Optional[bool] = None
+    plain_password: Optional[str] = None
 
 
 

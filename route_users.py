@@ -36,7 +36,7 @@ def create_db_user(user_in: UserIn):
 
 
 
-# # create: user
+# # create: user without details
 # @router.post("/users", response_model=UserRead, tags=["User"])
 # def create_user(user_in: UserIn):
 #     with Session(engine) as session:
@@ -156,7 +156,7 @@ def read_user_details(username: str, current_user: Annotated[User, Depends(get_c
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
         user_details = user.user_details
         user_details_dict = user_details.model_dump()
-        user_details_dict["username"] = current_user.username
+        user_details_dict["username"] = user.username
         return user_details_dict
 
 
@@ -167,16 +167,20 @@ def update_user(session: Annotated[Session, Depends(get_session)], username: str
     if current_user.username != "user":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
     # db_user = session.get(User, user_id)
-    db_user = session.exec(select(User).where(User.username == username)).one()
-    if db_user is None:
+    user = session.exec(select(User).where(User.username == username)).one()
+    if user is None:
         raise HTTPException(status_code=404, detail="Not found")
-    user_data = user_update.model_dump(exclude_unset=True) # pydantic型をdict型に変換してNULLなデータを除外する
-    for key, value in user_data.items():
-        setattr(db_user, key, value) # user_dataのkey, valueをdb_userに割り当てる => 送られてきたuser_updateでNULLでないデータだけを上書きする
-    session.add(db_user)
+    user_update_dict = user_update.model_dump(exclude_unset=True) # pydantic型をdict型に変換してNULLなデータを除外する
+    if user_update.plain_password:
+        hashed_password = get_hashed_password(user_update.plain_password)
+        user_update_dict.pop("plain_password")
+        user_update_dict["hashed_password"] = hashed_password
+    for key, value in user_update_dict.items():
+        setattr(user, key, value) # user_dataのkey, valueをdb_userに割り当てる => 送られてきたuser_updateでNULLでないデータだけを上書きする
+    session.add(user)
     session.commit()
-    session.refresh(db_user)
-    return db_user
+    session.refresh(user)
+    return user
 
 
 
