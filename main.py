@@ -11,6 +11,7 @@ from alembic.config import Config
 # my modules
 from database import engine, create_database
 import route_html, route_items, route_users, route_lessons, route_auth, route_todos, route_test
+from force_sqlite import force_sqlite
 
 # FastAPI instance
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
@@ -37,6 +38,8 @@ app.mount('/static', StaticFiles(directory='static'), name='static')
 # create database on startup
 @app.on_event("startup")
 def on_startup():
+    force_sqlite()
+    migrate_database()
     create_database()
 
 @app.on_event("shutdown")
