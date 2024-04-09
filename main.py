@@ -38,8 +38,6 @@ app.mount('/static', StaticFiles(directory='static'), name='static')
 # create database on startup
 @app.on_event("startup")
 def on_startup():
-    force_sqlite()
-    migrate_database()
     create_database()
 
 @app.on_event("shutdown")
