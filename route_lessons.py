@@ -306,3 +306,15 @@ def json_read_lesson_signup_position_all(current_user: Annotated[User, Depends(g
             position_list.append(positioon_dict)
         return position_list
 
+
+
+@router.get("/json/admin/user/{user_id}/lessons", tags=["Lesson"])
+def admin_json_read_user_lesson_list(user_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
+    if current_user.username != "user":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+    with Session(engine) as session:
+        user = session.get(User, user_id)
+        user_lessons = user.lessons
+        return user_lessons
+
+
