@@ -83,12 +83,12 @@ def create_db_user_details(user_in: UserWithUserDetailCreate):
 
 
 # read: admin: children
-@router.get("/user/{username}/children", tags=["User"])
-def admin_read_user_children(username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
+@router.get("/user/{user_id}/children", tags=["User"])
+def admin_read_user_children(user_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     if current_user.username != "user":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
     with Session(engine) as session:
-        user = session.exec(select(User).where(User.username == username)).one()
+        user = session.exec(select(User).where(User.id == user_id)).one()
         children = user.user_children
         return children
 
@@ -130,12 +130,12 @@ def delete_my_user_children(child_id: int, current_user: Annotated[User, Depends
 
 
 # delete: admin: children
-@router.delete("/user/{username}/children/{child_id}", tags=["User"])
-def admin_delete_user_children(child_id: int, username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
+@router.delete("/user/{user_id}/children/{child_id}", tags=["User"])
+def admin_delete_user_children(user_id: int, child_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     if current_user.username != "user":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
     with Session(engine) as session:
-        user = session.exec(select(User).where(User.username == username)).one()
+        user = session.exec(select(User).where(User.id == user_id)).one()
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="user not found")
         child = session.exec(select(UserChild).where(UserChild.id == child_id and UserChild.user_id == user.id)).first()

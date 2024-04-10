@@ -67,10 +67,9 @@ async function renderLessons() {
         };
         if (position > lesson.capacity && myLessons.some(myLesson => myLesson.id == lesson.id)) {
             console.log("position bigger");
-            signUpBtn = `<button class="dummy-btn" style="position: relative;">キャンセル待ちに申込済${cancelBtn}</button>`;
+            signUpBtn = `<button class="dummy-btn" style="position: relative; color: tomato;">キャンセル待ちに申込済${cancelBtn}</button>`;
         } else {
             console.log("position: ok");
-            console.log(position_list[lesson.id]);
         };
 
         let numberColor = "gray";
@@ -250,7 +249,7 @@ async function get_lesson_signup_position() {
     });
     if (response.ok) {
         const result = await response.json();
-        console.log("success: get_lesson_signup_position()", result);
+        // console.log("success: get_lesson_signup_position()", result);
         return result;
     } else {
         console.error("error: fetchMyLessons()");

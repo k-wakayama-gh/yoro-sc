@@ -25,6 +25,7 @@ function attachEventListeners() {
 // render lesson list
 async function renderLessons() {
     const myLessons = await fetchMyLessons();
+    const position_list = await get_lesson_signup_position();
     const lessonList = document.getElementById("lesson-list");
 
     // clear the previous lesson list
@@ -43,6 +44,23 @@ async function renderLessons() {
         } else {
             numberColor = "#4379a6";
         };
+
+        let position;
+        for (let i = 0; i < position_list.length; i++) {
+            if (position_list[i].lesson_id == lesson.id) {
+                position = position_list[i].user_position;
+                break;
+            };
+        };
+        let position_msg;
+        if (position > lesson.capacity) {
+            console.log("position bigger");
+            position_msg = `<p class="position-msg" style="position: relative; color: tomato; text-align: center;">キャンセル待ちに申込済</p>`;
+        } else {
+            console.log("position: ok");
+            position_msg = "";
+        };
+        
         const listItem = `
             <li class="lesson-list-li flex-column" style="border-color: ${numberColor};" data-lesson-id="${lesson.id}">
                 <div class="flex-row-between lesson-number-etc">
@@ -67,6 +85,8 @@ async function renderLessons() {
                 <p class="lesson-description">${lesson.description}</p>
 
                 <button class="lesson-cancel-btn hidden">キャンセルする</button>
+
+                ${position_msg}
             </li>
         `;
         lessonList.insertAdjacentHTML("beforeend", listItem);
@@ -141,6 +161,23 @@ function cancelLesson() {
 
 
 
+
+
+async function get_lesson_signup_position() {
+    const token = loadAccessToken();
+    const response = await fetch("/json/my/lessons/position", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+    });
+    if (response.ok) {
+        const result = await response.json();
+        // console.log("success: get_lesson_signup_position()", result);
+        return result;
+    } else {
+        console.error("error: fetchMyLessons()");
+        return [];
+    };
+};
 
 
 
