@@ -315,10 +315,24 @@ def display_users(request: Request):
 
 
 @router.get("/json/admin/users", tags=["User"])
-def get_user_list_json(current_user: Annotated[User, Depends(get_current_active_user)]):
+def admin_get_user_list_json(current_user: Annotated[User, Depends(get_current_active_user)]):
+    if current_user.username != "user":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
     with Session(engine) as session:
-        user = session.exec(select(User).where(User.username == current_user.username)).one()
-        if user.username != "user":
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
-        return {"response": "ok"}
+        user_details = session.exec(select(UserDetail)).all()
+        return user_details
+
+
+@router.get("/json/admin/users/search", tags=["User"])
+def  admin_user_search(current_user: Annotated[User, Depends(get_current_active_user)], last_name_furigana: str = None, first_name_furigana: str = None):
+    if current_user.username != "user":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not Authorized")
+    with Session(engine) as session:
+        if last_name_furigana and not first_name_furigana:
+            user_details = session.exec(select(UserDetail).where(UserDetail.last_name_furigana == last_name_furigana)).all()
+        elif not last_name_furigana and first_name_furigana:
+            user_details = session.exec(select(UserDetail).where(UserDetail.first_name_furigana == first_name_furigana)).all()
+        elif last_name_furigana and first_name_furigana:
+            user_details = session.exec(select(UserDetail).where(UserDetail.last_name_furigana == last_name_furigana and UserDetail.first_name_furigana == first_name_furigana)).all()
+        return user_details
 
