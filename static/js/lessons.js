@@ -218,6 +218,7 @@ function cancelLessonOnSmallBtn() {
                 console.log("success: cancel a lesson", result);
             } else {
                 console.error("error: cancelLesson()");
+                location.reload();
             };
         });
     });

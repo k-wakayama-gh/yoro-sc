@@ -227,6 +227,8 @@ def delete_my_lesson(lesson_id: int, current_user: Annotated[User, Depends(get_c
         user = session.exec(select(User).where(User.username == current_user.username)).one()
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        if not user in cancel_lesson.users:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not signed up")
         user.lessons.remove(cancel_lesson)
         session.commit()
         cancel_lesson.capacity_left = cancel_lesson.capacity - len(cancel_lesson.users)
@@ -235,4 +237,37 @@ def delete_my_lesson(lesson_id: int, current_user: Annotated[User, Depends(get_c
         session.refresh(cancel_lesson)
         return {"removed": cancel_lesson}
 
+
+
+
+# admin: read signuped user list for each lesson
+@router.get("/json/admin/{lesson_id}/member", response_model=list[UserRead], tags={"Lesson"})
+def admin_read_lesson_member_list(lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
+    if current_user.username != "user":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+    with Session(engine) as session:
+        lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
+        lesson_member = lesson.users
+        return lesson_member
+
+
+
+# admin: delete: lesson member
+@router.delete("/admin/{lesson_id}/remove/{username}", tags=["Lesson"])
+def admin_remove_lesson_member(lesson_id: int, username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
+    if current_user.username != "user":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+    with Session(engine) as session:
+        lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
+        lesson_title = lesson.title
+        lesson_member = lesson.users
+        user = session.exec(select(User).where(User.username == username)).one()
+        user_details = (user.user_details).model_dump()
+        user_fullname = user_details["last_name"] + "　" + user_details["first_name"]
+        lesson_member.remove(user)
+        session.add(lesson)
+        session.commit()
+        session.refresh(lesson)
+        message = f"{username}：{user_fullname}を{lesson_title}から削除しました。"
+        return {"removed done": message}
 
