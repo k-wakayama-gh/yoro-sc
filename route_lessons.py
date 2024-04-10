@@ -318,3 +318,29 @@ def admin_json_read_user_lesson_list(user_id: int, current_user: Annotated[User,
         return user_lessons
 
 
+
+# post: sign up to a lessons with auth
+@router.post("/admin/user/{user_id}/lessons/{lesson_id}", response_model=list[LessonRead], tags=["Lesson"])
+def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_active_user)], user_id: int, lesson_id: int):
+    current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
+    if current_time < start_time and current_user.username != "user":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
+    with Session(engine) as session:
+        new_lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
+        # if new_lesson.year != 2024 or new_lesson.season != 1:
+        #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
+        user = session.exec(select(User).where(User.id == user_id)).one()
+        if user is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+        if not new_lesson in user.lessons:
+            user.lessons.append(new_lesson)
+            session.add(user)
+            session.commit()
+            session.refresh(user)
+        new_lesson.capacity_left = new_lesson.capacity - len(new_lesson.users)
+        session.add(new_lesson)
+        session.commit()
+        session.refresh(new_lesson)
+        user_lessons = user.lessons
+        return user_lessons
+
