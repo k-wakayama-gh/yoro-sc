@@ -271,3 +271,38 @@ def admin_remove_lesson_member(lesson_id: int, username: str, current_user: Anno
         message = f"{username}：{user_fullname}を{lesson_title}から削除しました。"
         return {"removed done": message}
 
+
+
+# read: lesson signup position
+@router.get("/json/my/lessons/{lesson_id}/position", tags=["Lesson"])
+def json_read_lesson_signup_position(lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
+    with Session(engine) as session:
+        lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
+        lesson_member = lesson.users
+        if not user in lesson_member:
+            # raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not signed up to this lesson")
+            user_position = 0
+        else:
+            user_position = lesson_member.index(user) + 1
+        return user_position
+
+
+
+# read: lesson signup position
+@router.get("/json/my/lessons/position", tags=["Lesson"])
+def json_read_lesson_signup_position_all(current_user: Annotated[User, Depends(get_current_active_user)]):
+    with Session(engine) as session:
+        lessons = session.exec(select(Lesson).where(Lesson.year == 2024)).all()
+        user = session.exec(select(User).where(User.username == current_user.username)).one()
+        position_list = []
+        for lesson in lessons:
+            lesson_member = lesson.users
+            if not user in lesson_member:
+                user_position = 0
+            else:
+                user_position = lesson_member.index(user) + 1
+            positioon_dict = {"lesson_id": lesson.id, "user_position": user_position}
+            position_list.append(positioon_dict)
+        return position_list
+
