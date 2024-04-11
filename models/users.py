@@ -136,6 +136,7 @@ class UserChild(UserChildBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     user_id: Optional[int] = Field(default=None, foreign_key="user.id")
     user: Optional["User"] = Relationship(back_populates="user_children", link_model=link_table.UserUserChildLink)
+    lessons: List["lessons.Lesson"] = Relationship(back_populates="user_children", link_model=link_table.UserChildLessonLink)
 
 
 

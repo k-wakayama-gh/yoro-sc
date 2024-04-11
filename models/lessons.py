@@ -35,6 +35,7 @@ class Lesson(LessonBase, table=True):
     capacity_left: Optional[int] = Field(default=None)
     
     users: List["users.User"] = Relationship(back_populates="lessons", link_model=link_table.UserLessonLink)
+    user_children: List["users.UserChild"] = Relationship(back_populates="lessons", link_model=link_table.UserChildLessonLink)
 
 
 
