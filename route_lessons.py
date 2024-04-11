@@ -302,7 +302,13 @@ def admin_json_read_users_of_every_lessons(current_user: Annotated[User, Depends
                     parent = session.exec(select(User).where(User.id == child.user_id)).one()
                     child_dict = child.model_dump()
                     parent_name = parent.user_details.last_name + "　" + parent.user_details.first_name
+                    parent_tel = parent.user_details.tel
+                    parent_postal_code = parent.user_details.postal_code
+                    parent_address = parent.user_details.address
                     child_dict["parent_name"] = parent_name
+                    child_dict["parent_tel"] = parent_tel
+                    child_dict["parent_postal_code"] = parent_postal_code
+                    child_dict["parent_address"] = parent_address
                     users.append(child_dict)
             else:
                 for user in lesson.users:

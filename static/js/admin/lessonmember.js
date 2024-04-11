@@ -55,9 +55,9 @@ async function displayLessonMember () {
                         <td>${user.child_last_name}　${user.child_first_name}</td>
                         <td>${user.child_last_name_furigana}　${user.child_first_name_furigana}</td>
                         <td>${user.parent_name}</td>
-                        <td>あああ</td>
-                        <td>あああ</td>
-                        <td>あああ</td>
+                        <td>${user.parent_tel}</td>
+                        <td>${user.parent_postal_code}</td>
+                        <td>${user.parent_address}</td>
                     </tr>
                 `;
                 const table_body = document.querySelector(table_body_selector);
