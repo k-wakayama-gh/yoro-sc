@@ -396,3 +396,28 @@ def admin_add_children_into_lesson(user_id: int, lesson_id: int, current_user: A
             return {"parent user has not signed up to the lesson": "ignored"}
 
 
+
+# admin: temorary function username ver
+@router.get("/admin/user/{username}/lesson/{lesson_id}/enter-children-username-ver", tags=["Lesson"])
+def admin_add_children_into_lesson_username_ver(username: str, lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
+    if current_user.username != "user":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+    if lesson_id != 1:
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="lesson_id must be 1")
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.username == username)).one()
+        user_children = user.user_children
+        lesson = session.get(Lesson, lesson_id)
+        if user in lesson.users:
+            for child in user_children:
+                if not child in lesson.user_children:
+                    child.lessons.append(lesson)
+            lesson.capacity_left = lesson.capacity - len(lesson.user_children)
+            session.add(lesson)
+            session.commit()
+            session.refresh(lesson)
+            return {"children signed up to the lesson": "done"}
+        else:
+            return {"parent user has not signed up to the lesson": "ignored"}
+
+
