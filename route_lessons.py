@@ -266,14 +266,61 @@ def delete_my_lesson(lesson_id: int, current_user: Annotated[User, Depends(get_c
 
 
 # admin: read user list of a lesson
-@router.get("/json/admin/lessons/{lesson_id}/member", response_model=list[UserRead], tags={"Lesson"})
-def admin_read_lesson_member_list(lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
+@router.get("/json/admin/lessons/{lesson_id}/users", response_model=list[UserRead], tags={"Lesson"})
+def admin_json_read_users_of_a_lesson(lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     if current_user.username != "user":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
     with Session(engine) as session:
         lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
         lesson_member = lesson.users
         return lesson_member
+
+
+
+
+# admin: json: read lesson member list
+@router.get("/json/admin/lessons/users", tags={"Lesson"})
+def admin_json_read_users_of_every_lessons(current_user: Annotated[User, Depends(get_current_active_user)], year: int = None, season: int = None):
+    # if current_user.username != "user":
+    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+    with Session(engine) as session:
+        accessing_user = session.exec(select(User).where(User.username == current_user.username)).one()
+        if accessing_user.is_admin != True:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+        
+        if year and season:
+            lessons = session.exec(select(Lesson).where(Lesson.year == year and Lesson.season == season)).all()
+        elif year and not season:
+            lessons = session.exec(select(Lesson).where(Lesson.year == year)).all()
+        else:
+            lessons = session.exec(select(Lesson)).all()
+        lessons_users_list = []
+        for lesson in lessons:
+            users = []
+            if lesson.id == 1:
+                for child in lesson.user_children:
+                    parent = session.exec(select(User).where(User.id == child.user_id)).one()
+                    child_dict = child.model_dump()
+                    parent_name = parent.user_details.last_name + "　" + parent.user_details.first_name
+                    child_dict["parent_name"] = parent_name
+                    users.append(child_dict)
+            else:
+                for user in lesson.users:
+                    user_details = user.user_details
+                    users.append(user_details)
+            lessons_users_dict = {"lesson_id": lesson.id, "lesson_title": lesson.title, "users": users}
+            lessons_users_list.append(lessons_users_dict)
+        return lessons_users_list
+
+
+
+
+# admin: display lesson member list
+@router.get("/admin/lessons/users", tags={"Lesson"})
+def admin_display_users_of_every_lessons(request: Request):
+    context = {"request": request}
+    return templates.TemplateResponse("admin/lessonmember.html", context)
+
 
 
 
