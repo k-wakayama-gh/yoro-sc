@@ -65,6 +65,7 @@ async function renderLessons() {
                 break;
             };
         };
+        // console.log(position);
         if (position > lesson.capacity && myLessons.some(myLesson => myLesson.id == lesson.id)) {
             console.log("position bigger");
             signUpBtn = `<button class="dummy-btn" style="position: relative; color: tomato;">キャンセル待ちに申込済${cancelBtn}</button>`;

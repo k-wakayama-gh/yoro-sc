@@ -325,11 +325,19 @@ def json_read_lesson_signup_position_all(current_user: Annotated[User, Depends(g
             lesson_member = lesson.users
             if not user in lesson_member:
                 user_position = 0
-            else:
+            elif lesson.number != 1:
                 user_position = lesson_member.index(user) + 1
+            elif lesson.number == 1:
+                user_children = session.exec(select(UserChild).where(UserChild.user_id == user.id)).all()
+                user_position = 0
+                for child in user_children:
+                    if child in lesson.user_children:
+                        user_position = lesson.user_children.index(child) + 1
             positioon_dict = {"lesson_id": lesson.id, "user_position": user_position}
             position_list.append(positioon_dict)
         return position_list
+
+
 
 
 # admin: read: lesson list of a user signed up
