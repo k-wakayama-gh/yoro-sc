@@ -5,7 +5,8 @@
     border-radius: 5px;
 }
 
-#select-number-of-children > span {
+/* #select-number-of-children > span {...} => style priority too strong */
+.number-btn {
     background-color: lightgray;
     border-radius: 50%;
     width: 3rem;
@@ -39,3 +40,35 @@ h2 {
     text-align: center;
 }
 
+#signup-check-btn {
+    background-color: rgb(22, 154, 46);
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+
+#signup-check-btn:hover {
+    background-color: rgb(63, 168, 82);
+}
+
+#signup-btn {
+    background-color: rgb(36, 83, 175);
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+
+#signup-btn:hover {
+    background-color: rgb(60, 108, 205);
+}
+
+#signup-cancel-btn {
+    background-color: rgb(195, 51, 35);
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+
+#signup-cancel-btn:hover {
+    background-color: rgb(212, 67, 51);
+}

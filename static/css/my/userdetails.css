@@ -14,10 +14,19 @@
 }
 
 
+.link-children-signup {
+    background-color: darkgoldenrod;
+    font-size: medium;
+}
+
+.link-children-signup:hover {
+    background-color: rgb(211, 166, 53);
+}
+
+
 #edit-btn {
     width: 100%;
     padding: 1rem;
-    font-size: inherit;
     background-color: teal;
     color: white;
     box-sizing: border-box;
