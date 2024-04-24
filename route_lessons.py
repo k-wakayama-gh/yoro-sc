@@ -482,3 +482,18 @@ def admin_add_children_into_lesson_username_ver(username: str, lesson_id: int, c
             return {"parent user has not signed up to the lesson": "ignored"}
 
 
+
+
+# get: refresh lesson capacity
+@router.get("/lessons/refresh/capacity", tags=["Lesson"])
+def refresh_lesson_capacity_left(session: Annotated[Session, Depends(get_session)]):
+    lessons = session.exec(select(Lesson).where(Lesson.year == 2024)).all()
+    for lesson in lessons:
+        lesson.capacity_left = lesson.capacity - len(lesson.users)
+        session.add(lesson)
+    session.commit()
+    for lesson in lessons:
+        session.refresh(lesson)
+    return lessons
+
+

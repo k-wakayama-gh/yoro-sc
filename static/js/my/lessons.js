@@ -26,6 +26,7 @@ function attachEventListeners() {
 async function renderLessons() {
     const myLessons = await fetchMyLessons();
     const position_list = await get_lesson_signup_position();
+    const my_children = await fetchMyChildren();
     const lessonList = document.getElementById("lesson-list");
 
     // clear the previous lesson list
@@ -101,7 +102,11 @@ async function renderLessons() {
     let totalFee = 0;
     myLessons.forEach(function (lesson) {
         totalFee = totalFee + lesson.price;
-        const fee = `<p>${lesson.title}：${lesson.price.toLocaleString()}円</p>`;
+        let fee = `<p>${lesson.title}：${lesson.price.toLocaleString()}円</p>`;
+        if (lesson.number == 1) {
+            const number_of_children = my_children.length;
+            fee = `<p>${lesson.title}：${lesson.price.toLocaleString()}円 x ${number_of_children}名分</p>`;
+        };
         feeList.insertAdjacentHTML("beforeend", fee);
     });
     // feeList.insertAdjacentHTML("beforeend", `<p style="font-weight: bold;">合計：${totalFee.toLocaleString()}円</p>`);
@@ -124,6 +129,25 @@ async function fetchMyLessons() {
     } else {
         console.error("error: fetchMyLessons()");
         // renderOnLogout();
+        return []; // empty <=> length == 0
+    };
+};
+
+
+
+// get my children
+async function fetchMyChildren() {
+    const token = loadAccessToken();
+    const response = await fetch("/json/my/children", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+    });
+    if (response.ok) {
+        const result = await response.json();
+        console.log("success: fetchMyChildren()", result);
+        return result;
+    } else {
+        console.error("error: fetchMyChildren()");
         return []; // empty <=> length == 0
     };
 };

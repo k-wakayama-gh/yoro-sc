@@ -54,9 +54,10 @@ async function renderLessons() {
             signUpBtn = `<button class="lesson-sign-up-btn">申し込みをする</button>`;
         };
 
-        // if (lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
-        //     signUpBtn = `<button class="dummy-btn-1" style="position: relative;">定員に達しました</button>`;
-        // };
+        // comment out here to accept more signups manually
+        if (lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
+            signUpBtn = `<button class="dummy-btn-1" style="position: relative;">受付を締め切りました</button>`;
+        };
 
         let position;
         for (let i = 0; i < position_list.length; i++) {
