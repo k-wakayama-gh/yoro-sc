@@ -1,4 +1,4 @@
-# --- route_html.py ---
+# --- router/html.py ---
 
 # modules
 from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
@@ -13,7 +13,7 @@ from database import engine, get_session
 from models.items import Item, ItemCreate, ItemRead, ItemUpdate, ItemDelete
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete
 from models.todos import Todo, TodoCreate, TodoRead, TodoUpdate, TodoDelete
-from route_auth import get_current_active_user
+from router.auth import get_current_active_user
 from database import make_backup_db
 
 # FastAPI instance and API router

@@ -114,6 +114,10 @@ class UserWithUserDetailCreate(UserIn, UserDetailCreate):
 
 
 class UserDetailRead(UserDetailBase):
+    pass
+
+
+class UserDetailUsernameRead(UserDetailBase):
     username: str
 
 

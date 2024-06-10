@@ -1,4 +1,4 @@
-# --- route_users.py ---
+# --- router/users.py ---
 
 # modules
 from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
@@ -10,9 +10,9 @@ from typing import Optional, Annotated
 # my modules
 from database import engine, get_session
 from models.items import Item, ItemCreate, ItemRead, ItemUpdate, ItemDelete
-from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserIn, UserInDB, UserDetail, UserWithUserDetailCreate, UserDetailRead, UserDetailCreate, UserChild, UserChildCreate, UserChildRead
-from route_auth import get_hashed_password
-from route_auth import get_current_active_user
+from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserIn, UserInDB, UserDetail, UserWithUserDetailCreate, UserDetailRead, UserDetailUsernameRead, UserDetailCreate, UserChild, UserChildCreate, UserChildRead
+from router.auth import get_hashed_password
+from router.auth import get_current_active_user
 
 # FastAPI instance and API router
 app = FastAPI()
@@ -82,7 +82,7 @@ def create_db_user_details(user_in: UserWithUserDetailCreate):
 
 
 
-# read: admin: children
+# admin: read: children
 @router.get("/user/{user_id}/children", tags=["User"])
 def admin_read_user_children(user_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     if current_user.username != "user":
@@ -129,7 +129,7 @@ def delete_my_user_children(child_id: int, current_user: Annotated[User, Depends
         return {"removed": "done"}
 
 
-# delete: admin: children
+# admin: delete: children
 @router.delete("/user/{user_id}/children/{child_id}", tags=["User"])
 def admin_delete_user_children(user_id: int, child_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     if current_user.username != "user":
@@ -171,7 +171,7 @@ def read_user(session: Annotated[Session, Depends(get_session)], username: str, 
 
 
 # read user with user details
-@router.get("/users/details/{username}", response_model=UserDetailRead, tags=["User"])
+@router.get("/users/details/{username}", response_model=UserDetailUsernameRead, tags=["User"])
 def read_user_details(username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
         if current_user.username != "user":
@@ -210,7 +210,7 @@ def update_user(session: Annotated[Session, Depends(get_session)], username: str
 
 
 # patch: user details
-@router.patch("/userdetails/{username}", tags=["User"], response_model=UserDetailRead)
+@router.patch("/userdetails/{username}", tags=["User"], response_model=UserDetailUsernameRead)
 def patch_userdetails(username: str, new_user_details: UserDetailCreate, current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
         if username != current_user.username and current_user.username != "user":
@@ -264,7 +264,7 @@ def get_username(current_user: Annotated[User, Depends(get_current_active_user)]
 
 
 # json: get my user details
-@router.get("/json/my/userdetails", tags=["User"], response_model=UserDetailRead)
+@router.get("/json/my/userdetails", tags=["User"], response_model=UserDetailUsernameRead)
 def json_get_my_userdetails(current_user: Annotated[User, Depends(get_current_active_user)]):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.username == current_user.username)).one()

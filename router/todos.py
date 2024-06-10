@@ -1,4 +1,4 @@
-# --- route_todos.py ---
+# --- router/todos.py ---
 
 # modules
 from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
@@ -11,7 +11,7 @@ from typing import Optional, Annotated
 from database import engine, get_session
 from models.todos import Todo, TodoCreate, TodoRead, TodoUpdate, TodoDelete, ToDoUpdateIsDone
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete
-from route_auth import get_current_active_user
+from router.auth import get_current_active_user
 
 # FastAPI instance and API router
 app = FastAPI()

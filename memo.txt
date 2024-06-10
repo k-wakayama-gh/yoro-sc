@@ -1,37 +1,41 @@
+# Virtual environment
+
+## create venv
+python -m venv venv
+
+## activate venv
+source venv/bin/activate
+
 # Git and GiuHub
 
-# First commit
+## First commit
 git remote add origin https://k-wakayama-gh:<ACCESSTOKEN>@github.com/k-wakayama-gh/yoro-sc.git
 git add .
 git commit -m "comment"
 git push -u origin main
 git push
 
-# Second commit and later
+## Second commit and later
 git add .
 git commit -m "comment"
 git push
 
-# After token espired
+## After token espired
 git remote set-url origin https://k-wakayama-gh:<ACCESSTOKEN>@github.com/k-wakayama-gh/yoro-sc.git
 
-# Run this app
+# Run app
 python main.py
 
-# Finish this app
+# Stop app
 [control] + [C]
 
 # Database migration: create a revision and apply changes to DB
 
-# First migration
+## First migration
 alembic revision --autogenerate -m "comment"
 alembic upgrade head
 
-# Second migration and later
+## Second migration and later
 alembic revision -m "comment"
 alembic upgrade head
-
-
-# Old secret key for password hash
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 

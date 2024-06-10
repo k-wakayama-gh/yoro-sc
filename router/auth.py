@@ -1,4 +1,4 @@
-# --- route_auth.py ---
+# --- router/auth.py ---
 
 # modules
 from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
@@ -35,7 +35,7 @@ else:
     MY_SECRET_KEY = "fakesecretkeyfakesecretkeyfakesecretkeyfakesecretkeyfakesecretkey"
 
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 * 30 * 12
 
 
 # codes below 000000000000000000000000000000000000
@@ -70,6 +70,7 @@ def get_user(username: str):
 
 # argumentにsession: Session=Depends(get_session)を入れるやり方はあまりよくないかもしれない。
 # with Session...を使う場合は、argumentは検索用のusernameひとつでいい。
+# しかし、パフォーマンス的にはDependsでinjectionするほうがいいらしい
 
 
 # def: verify username and password

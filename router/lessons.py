@@ -1,4 +1,4 @@
-# --- route_lessons.py ---
+# --- router/lessons.py ---
 
 # modules
 from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
@@ -12,7 +12,7 @@ from datetime import datetime, timedelta, timezone
 from database import engine, get_session
 from models.lessons import Lesson, LessonCreate, LessonRead, LessonUpdate, LessonDelete
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserChild
-from route_auth import get_current_active_user
+from router.auth import get_current_active_user
 
 # FastAPI instance and API router
 app = FastAPI()
