@@ -29,16 +29,26 @@ async function renderLessons() {
     const my_children = await fetchMyChildren();
     const lessonList = document.getElementById("lesson-list");
 
+    const current_year = 2024;
+    const current_season = 2;
+
     // clear the previous lesson list
     lessonList.textContent = "";
 
     const dayColor = {"日": "red", "月": "gray", "火": "orange", "水": "#4193f6", "木": "3f8d57", "金": "#f19937", "土": "blue"};
 
-    if (myLessons.length == 0) {
+    const current_my_lessons = [];
+    myLessons.forEach(function(myLesson){
+        if(myLesson.year == current_year && myLesson.season == current_season){
+            current_my_lessons.push(myLesson);
+        };
+    });
+
+    if (current_my_lessons.length == 0) {
         lessonList.insertAdjacentHTML("afterend", "<p class='text-center'>現在申し込み済みの教室はありません。</p>");
     };
 
-    myLessons.forEach(function (lesson) {
+    current_my_lessons.forEach(function (lesson) {
         let numberColor = "gray";
         if (lesson.number <= 1) {
             numberColor = "#a44d3a";
@@ -97,10 +107,11 @@ async function renderLessons() {
         document.getElementById("fee-list-section").classList.remove("hidden");
     };
 
+    // display price
     const feeList = document.getElementById("fee-list");
     feeList.textContent = "";
     let totalFee = 0;
-    myLessons.forEach(function (lesson) {
+    current_my_lessons.forEach(function (lesson) {
         totalFee = totalFee + lesson.price;
         let fee = `<p>${lesson.title}：${lesson.price.toLocaleString()}円</p>`;
         if (lesson.number == 1) {

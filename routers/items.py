@@ -1,4 +1,4 @@
-# --- router/items.py ---
+# --- routers/items.py ---
 
 # modules
 from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form

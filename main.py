@@ -10,7 +10,7 @@ from alembic.config import Config
 
 # my modules
 from database import engine, create_database
-import router.html as html, router.items as items, router.users as users, router.lessons as lessons, router.auth as auth, router.todos as todos, router.test as test
+import routers.html, routers.items, routers.users, routers.lessons, routers.auth, routers.todos, routers.test
 from force_sqlite import force_sqlite
 
 # FastAPI instance
@@ -22,14 +22,14 @@ def migrate_database():
         alembic_cfg = Config("alembic_product.ini")
         command.upgrade(alembic_cfg, "head")
 
-# include API router
-app.include_router(html.router)
-app.include_router(items.router)
-app.include_router(users.router)
-app.include_router(lessons.router)
-app.include_router(auth.router)
-app.include_router(todos.router)
-app.include_router(test.router)
+# include API routers
+app.include_router(routers.html.router)
+app.include_router(routers.items.router)
+app.include_router(routers.users.router)
+app.include_router(routers.lessons.router)
+app.include_router(routers.auth.router)
+app.include_router(routers.todos.router)
+app.include_router(routers.test.router)
 
 
 # static files settings

@@ -1,4 +1,4 @@
-# --- router/lessons.py ---
+# --- routers/lessons.py ---
 
 # modules
 from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
@@ -12,7 +12,7 @@ from datetime import datetime, timedelta, timezone
 from database import engine, get_session
 from models.lessons import Lesson, LessonCreate, LessonRead, LessonUpdate, LessonDelete
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserChild
-from router.auth import get_current_active_user
+from routers.auth import get_current_active_user
 
 # FastAPI instance and API router
 app = FastAPI()
@@ -36,12 +36,10 @@ class CommonQueryParams:
 # lesson application start date and time
 test_start_time = datetime(year=2024, month=4, day=9, hour=22, minute=30, second=0, tzinfo=timezone(timedelta(hours=9)))
 
-start_time = datetime(year=2024, month=4, day=10, hour=7, minute=0, second=0, tzinfo=timezone(timedelta(hours=9)))
+start_time = datetime(year=2024, month=9, day=11, hour=7, minute=0, second=0, tzinfo=timezone(timedelta(hours=9)))
 
-# def: return current time
-# def current_time():
-#     current_time = datetime.now()
-#     return current_time
+year = 2024
+season = 2
 
 
 # create
@@ -90,7 +88,7 @@ def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
     if current_time < start_time:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
     with Session(engine) as session:
-        lessons = session.exec(select(Lesson).offset(query.offset).limit(query.limit)).all()
+        lessons = session.exec(select(Lesson).where(Lesson.year == year, Lesson.season == season)).all()
         return lessons
 
 
@@ -105,7 +103,7 @@ def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()], curren
     if not current_user.username == "user":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not allowed to access")
     with Session(engine) as session:
-        lessons = session.exec(select(Lesson).offset(query.offset).limit(query.limit)).all()
+        lessons = session.exec(select(Lesson).where(Lesson.year == year, Lesson.season == season)).all()
         return lessons
 
 
@@ -178,7 +176,7 @@ def create_my_lessons(current_user: Annotated[UserRead, Depends(get_current_acti
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
     with Session(engine) as session:
         new_lesson = session.exec(select(Lesson).where(Lesson.id == id)).one()
-        if new_lesson.year != 2024 or new_lesson.season != 1:
+        if new_lesson.year != year or new_lesson.season != season:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
         user = session.exec(select(User).where(User.username == current_user.username)).one()
         if user is None:
@@ -234,7 +232,7 @@ def delete_my_lesson(lesson_id: int, current_user: Annotated[User, Depends(get_c
         cancel_lesson = session.get(Lesson, lesson_id)
         if not cancel_lesson:
             raise HTTPException(status_code=404, detail="Lesson not found")
-        if cancel_lesson.year != 2024 or cancel_lesson.season != 1:
+        if cancel_lesson.year != year or cancel_lesson.season != season:
             raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="Outdated")
         user = session.exec(select(User).where(User.username == current_user.username)).one()
         if user is None:

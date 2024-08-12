@@ -1,4 +1,4 @@
-# --- router/test.py ---
+# --- routers/test.py ---
 
 # modules
 from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
@@ -12,7 +12,7 @@ import shutil
 # my modules
 from database import engine, get_session
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete
-from router.auth import get_current_active_user
+from routers.auth import get_current_active_user
 
 # FastAPI instance and API router
 app = FastAPI()

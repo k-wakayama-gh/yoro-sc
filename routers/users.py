@@ -1,4 +1,4 @@
-# --- router/users.py ---
+# --- routers/users.py ---
 
 # modules
 from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
@@ -11,8 +11,8 @@ from typing import Optional, Annotated
 from database import engine, get_session
 from models.items import Item, ItemCreate, ItemRead, ItemUpdate, ItemDelete
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserIn, UserInDB, UserDetail, UserWithUserDetailCreate, UserDetailRead, UserDetailUsernameRead, UserDetailCreate, UserChild, UserChildCreate, UserChildRead
-from router.auth import get_hashed_password
-from router.auth import get_current_active_user
+from routers.auth import get_hashed_password
+from routers.auth import get_current_active_user
 
 # FastAPI instance and API router
 app = FastAPI()
