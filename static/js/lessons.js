@@ -19,6 +19,10 @@ async function fetchAndDisplayLessons() {
 function attachEventListeners() {
     signUpLesson();
     cancelLessonOnSmallBtn();
+    signUpCheck();
+    signUpCancel();
+    cancelCheck();
+    CancelCancel();
 };
 
 
@@ -42,7 +46,7 @@ async function renderLessons() {
     // clear the previous lesson list
     lessonList.textContent = "";
 
-    const cancelBtn = `<span class="lesson-cancel-btn-small" onclick="cancelLessonOnSmallBtn()">キャンセル</span>`;
+    const cancelBtn = `<span class="lesson-cancel-btn-small">キャンセル</span>`;
 
     lessons.forEach(function (lesson) {
         let signUpBtn = "";
@@ -116,6 +120,18 @@ async function renderLessons() {
                 <p class="lesson-description">${lesson.description}</p>
 
                 ${signUpBtn}
+
+                <div class="sign-up-check-message hidden">[確認]この教室に申し込みますか？</div>
+                <div class="sign-up-check-div hidden">
+                    <button class="lesson-sign-up-confirm-btn">はい</button>
+                    <button class="lesson-sign-up-cancel-btn">いいえ</button>
+                </div>
+
+                <div class="cancel-check-message hidden">[確認]申し込みを取り消しますか？</div>
+                <div class="cancel-check-div hidden">
+                    <button class="lesson-cancel-confirm-btn">はい</button>
+                    <button class="lesson-cancel-cancel-btn">いいえ</button>
+                </div>
             </li>
         `;
         lessonList.insertAdjacentHTML("beforeend", listItem);
@@ -173,13 +189,40 @@ async function fetchMyLessons() {
 
 
 
+// sign up check
+function signUpCheck() {
+    document.querySelectorAll(".lesson-sign-up-btn").forEach(function (button) {
+        button.addEventListener("click", function () {
+            // console.log("clicked sign up btn");
+            // console.log(this.nextElementSibling);
+            // this.nextElementSibling.classList.toggle("hidden");
+            // console.log(this.nextElementSibling.classList);
+            this.parentNode.querySelector(".sign-up-check-div").classList.toggle("hidden");
+            this.parentNode.querySelector(".sign-up-check-message").classList.toggle("hidden");
+            this.classList.toggle("hidden");
+        });
+    });
+};
+
+
+function signUpCancel() {
+    document.querySelectorAll(".lesson-sign-up-cancel-btn").forEach(function (button) {
+        button.addEventListener("click", function () {
+            this.parentNode.classList.toggle("hidden");
+            this.parentNode.parentNode.querySelector(".lesson-sign-up-btn").classList.toggle("hidden");
+            this.parentNode.parentNode.querySelector(".sign-up-check-message").classList.toggle("hidden");
+        });
+    });
+};
+
+
 
 // sign up to a lesson
 function signUpLesson() {
-    document.querySelectorAll(".lesson-sign-up-btn").forEach(function (button) {
+    document.querySelectorAll(".lesson-sign-up-confirm-btn").forEach(function (button) {
         button.addEventListener("click", async function () {
             const token = loadAccessToken();
-            const lessonId = this.parentNode.dataset.lessonId;
+            const lessonId = this.parentNode.parentNode.dataset.lessonId;
 
             this.textContent = "処理中...";
 
@@ -207,16 +250,41 @@ function signUpLesson() {
 
 
 
+// cancel check
+function cancelCheck() {
+    document.querySelectorAll(".lesson-cancel-btn-small").forEach(function (button) {
+        button.addEventListener("click", function () {
+            this.parentNode.parentNode.querySelector(".cancel-check-div").classList.toggle("hidden");
+            this.parentNode.parentNode.querySelector(".cancel-check-message").classList.toggle("hidden");
+            this.parentNode.classList.toggle("hidden");
+        });
+    });
+};
+
+
+function CancelCancel() {
+    document.querySelectorAll(".lesson-cancel-cancel-btn").forEach(function (button) {
+        button.addEventListener("click", function () {
+            this.parentNode.parentNode.querySelector(".dummy-btn").classList.toggle("hidden");
+            this.parentNode.parentNode.querySelector(".cancel-check-div").classList.toggle("hidden");
+            this.parentNode.parentNode.querySelector(".cancel-check-message").classList.toggle("hidden");
+        });
+    });
+};
+
 
 
 // cancel a lesson
 function cancelLessonOnSmallBtn() {
-    document.querySelectorAll(".lesson-cancel-btn-small").forEach(function (button) {
+    document.querySelectorAll(".lesson-cancel-confirm-btn").forEach(function (button) {
         button.addEventListener("click", async function () {
             const token = loadAccessToken();
+            // console.log("loading dataset");
             const lessonId = this.parentNode.parentNode.dataset.lessonId;
+            // console.log("dataset is ", lessonId);
 
-            this.parentNode.textContent = "処理中...";
+            this.parentNode.parentNode.querySelector(".lesson-cancel-confirm-btn").textContent = "処理中...";
+            // console.log(this.parentNode.parentNode.querySelector(".lesson-cancel-confirm-btn"));
             this.textContent = "";
 
             const body = {};
@@ -226,7 +294,7 @@ function cancelLessonOnSmallBtn() {
             const response = await fetch(`/my/lessons/${lessonId}`, {
                 method: "DELETE",
                 headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
-                body: JSON.stringify(body),
+                // body: JSON.stringify(body),
             });
 
             if (response.ok) {

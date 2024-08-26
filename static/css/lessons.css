@@ -151,6 +151,67 @@
 }
 
 
+.sign-up-check-div, .cancel-check-div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.sign-up-check-div > button, .cancel-check-div > button {
+    border: 1px darkgray solid;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: large;
+}
+
+.sign-up-check-div > button:first-child {
+    margin-right: 0.25rem;
+    background-color: rgb(38, 158, 96);
+}
+
+.sign-up-check-div > button:first-child:hover {
+    background-color: rgb(60, 198, 127);
+}
+
+.sign-up-check-div > button:last-child {
+    margin-left: 0.25rem;
+    background-color: gray;
+}
+
+.sign-up-check-div > button:last-child:hover {
+    background-color: darkgray;
+}
+
+.sign-up-check-message {
+    color: darkcyan;
+}
+
+.cancel-check-div > button:first-child {
+    margin-right: 0.25rem;
+    background-color: rgb(209, 96, 73);
+}
+
+.cancel-check-div > button:first-child:hover {
+    background-color: rgb(226, 115, 92);
+}
+
+.cancel-check-div > button:last-child {
+    margin-left: 0.25rem;
+    background-color: gray;
+}
+
+.cancel-check-div > button:last-child:hover {
+    background-color: darkgray;
+}
+
+.cancel-check-message {
+    color: rgb(203, 50, 47);
+}
+
+.hidden {
+    display: none;
+}
+
 
 @media screen and (max-width: 26rem) {
     .lesson-list-li, .dummy-li, #lesson-list, #lesson-list-section {
