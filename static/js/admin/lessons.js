@@ -1,51 +1,46 @@
 // admin/lessons.js
 
-// create: add lesson from
-document.getElementById("add-lesson-form").addEventListener("submit", async function (event) {
-    event.preventDefault(); // prevent default form submit
-    document.getElementById("add-lesson-btn").style.pointerEvents = "none"; // prevent double submit
+// post: create lessons via spreadsheet GAS API
+document.getElementById("add-lessons-all-btn").addEventListener("click", async function (event) {
+    event.preventDefault();
+    this.style.pointerEvents = "none";
 
-    // フォームのデータを取得
-    const formData = new FormData(document.getElementById("add-lesson-form"));
-    
-    const sendingData = {
-        year: formData.get("year"),
-        season: formData.get("season"),
-        number: formData.get("number"),
-        title: formData.get("title"),
-        teacher: formData.get("teacher"),
-        day: formData.get("day"),
-        time: formData.get("time"),
-        price: formData.get("price"),
-        description: formData.get("description"),
-        capacity: formData.get("capacity"),
-        lessons: formData.get("lessons"),
+    const api_url = document.getElementById("api-url").value;
+    console.log("api_irl:", api_url);
+
+    // sending a request to GAS API
+    const response_gas = await fetch(api_url, {
+        method: "GET",
+    });
+    let result_gas = [];
+    if (response_gas.ok) {
+        result_gas = await response_gas.json();
+        console.log("result of GAS API:", result_gas);
+    } else {
+        console.error("Error on fetching GAS API");
     };
 
-    // エンドポイントにPOSTリクエストを送信
     const token = loadAccessToken();
 
-    const response = await fetch("/lessons", {
+    // sending a request to python
+    const response_python = await fetch("/json/admin/lessons/create", {
         method: "POST",
         headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
-        body: JSON.stringify(sendingData),
+        body: JSON.stringify(result_gas),
     });
-
-    if (response.ok) {
-        const result = await response.json();
-        console.log("Success:", result);
-        fetchAndDisplayLessons();
+    if (response_python.ok) {
+        const result_python = await response_python.json();
+        console.log("response of python:", result_python);
     } else {
-        console.error("Error on add lesson form");
+        console.error("Error on fetching python api");
     };
 
-    // clear form after sending data
-    document.querySelectorAll("#add-lesson-form > input").forEach(function (x) {
-        x.value = "";
-    });
-    // reactivate submit button
-    document.querySelector("#add-lesson-btn").style.pointerEvents = "auto";
+    // clear input after sending data
+    document.getElementById("api-url").value = "";
+    // reactivate button
+    this.style.pointerEvents = "auto";
 });
+
 
 
 
@@ -340,3 +335,53 @@ function cancelLessonOnSmallBtn() {
     });
 };
 
+
+
+
+
+// create: add lesson from
+document.getElementById("add-lesson-form").addEventListener("submit", async function (event) {
+    event.preventDefault(); // prevent default form submit
+    document.getElementById("add-lesson-btn").style.pointerEvents = "none"; // prevent double submit
+
+    // フォームのデータを取得
+    const formData = new FormData(document.getElementById("add-lesson-form"));
+    
+    const sendingData = {
+        year: formData.get("year"),
+        season: formData.get("season"),
+        number: formData.get("number"),
+        title: formData.get("title"),
+        teacher: formData.get("teacher"),
+        day: formData.get("day"),
+        time: formData.get("time"),
+        price: formData.get("price"),
+        description: formData.get("description"),
+        capacity: formData.get("capacity"),
+        lessons: formData.get("lessons"),
+    };
+
+    // エンドポイントにPOSTリクエストを送信
+    const token = loadAccessToken();
+
+    const response = await fetch("/lessons", {
+        method: "POST",
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+        body: JSON.stringify(sendingData),
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        console.log("Success:", result);
+        fetchAndDisplayLessons();
+    } else {
+        console.error("Error on add lesson form");
+    };
+
+    // clear form after sending data
+    document.querySelectorAll("#add-lesson-form > input").forEach(function (x) {
+        x.value = "";
+    });
+    // reactivate submit button
+    document.querySelector("#add-lesson-btn").style.pointerEvents = "auto";
+});

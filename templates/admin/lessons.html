@@ -54,7 +54,17 @@
 
                 <div class="space"></div>
 
-                <section id="add-lesson-section">
+                <section class="on-login">
+                    <h1>教室を追加する</h1>
+                    <form id="add-lessons-all-form">
+                        <input id="api-url" type="text" name="gas_api" placeholder="GAS API">
+                        <button id="add-lessons-all-btn" type="button">教室を追加する</button>
+                    </form>
+                </section>
+
+                <div class="space"></div>
+
+                <section id="add-lesson-section" class="hidden">
                     <h1>教室を追加する</h1>
                     <form id="add-lesson-form" class="flex-column">
                         <input type="tel" inputmode="tel" name="year" placeholder="年度">

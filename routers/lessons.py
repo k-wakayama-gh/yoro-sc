@@ -47,13 +47,12 @@ season = 2
 
 # create
 @router.post("/lessons", response_model=LessonRead, tags=["Lesson"])
-def create_lesson(lesson_create: LessonCreate):
-    with Session(engine) as session:
-        db_lesson = Lesson.model_validate(lesson_create)
-        session.add(db_lesson)
-        session.commit()
-        session.refresh(db_lesson)
-        return db_lesson
+def create_lesson(session: Annotated[Session, Depends(get_session)], lesson_create: LessonCreate):
+    db_lesson = Lesson.model_validate(lesson_create)
+    session.add(db_lesson)
+    session.commit()
+    session.refresh(db_lesson)
+    return db_lesson
 
 
 
@@ -517,4 +516,19 @@ def json_read_lesson_applicants(lesson_id: int, session: Annotated[Session, Depe
             result.append(user_details_out)
     return result
 
+
+
+# post: admin: create lessons via spreadsheet GAS API
+@router.post("/json/admin/lessons/create")
+def json_admin_create_lessons(lessons_create: list[LessonCreate], session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
+    user = session.exec(select(User).where(User.username == current_user.username)).one()
+    if user is None or not user.is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
+    # print(lessons_create)
+    # session.add_all(lessons_create) # this fails
+    for lesson_create in lessons_create:
+        db_lesson = Lesson.model_validate(lesson_create)
+        session.add(db_lesson)
+    session.commit()
+    return {"ok": "done"}
 
