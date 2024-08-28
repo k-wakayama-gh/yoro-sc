@@ -103,6 +103,8 @@ async function renderLessons() {
         let numberColor = "gray";
         if (lesson.number <= 1) {
             numberColor = "#a44d3a";
+        } else if (lesson.number >= 11) {
+            numberColor = "#dcbd24";
         } else {
             numberColor = "#4379a6";
         };
@@ -335,6 +337,28 @@ function cancelLessonOnSmallBtn() {
     });
 };
 
+
+
+// refresh capacity left
+document.getElementById("refresh-capacity").addEventListener("click", async function (event) {
+    event.preventDefault();
+    this.style.pointerEvents = "none";
+
+    const token = loadAccessToken();
+
+    const response = await fetch("/lessons/refresh/capacity", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+    });
+    if (response.ok) {
+        const result = await response.json();
+        console.log("refreshed capacity left:", result);
+        fetchAndDisplayLessons();
+    } else {
+        console.error("Error refreshing capacity left");
+    };
+    this.style.pointerEvents = "auto";
+});
 
 
 

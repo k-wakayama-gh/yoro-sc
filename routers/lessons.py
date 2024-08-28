@@ -98,15 +98,15 @@ def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
 
 # json admin: get lesson list
 @router.get("/json/admin/lessons", response_model=list[LessonRead], tags=["Lesson"])
-def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()], current_user: Annotated[User, Depends(get_current_active_user)]):
+def read_lesson_list_json(session: Annotated[Session, Depends(get_session)], query: Annotated[CommonQueryParams, Depends()], current_user: Annotated[User, Depends(get_current_active_user)]):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
     if current_time < test_start_time:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
-    if not current_user.username == "user":
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not allowed to access")
-    with Session(engine) as session:
-        lessons = session.exec(select(Lesson).where(Lesson.year == year, Lesson.season == season)).all()
-        return lessons
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="it is before test start time")
+    user = session.exec(select(User).where(User.username == current_user.username)).one()
+    if not user.is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
+    lessons = session.exec(select(Lesson).where(Lesson.year == year, Lesson.season == season)).all()
+    return lessons
 
 
 
@@ -123,29 +123,29 @@ def read_lesson(session: Annotated[Session, Depends(get_session)], lesson_id: in
 
 # patch: update lesson information
 @router.patch("/lessons/{lesson_id}", response_model=LessonRead, tags=["Lesson"])
-def update_lesson(lesson_id: int, lesson_update: LessonUpdate, current_user: Annotated[User, Depends(get_current_active_user)]):
-    if current_user.username != "user":
+def update_lesson(session: Annotated[Session, Depends(get_session)], lesson_id: int, lesson_update: LessonUpdate, current_user: Annotated[User, Depends(get_current_active_user)]):
+    user = session.exec(select(User).where(User.username == current_user.username)).one()
+    if not user.is_admin:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
-    with Session(engine) as session:
-        db_lesson = session.get(Lesson, lesson_id)
-        if not db_lesson:
-            raise HTTPException(status_code=404, detail="Not found")
+    db_lesson = session.get(Lesson, lesson_id)
+    if not db_lesson:
+        raise HTTPException(status_code=404, detail="Not found")
+    
+    lesson_update_dict = lesson_update.model_dump(exclude_unset=True)
+    
+    for key, value in lesson_update_dict.items():
+        setattr(db_lesson, key, value)
         
-        lesson_update_dict = lesson_update.model_dump(exclude_unset=True)
-        
-        for key, value in lesson_update_dict.items():
-            setattr(db_lesson, key, value)
-            
-        session.add(db_lesson)
-        session.commit()
-        session.refresh(db_lesson)
-        return db_lesson
+    session.add(db_lesson)
+    session.commit()
+    session.refresh(db_lesson)
+    return db_lesson
 
 
 
 # delete: cancel a lesson
 @router.delete("/lessons/{lesson_id}", tags=["Lesson"])
-def delete_lesson(*, session: Session = Depends(get_session), lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
+def delete_lesson(session: Annotated[Session, Depends(get_session)], lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     if current_user.username != "user":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not allowed")
     lesson = session.get(Lesson, lesson_id)
@@ -173,15 +173,14 @@ def read_my_lessons(session: Annotated[Session, Depends(get_session)], current_u
 @router.post("/lessons/{id}", response_model=list[LessonRead], tags=["Lesson"])
 def create_my_lessons(session: Annotated[Session, Depends(get_session)], current_user: Annotated[UserRead, Depends(get_current_active_user)], id: int):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
-    if current_time < start_time and current_user.username != "user":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
-    # using session below
-    new_lesson = session.exec(select(Lesson).where(Lesson.id == id)).one()
-    if new_lesson.year != year or new_lesson.season != season:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
     user = session.exec(select(User).where(User.username == current_user.username)).one()
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+    if current_time < start_time and not user.is_admin:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
+    new_lesson = session.exec(select(Lesson).where(Lesson.id == id)).one()
+    if new_lesson.year != year or new_lesson.season != season:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
     if not new_lesson in user.lessons:
         user.lessons.append(new_lesson)
         session.add(user)
@@ -266,7 +265,8 @@ def delete_my_lesson(session: Annotated[Session, Depends(get_session)], current_
 # admin: read user list of a lesson
 @router.get("/json/admin/lessons/{lesson_id}/users", response_model=list[UserRead], tags={"Lesson"})
 def admin_json_read_users_of_a_lesson(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)], lesson_id: int):
-    if current_user.username != "user":
+    operating_user = session.exec(select(User).where(User.username == current_user.username)).one()
+    if not operating_user.is_admin:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
     # using session below
     lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
@@ -331,9 +331,9 @@ def admin_display_users_of_every_lessons(request: Request):
 # admin: delete: remove a user from a lesson
 @router.delete("/admin/users/{username}/remove/{lesson_id}", tags=["Lesson"])
 def admin_remove_lesson_member(session: Annotated[Session, Depends(get_session)], username: str, lesson_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
-    if current_user.username != "user":
+    operating_user = session.exec(select(User).where(User.username == current_user.username)).one()
+    if not operating_user.is_admin:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
-    # using session below
     lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
     lesson_title = lesson.title
     lesson_member = lesson.users
@@ -392,10 +392,11 @@ def json_read_lesson_signup_position_all(session: Annotated[Session, Depends(get
 # admin: read: lesson list of a user signed up
 @router.get("/json/admin/user/{user_id}/lessons", tags=["Lesson"])
 def admin_json_read_user_lesson_list(session: Annotated[Session, Depends(get_session)], user_id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
-    if current_user.username != "user":
+    user = session.exec(select(User).where(User.username == current_user.username)).one()
+    if not user.is_admin:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
-    user = session.get(User, user_id)
-    user_lessons = user.lessons
+    target_user = session.get(User, user_id)
+    user_lessons = target_user.lessons
     return user_lessons
 
 
@@ -404,9 +405,9 @@ def admin_json_read_user_lesson_list(session: Annotated[Session, Depends(get_ses
 @router.post("/admin/user/{user_id}/lessons/{lesson_id}", response_model=list[LessonRead], tags=["Lesson"])
 def create_my_lessons(session: Annotated[Session, Depends(get_session)], current_user: Annotated[UserRead, Depends(get_current_active_user)], user_id: int, lesson_id: int):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
-    if current_time < start_time and current_user.username != "user":
+    user = session.exec(select(User).where(User.username == current_user.username)).one()
+    if current_time < start_time and not user.is_admin:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
-    # using session below
     new_lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
     # if new_lesson.year != 2024 or new_lesson.season != 1:
     #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
