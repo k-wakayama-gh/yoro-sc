@@ -51,8 +51,10 @@ class UserCreate(UserBase):
 
 
 # read
-class UserRead(UserBase):
-    pass
+class UserRead(SQLModel):
+    id: int
+    username: str
+    is_admin: Optional[bool]
 
 
 # read: username
