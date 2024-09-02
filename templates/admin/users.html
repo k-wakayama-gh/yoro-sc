@@ -26,7 +26,25 @@
         <div id="proper-body" class="flex-row">
 
             <main id="main" class="flex-column-center">
-                <section id="user-list-section">
+
+                {% include "login.html" %}
+
+                <section class="patch-user-info on-login">
+                    <h2>パスワード変更</h2>
+                    <form id="patch-user-info-form">
+                        <input type="text" id="username-input" name="username-input" placeholder="ユーザー名" pattern="^[a-zA-Z0-9._@-]{4,}$" required>
+                        <input type="text" id="new-password-input" name="new-password-input" placeholder="新しいパスワード" pattern="^([a-zA-Z0-9]{4,})$" required>
+                        <button type="button" id="patch-user-info-btn">パスワード変更</button>
+                    </form>
+                    <p id="form-error-p" class="hidden" style="color: red;">パスワードの変更に失敗しました。パスワードは４文字以上必要です。一部の記号は使用できません。</p>
+                    <p id="success-change-password-p" class="hidden" style="color: green;">パスワードを変更しました。</p>
+                    <p id="fail-change-password-p" class="hidden" style="color: red;">パスワードの変更に失敗しました。</p>
+                </section>
+
+                <div class="space"></div>
+
+                <section id="user-list-section" class="on-login">
+                    <h2>ユーザー一覧</h2>
                     <table id="user-list-table">
                         <thead>
                             <tr>
@@ -83,5 +101,6 @@
 
     <script src="/static/js/base.js"></script>
     <script src="/static/js/login.js"></script>
+    <script src="/static/js/admin/users.js"></script>
 </body>
 </html>

@@ -64,10 +64,10 @@ class UserUsername(SQLModel):
 
 # patch
 class UserUpdate(SQLModel):
-    username: Optional[str] = None
+    username: Optional[str] = Field(default=None, unique=True, min_length=4)
     is_active: Optional[bool] = None
     is_admin: Optional[bool] = None
-    plain_password: Optional[str] = None
+    plain_password: Optional[str] = Field(default=None, min_length=4)
 
 
 

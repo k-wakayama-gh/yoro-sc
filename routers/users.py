@@ -142,8 +142,8 @@ def admin_delete_user_children(session: Annotated[Session, Depends(get_session)]
 
 
 
-# read list
-@router.get("/users", response_model=list[UserRead], tags=["User"])
+# json: admin: read user list
+@router.get("/json/admin/users", response_model=list[UserRead], tags=["User"])
 def read_users_list(*, offset: int = 0, limit: int = Query(default=100, le=100), session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
     operating_user = session.exec(select(User).where(User.username == current_user.username)).one()
     if not operating_user.is_admin:
@@ -152,6 +152,27 @@ def read_users_list(*, offset: int = 0, limit: int = Query(default=100, le=100),
     # if not users:
     #     raise HTTPException(status_code=404, detail="Not found") # rather than this it should return empty list if no users
     return users
+
+
+
+# json: admin: read user list with data
+@router.get("/json/admin/users-full", tags=["User"])
+def read_users_list(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
+    operating_user = session.exec(select(User).where(User.username == current_user.username)).one()
+    if not operating_user.is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
+    users = session.exec(select(User)).all()
+    result = []
+    for user in users:
+        one = {"id": user.id,
+               "username": user.username,
+               "name": user.user_details.last_name + user.user_details.first_name,
+               "furigana": user.user_details.last_name_furigana + user.user_details.first_name_furigana,
+               "tel": user.user_details.tel,
+               "lessons": len(user.lessons),
+               }
+        result.append(one)
+    return result
 
 
 
@@ -167,8 +188,8 @@ def read_user(session: Annotated[Session, Depends(get_session)], username: str, 
 
 
 
-# read user with user details
-@router.get("/users/details/{username}", response_model=UserDetailUsernameRead, tags=["User"])
+# json: admin: read user with user details
+@router.get("/json/admin/users/details/{username}", response_model=UserDetailUsernameRead, tags=["User"])
 def read_user_details(username: str, session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
     operating_user = session.exec(select(User).where(User.username == current_user.username)).one()
     if not operating_user.is_admin:
@@ -183,9 +204,9 @@ def read_user_details(username: str, session: Annotated[Session, Depends(get_ses
 
 
 
-# patch: username and password -> require edit to get_hashed_password
-@router.patch("/users/{username}", response_model=UserRead, tags=["User"])
-def update_user(session: Annotated[Session, Depends(get_session)], username: str, user_update: UserUpdate, current_user: Annotated[User, Depends(get_current_active_user)]):
+# admin: patch: username password and is_admin
+@router.patch("/admin/users/{username}", response_model=UserRead, tags=["User"])
+def patch_user(session: Annotated[Session, Depends(get_session)], username: str, user_update: UserUpdate, current_user: Annotated[User, Depends(get_current_active_user)]):
     operating_user = session.exec(select(User).where(User.username == current_user.username)).one()
     if not operating_user.is_admin:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
@@ -207,11 +228,11 @@ def update_user(session: Annotated[Session, Depends(get_session)], username: str
 
 
 
-# patch: user details
-@router.patch("/userdetails/{username}", tags=["User"], response_model=UserDetailUsernameRead)
+# admin: patch: user details
+@router.patch("/admin/userdetails/{username}", tags=["User"], response_model=UserDetailUsernameRead)
 def patch_userdetails(username: str, new_user_details: UserDetailCreate, session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
     operating_user = session.exec(select(User).where(User.username == current_user.username)).one()
-    if username != current_user.username and not operating_user.is_admin:
+    if not username == current_user.username and not operating_user.is_admin:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
     user = session.exec(select(User).where(User.username == username)).one()
     if user is None:
@@ -225,6 +246,23 @@ def patch_userdetails(username: str, new_user_details: UserDetailCreate, session
     session.refresh(user_details)
     user_details_out = user_details.model_dump()
     user_details_out["username"] = username
+    return user_details_out
+
+
+# patch: my user details
+@router.patch("/my/userdetails", tags=["User"], response_model=UserDetailUsernameRead)
+def patch_my_userdetails(new_user_details: UserDetailCreate, session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
+    # operating_user = session.exec(select(User).where(User.username == current_user.username)).one()
+    user = session.exec(select(User).where(User.username == current_user.username)).one()
+    user_details = user.user_details
+    db_new_user_details = new_user_details.model_dump(exclude_unset=True)
+    for key, value in db_new_user_details.items():
+        setattr(user_details, key, value)
+    session.add(user)
+    session.commit()
+    session.refresh(user_details)
+    user_details_out = user_details.model_dump()
+    user_details_out["username"] = current_user.username
     return user_details_out
 
 
