@@ -21,9 +21,6 @@ router = APIRouter()
 # templates settings
 templates = Jinja2Templates(directory='templates')
 
-# database session
-# session = Session(engine)
-
 # common query parameters
 class CommonQueryParams:
     def __init__(self, q: Optional[str] = None, offset: int = 0, limit: int = Query(default=100, le=100)):
@@ -33,16 +30,16 @@ class CommonQueryParams:
 
 # routes below 000000000000000000000000000000000000
 
-# lesson application start date and time
-test_start_time = datetime(year=2024, month=4, day=9, hour=22, minute=30, second=0, tzinfo=timezone(timedelta(hours=9)))
-
-start_time = datetime(year=2024, month=9, day=11, hour=7, minute=0, second=0, tzinfo=timezone(timedelta(hours=9)))
+# current lesson period
+class Period:
+    year = 2024
+    season = 2
+    start_time = datetime(year=2024, month=9, day=11, hour=7, minute=0, second=0, tzinfo=timezone(timedelta(hours=9)))
+    test_start_time = datetime(year=2024, month=4, day=9, hour=22, minute=30, second=0, tzinfo=timezone(timedelta(hours=9)))
 
 # for test
-# start_time = test_start_time
+# Period.start_time = Period.test_start_time
 
-year = 2024
-season = 2
 
 
 # create
@@ -85,13 +82,12 @@ def display_lessons(request: Request):
 
 # json: get lesson list
 @router.get("/json/lessons", response_model=list[LessonRead], tags=["Lesson"])
-def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
+def read_lesson_list_json(session:Annotated[Session, Depends(get_session)], query: Annotated[CommonQueryParams, Depends()]):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
-    if current_time < start_time:
+    if current_time < Period.start_time:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
-    with Session(engine) as session:
-        lessons = session.exec(select(Lesson).where(Lesson.year == year, Lesson.season == season)).all()
-        return lessons
+    lessons = session.exec(select(Lesson).where(Lesson.year == Period.year, Lesson.season == Period.season)).all()
+    return lessons
 
 
 
@@ -100,12 +96,12 @@ def read_lesson_list_json(query: Annotated[CommonQueryParams, Depends()]):
 @router.get("/json/admin/lessons", response_model=list[LessonRead], tags=["Lesson"])
 def read_lesson_list_json(session: Annotated[Session, Depends(get_session)], query: Annotated[CommonQueryParams, Depends()], current_user: Annotated[User, Depends(get_current_active_user)]):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
-    if current_time < test_start_time:
+    if current_time < Period.test_start_time:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="it is before test start time")
     user = session.exec(select(User).where(User.username == current_user.username)).one()
     if not user.is_admin:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
-    lessons = session.exec(select(Lesson).where(Lesson.year == year, Lesson.season == season)).all()
+    lessons = session.exec(select(Lesson).where(Lesson.year == Period.year, Lesson.season == Period.season)).all()
     return lessons
 
 
@@ -176,10 +172,10 @@ def create_my_lessons(session: Annotated[Session, Depends(get_session)], current
     user = session.exec(select(User).where(User.username == current_user.username)).one()
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
-    if current_time < start_time and not user.is_admin:
+    if current_time < Period.start_time and not user.is_admin:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
     new_lesson = session.exec(select(Lesson).where(Lesson.id == id)).one()
-    if new_lesson.year != year or new_lesson.season != season:
+    if new_lesson.year != Period.year or new_lesson.season != Period.season:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
     if not new_lesson in user.lessons:
         user.lessons.append(new_lesson)
@@ -231,7 +227,7 @@ def delete_my_lesson(session: Annotated[Session, Depends(get_session)], current_
     cancel_lesson = session.get(Lesson, lesson_id)
     if not cancel_lesson:
         raise HTTPException(status_code=404, detail="Lesson not found")
-    if cancel_lesson.year != year or cancel_lesson.season != season:
+    if cancel_lesson.year != Period.year or cancel_lesson.season != Period.season:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="Outdated")
     user = session.exec(select(User).where(User.username == current_user.username)).one()
     if user is None:
@@ -278,13 +274,13 @@ def admin_json_read_users_of_a_lesson(session: Annotated[Session, Depends(get_se
 
 # admin: json: read lesson member list
 @router.get("/json/admin/lessons/users", tags={"Lesson"})
-def admin_json_read_users_of_every_lessons(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)], year: int = None, season: int = None):
+def admin_json_read_users_of_every_lessons(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
     # if current_user.username != "user":
     #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
     accessing_user = session.exec(select(User).where(User.username == current_user.username)).one()
     if accessing_user.is_admin != True:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
-    lessons = session.exec(select(Lesson).where(Lesson.year == 2024, Lesson.season == 2)).all()
+    lessons = session.exec(select(Lesson).where(Lesson.year == Period.year, Lesson.season == Period.season)).all()
     lessons_users_list = []
     for lesson in lessons:
         users = []
@@ -360,7 +356,7 @@ def json_read_lesson_signup_position(session: Annotated[Session, Depends(get_ses
 # read: lesson signup position
 @router.get("/json/my/lessons/position", tags=["Lesson"])
 def json_read_lesson_signup_position_all(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
-    lessons = session.exec(select(Lesson).where(Lesson.year == year, Lesson.season == season)).all()
+    lessons = session.exec(select(Lesson).where(Lesson.year == Period.year, Lesson.season == Period.season)).all()
     user = session.exec(select(User).where(User.username == current_user.username)).one()
     position_list = []
     for lesson in lessons:
@@ -398,9 +394,9 @@ def admin_json_read_user_lesson_list(session: Annotated[Session, Depends(get_ses
 @router.post("/admin/user/{user_id}/lessons/{lesson_id}", response_model=list[LessonRead], tags=["Lesson"])
 def create_my_lessons(session: Annotated[Session, Depends(get_session)], current_user: Annotated[UserRead, Depends(get_current_active_user)], user_id: int, lesson_id: int):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
-    user = session.exec(select(User).where(User.username == current_user.username)).one()
-    if current_time < start_time and not user.is_admin:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
+    accessing_user = session.exec(select(User).where(User.username == current_user.username)).one()
+    if not accessing_user.is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
     new_lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
     # if new_lesson.year != 2024 or new_lesson.season != 1:
     #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
