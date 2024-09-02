@@ -9,12 +9,12 @@ document.getElementById("patch-user-info-btn").addEventListener("click", async f
     document.getElementById("fail-change-password-p").classList.add("hidden");
     document.getElementById("form-error-p").classList.add("hidden");
 
-    let invalidElementsCount = document.querySelectorAll("form:invalid").length;
+    let invalidElementsCount = document.querySelectorAll("#patch-user-info-form:invalid").length;
     if (invalidElementsCount != 0) {
         this.style.pointerEvents = "auto";
         // alert("パスワードの変更に失敗しました。パスワードは４文字以上必要です。一部の記号は使用できません。");
         document.getElementById("form-error-p").classList.remove("hidden");
-        throw new Error("パスワードの変更に失敗しました。");
+        throw new Error("error on form");
     };
 
     const username = document.getElementById("username-input").value;
@@ -23,6 +23,7 @@ document.getElementById("patch-user-info-btn").addEventListener("click", async f
     const sending_data = {
         "plain_password": new_password,
     };
+    const token = loadAccessToken();
     const response = await fetch(`/admin/users/${username}`, {
         method: "PATCH",
         headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
@@ -41,9 +42,6 @@ document.getElementById("patch-user-info-btn").addEventListener("click", async f
     document.getElementById("new-password-input").value = "";
     this.style.pointerEvents = "auto";
 });
-
-
-const token = loadAccessToken();
 
 
 
