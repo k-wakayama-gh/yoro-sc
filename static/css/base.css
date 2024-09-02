@@ -308,8 +308,10 @@ footer {
 
 
 #login-failed-message {
-    color: orangered;
+    color: rgb(155, 72, 13);
     background-color: antiquewhite;
+    text-align: start;
+    padding: 0.5rem;
 }
 
 

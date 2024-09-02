@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 async function displayLessonMember () {
-    console.log("called: displayLessonMember()");
+    // console.log("called: displayLessonMember()");
     const data = await fetchLessonMember();
     console.log(data);
     const dummy_data = [];
@@ -19,16 +19,15 @@ async function displayLessonMember () {
     // data = [{"lesson_id": "int", "lesson_title": "string", "users": ["..."]}, {"lesson_id": "int", "lesson_title": "string", "users": ["..."]}, ...]
     // data.foreach lesson => lesson["lesson_id"], lesson["lesson_title"], lesson["users"]
     // lesson["users"].foreach user => user.last_name, ...
-
-    // for
+    
     data.forEach(function (lesson) {
         console.log("first for activated");
-        if (lesson.lesson_id == 1) {
-            const table_body_class = `table-body-${lesson.lesson_id}`;
+        if (lesson.lesson_number == 1) {
+            const table_body_class = `table-body-${lesson.lesson_number}`;
             const table_body_selector = `.${table_body_class}`;
             const table_content = `
-                <table class="lesson-member-table" data-lesson-id="${lesson.lesson_id}">
-                    <h2>${lesson.lesson_id}：${lesson.lesson_title}</h2>
+                <table class="lesson-member-table" data-lesson-number="${lesson.lesson_number}">
+                    <h2>${lesson.lesson_number}：${lesson.lesson_title}</h2>
                     <thead>
                         <tr>
                             <th>#</th>
@@ -47,7 +46,6 @@ async function displayLessonMember () {
             `;
             table_section.insertAdjacentHTML("beforeend", table_content);
             let index = 1;
-            // for
             lesson["users"].forEach(function (user) {
                 const table_body_content = `
                     <tr>
@@ -64,13 +62,12 @@ async function displayLessonMember () {
                 table_body.insertAdjacentHTML("beforeend", table_body_content);
                 index ++;
             });
-            // end for
-        } else if (lesson["lesson_id"] != 1) {
-            const table_body_class = `table-body-${lesson["lesson_id"]}`;
+        } else if (lesson["lesson_number"] != 1) {
+            const table_body_class = `table-body-${lesson["lesson_number"]}`;
             const table_body_selector = `.${table_body_class}`;
             const table_content = `
-                <table class="lesson-member-table" data-lesson-id="${lesson["lesson_id"]}">
-                    <h2>${lesson["lesson_id"]}：${lesson["lesson_title"]}</h2>
+                <table class="lesson-member-table" data-lesson-number="${lesson["lesson_number"]}">
+                    <h2>${lesson["lesson_number"]}：${lesson["lesson_title"]}</h2>
                     <thead>
                         <tr>
                             <th>#</th>
@@ -89,7 +86,6 @@ async function displayLessonMember () {
             table_section.insertAdjacentHTML("beforeend", table_content);
     
             let index = 1;
-            // for
             lesson["users"].forEach(function (user) {
                 const table_body_content = `
                     <tr>
@@ -105,7 +101,6 @@ async function displayLessonMember () {
                 table_body.insertAdjacentHTML("beforeend", table_body_content);
                 index ++;
             });
-            // end for
         };
     });
 };

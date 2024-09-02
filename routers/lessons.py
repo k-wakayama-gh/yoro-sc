@@ -281,21 +281,14 @@ def admin_json_read_users_of_a_lesson(session: Annotated[Session, Depends(get_se
 def admin_json_read_users_of_every_lessons(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)], year: int = None, season: int = None):
     # if current_user.username != "user":
     #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
-    # using session below
     accessing_user = session.exec(select(User).where(User.username == current_user.username)).one()
     if accessing_user.is_admin != True:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
-    
-    if year and season:
-        lessons = session.exec(select(Lesson).where(Lesson.year == year and Lesson.season == season)).all()
-    elif year and not season:
-        lessons = session.exec(select(Lesson).where(Lesson.year == year)).all()
-    else:
-        lessons = session.exec(select(Lesson)).all()
+    lessons = session.exec(select(Lesson).where(Lesson.year == 2024, Lesson.season == 2)).all()
     lessons_users_list = []
     for lesson in lessons:
         users = []
-        if lesson.id == 1:
+        if lesson.number == 1:
             for child in lesson.user_children:
                 parent = session.exec(select(User).where(User.id == child.user_id)).one()
                 child_dict = child.model_dump()
@@ -312,7 +305,7 @@ def admin_json_read_users_of_every_lessons(session: Annotated[Session, Depends(g
             for user in lesson.users:
                 user_details = user.user_details
                 users.append(user_details)
-        lessons_users_dict = {"lesson_id": lesson.id, "lesson_title": lesson.title, "users": users}
+        lessons_users_dict = {"lesson_number": lesson.number, "lesson_title": lesson.title, "users": users}
         lessons_users_list.append(lessons_users_dict)
     return lessons_users_list
 
@@ -367,7 +360,7 @@ def json_read_lesson_signup_position(session: Annotated[Session, Depends(get_ses
 # read: lesson signup position
 @router.get("/json/my/lessons/position", tags=["Lesson"])
 def json_read_lesson_signup_position_all(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
-    lessons = session.exec(select(Lesson).where(Lesson.year == 2024)).all()
+    lessons = session.exec(select(Lesson).where(Lesson.year == year, Lesson.season == season)).all()
     user = session.exec(select(User).where(User.username == current_user.username)).one()
     position_list = []
     for lesson in lessons:
@@ -401,7 +394,7 @@ def admin_json_read_user_lesson_list(session: Annotated[Session, Depends(get_ses
 
 
 
-# admin: post: sign up to a lessons
+# admin: sign up to a lessons
 @router.post("/admin/user/{user_id}/lessons/{lesson_id}", response_model=list[LessonRead], tags=["Lesson"])
 def create_my_lessons(session: Annotated[Session, Depends(get_session)], current_user: Annotated[UserRead, Depends(get_current_active_user)], user_id: int, lesson_id: int):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
