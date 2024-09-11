@@ -99,6 +99,11 @@ async function renderLessons() {
         } else {
             signUpBtn = `<button class="lesson-sign-up-btn">申し込みをする</button>`;
         };
+        
+        // comment out here to accept more signups manually
+        // if ((lesson.number == 1 || lesson.number == 8) && lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
+        //     signUpBtn = `<button class="dummy-btn-1" style="position: relative;">受付を締め切りました</button>`;
+        // };
 
         let numberColor = "gray";
         if (lesson.number <= 1) {

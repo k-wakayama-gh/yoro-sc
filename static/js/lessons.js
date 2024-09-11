@@ -59,9 +59,9 @@ async function renderLessons() {
         };
 
         // comment out here to accept more signups manually
-        // if (lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
-        //     signUpBtn = `<button class="dummy-btn-1" style="position: relative;">受付を締め切りました</button>`;
-        // };
+        if ((lesson.number == 1 || lesson.number == 8) && lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
+            signUpBtn = `<button class="dummy-btn-1" style="position: relative;">受付を締め切りました</button>`;
+        };
 
         let position;
         for (let i = 0; i < position_list.length; i++) {
