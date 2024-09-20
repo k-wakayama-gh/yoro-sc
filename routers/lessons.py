@@ -488,7 +488,7 @@ def refresh_lesson_capacity_left(session: Annotated[Session, Depends(get_session
 def json_read_lesson_applicants(lesson_id: int, session: Annotated[Session, Depends(get_session)]):
     lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
     result = []
-    if lesson.id == 1:
+    if lesson.number == 1:
         user_children = lesson.user_children
         counter = 1
         for child in user_children:
