@@ -493,7 +493,7 @@ def json_read_lesson_applicants(lesson_id: int, session: Annotated[Session, Depe
         counter = 1
         for child in user_children:
             user_details = child.user.user_details
-            child_details_out = {"No.": counter, "name": child.child_last_name + "　" + child.child_first_name, "parent": user_details.last_name + "　" + user_details.first_name, "tel": user_details.tel}
+            child_details_out = {"No.": counter, "name": child.child_last_name + "　" + child.child_first_name, "parent": user_details.last_name + "　" + user_details.first_name, "tel": user_details.tel, "address": user_details.address}
             counter = counter + 1
             result.append(child_details_out)
     else:
@@ -501,7 +501,7 @@ def json_read_lesson_applicants(lesson_id: int, session: Annotated[Session, Depe
         counter = 1
         for user in users:
             user_details = user.user_details
-            user_details_out = {"No.": counter, "name": (user_details.last_name + "　" + user_details.first_name), "tel": user_details.tel}
+            user_details_out = {"No.": counter, "name": (user_details.last_name + "　" + user_details.first_name), "tel": user_details.tel, "address": user_details.address}
             counter = counter + 1
             result.append(user_details_out)
     return result
