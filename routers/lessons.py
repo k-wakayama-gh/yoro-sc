@@ -55,8 +55,8 @@ def create_lesson(session: Annotated[Session, Depends(get_session)], lesson_crea
 
 # jinja: display lessons synced
 @router.get("/jinja/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
-def display_lessons_sync(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
-    lessons = session.exec(select(Lesson).offset(commons.offset).limit(commons.limit)).all() # Lesson here must be a database model i.e. table: not LessonRead model
+def display_lessons_sync(session: Annotated[Session, Depends(get_session)], query: Annotated[CommonQueryParams, Depends()], request: Request):
+    lessons = session.exec(select(Lesson).offset(query.offset).limit(query.limit)).all() # Lesson here must be a database model i.e. table: not LessonRead model
     # if not lessons:
     #     raise HTTPException(status_code=404, detail="Not found")
     context = {
@@ -82,7 +82,7 @@ def display_lessons(request: Request):
 
 # json: get lesson list
 @router.get("/json/lessons", response_model=list[LessonRead], tags=["Lesson"])
-def read_lesson_list_json(session:Annotated[Session, Depends(get_session)], query: Annotated[CommonQueryParams, Depends()]):
+def read_lesson_list_json(session:Annotated[Session, Depends(get_session)]):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
     if current_time < Period.start_time:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="lesson signup is not allowed yet")
@@ -94,7 +94,7 @@ def read_lesson_list_json(session:Annotated[Session, Depends(get_session)], quer
 
 # json admin: get lesson list
 @router.get("/json/admin/lessons", response_model=list[LessonRead], tags=["Lesson"])
-def read_lesson_list_json(session: Annotated[Session, Depends(get_session)], query: Annotated[CommonQueryParams, Depends()], current_user: Annotated[User, Depends(get_current_active_user)]):
+def read_lesson_list_json(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
     current_time = (datetime.utcnow() + timedelta(hours=9)).replace(tzinfo=timezone(timedelta(hours=9)))
     if current_time < Period.test_start_time:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="it is before test start time")
@@ -505,6 +505,32 @@ def json_read_lesson_applicants(lesson_id: int, session: Annotated[Session, Depe
             counter = counter + 1
             result.append(user_details_out)
     return result
+
+
+
+# get: json list of lessons that each user signed up
+@router.get("/json/users/lessons", tags=["Lesson"])
+def json_read_lessons_each_user_applied(session: Annotated[Session, Depends(get_session)], key: str = None):
+    if key is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
+    elif not key == "1489":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
+    users = session.exec(select(User)).all()
+    result = []
+    for user in users:
+        user_details = user.user_details
+        lessons = user.lessons
+        lessons_out = []
+        for lesson in lessons:
+            one_lesson = str(lesson.number) + ":" + lesson.title + "(" + str(lesson.year) + "_" + str(lesson.season) + ")"
+            lessons_out.append(one_lesson)
+        lessons_len = len(lessons)
+        one_user = {"#": user.id, "名前": (user_details.last_name + "　" + user_details.first_name), "ふりがな": (user_details.last_name_furigana + "　" + user_details.first_name_furigana), "申込数": lessons_len, "住所": user_details.address, "申し込んだ教室": lessons_out}
+        result.append(one_user)
+    return result
+
+
+
 
 
 
