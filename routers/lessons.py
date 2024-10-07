@@ -525,7 +525,17 @@ def json_read_lessons_each_user_applied(session: Annotated[Session, Depends(get_
             one_lesson = str(lesson.number) + ":" + lesson.title + "(" + str(lesson.year) + "_" + str(lesson.season) + ")"
             lessons_out.append(one_lesson)
         lessons_len = len(lessons)
-        one_user = {"#": user.id, "名前": (user_details.last_name + "　" + user_details.first_name), "ふりがな": (user_details.last_name_furigana + "　" + user_details.first_name_furigana), "申込数": lessons_len, "住所": user_details.address, "申し込んだ教室": lessons_out}
+        lessons_season1 = [lesson for lesson in lessons if lesson.season == 1]
+        lessons_season2 = [lesson for lesson in lessons if lesson.season == 2]
+        one_user = {"#": user.id,
+                    "名前": (user_details.last_name + "　" + user_details.first_name),
+                    "ふりがな": (user_details.last_name_furigana + "　" + user_details.first_name_furigana),
+                    "前期": len(lessons_season1),
+                    "後期": len(lessons_season2),
+                    "Tel": user_details.tel,
+                    "住所": user_details.address,
+                    "申し込んだ教室": str(lessons_out),
+                    }
         result.append(one_user)
     return result
 
