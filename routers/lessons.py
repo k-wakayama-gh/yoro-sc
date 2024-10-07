@@ -508,36 +508,35 @@ def json_read_lesson_applicants(lesson_id: int, session: Annotated[Session, Depe
 
 
 
-# # get: json list of lessons that each user signed up
-# @router.get("/json/users/lessons", tags=["Lesson"])
-# def json_read_lessons_each_user_applied(session: Annotated[Session, Depends(get_session)], key: str = None):
-#     if key is None:
-#         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
-#     elif not key == "1489":
-#         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
-#     users = session.exec(select(User)).all()
-#     result = []
-#     for user in users:
-#         user_details = user.user_details
-#         lessons = user.lessons
-#         lessons_out = []
-#         for lesson in lessons:
-#             one_lesson = str(lesson.number) + ":" + lesson.title + "(" + str(lesson.year) + "_" + str(lesson.season) + ")"
-#             lessons_out.append(one_lesson)
-#         lessons_len = len(lessons)
-#         lessons_season1 = [lesson for lesson in lessons if lesson.season == 1]
-#         lessons_season2 = [lesson for lesson in lessons if lesson.season == 2]
-#         one_user = {"#": user.id,
-#                     "名前": (user_details.last_name + "　" + user_details.first_name),
-#                     "ふりがな": (user_details.last_name_furigana + "　" + user_details.first_name_furigana),
-#                     "前期": len(lessons_season1),
-#                     "後期": len(lessons_season2),
-#                     "Tel": user_details.tel,
-#                     "住所": user_details.address,
-#                     "申し込んだ教室": str(lessons_out),
-#                     }
-#         result.append(one_user)
-#     return result
+# get: json list of lessons that each user signed up
+@router.get("/json/users/lessons", tags=["Lesson"])
+def json_read_lessons_each_user_applied(session: Annotated[Session, Depends(get_session)], key: str = None):
+    if key is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
+    elif not key == "1489":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
+    users = session.exec(select(User)).all()
+    result = []
+    for user in users:
+        user_details = user.user_details
+        lessons = user.lessons
+        lessons_out = []
+        for lesson in lessons:
+            one_lesson = str(lesson.number) + ":" + lesson.title + "(" + str(lesson.year) + "_" + str(lesson.season) + ")"
+            lessons_out.append(one_lesson)
+        lessons_season1 = [lesson for lesson in lessons if lesson.season == 1]
+        lessons_season2 = [lesson for lesson in lessons if lesson.season == 2]
+        one_user = {"#": user.id,
+                    "名前": (user_details.last_name + "　" + user_details.first_name),
+                    "ふりがな": (user_details.last_name_furigana + "　" + user_details.first_name_furigana),
+                    "前期": len(lessons_season1),
+                    "後期": len(lessons_season2),
+                    "Tel": user_details.tel,
+                    "住所": user_details.address,
+                    "申し込んだ教室": str(lessons_out),
+                    }
+        result.append(one_user)
+    return result
 
 
 
