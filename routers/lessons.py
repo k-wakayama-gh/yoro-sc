@@ -539,7 +539,7 @@ def json_read_lessons_each_user_applied(session: Annotated[Session, Depends(get_
         result.append(one_user)
     return result
 
-
+# re-deply test
 
 
 
