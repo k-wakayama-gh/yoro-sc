@@ -5,7 +5,7 @@
     --bg-color: #f0f0f0;
     --bg-color-accent: #f4f4f4;
     --border-form: 1px solid #bfbfbf;
-    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --box-shadow: 0 2px 4px gray;
 }
 
 .dark-mode {
@@ -39,7 +39,7 @@ a {
 }
 
 a:visited {
-    color: #dcac1d;
+    color: #761ddc;
 }
 
 /* remove default list styles and the margin on the left */
@@ -155,10 +155,10 @@ body {
 
 .a-btn {
     border: none;
-    /* border-radius: 5px; */
+    border-radius: 5px;
     box-sizing: border-box;
-    /* background-color: #0f82ac; */
-    background-color: teal;
+    background-color: #0f65ac;
+    box-shadow: var(--box-shadow);
     text-decoration: none;
     padding: 1rem;
     width: 100%;
@@ -170,12 +170,11 @@ body {
 }
 
 .a-btn:hover {
-    /* background-color: #2fafda; */
-    background-color: rgb(33, 177, 177);
+    background-color: #2fafda;
+    box-shadow: none;
 }
 
 .a-btn:visited {
-    /* color: #20a7cd; */
     color: white;
 }
 
@@ -359,7 +358,7 @@ footer {
 @media (prefers-color-scheme: dark) {
     /* pass */
     a:visited {
-        color: #dcac1d;
+        color: #761ddc;
     }
 }
 
