@@ -319,6 +319,7 @@ footer {
     background-color: #1f6c15;
     border-radius: 5px;
     border: 1px solid darkgray;
+    /* box-shadow: none; */
 }
 
 .important-btn:hover {
