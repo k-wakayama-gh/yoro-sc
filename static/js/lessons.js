@@ -59,7 +59,7 @@ async function renderLessons() {
         };
 
         // comment out here to accept more signups manually
-        if ([1,8,9,12,6,10,7].includes(lesson.number) && lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
+        if ([100].includes(lesson.number) && lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
             signUpBtn = `<button class="dummy-btn-1" style="position: relative;">受付を締め切りました</button>`;
         };
 

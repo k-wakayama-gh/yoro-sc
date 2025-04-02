@@ -32,8 +32,8 @@ class CommonQueryParams:
 
 # current lesson period
 class Period:
-    year = 2024
-    season = 2
+    year = 2025
+    season = 1
     start_time = datetime(year=2025, month=4, day=9, hour=7, minute=0, second=0, tzinfo=timezone(timedelta(hours=9)))
     test_start_time = datetime(year=2024, month=4, day=9, hour=22, minute=30, second=0, tzinfo=timezone(timedelta(hours=9)))
 
