@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
 from typing import Optional, Annotated
+from sqlalchemy.orm import selectinload
 
 # my modules
 from database import engine, get_session
@@ -356,8 +357,8 @@ def admin_get_user_list_json(session: Annotated[Session, Depends(get_session)], 
     return user_details
 
 
-@router.get("/json/admin/users/search", tags=["User"])
-def  admin_user_search(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)], last_name_furigana: str = None, first_name_furigana: str = None):
+@router.get("/json/admin/users/search_pre", tags=["User"])
+def  admin_user_search_pre(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)], last_name_furigana: str = None, first_name_furigana: str = None):
     user = session.exec(select(User).where(User.username == current_user.username)).one()
     if not user.is_admin:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not Authorized")
@@ -368,4 +369,72 @@ def  admin_user_search(session: Annotated[Session, Depends(get_session)], curren
     elif last_name_furigana and first_name_furigana:
         user_details = session.exec(select(UserDetail).where(UserDetail.last_name_furigana == last_name_furigana and UserDetail.first_name_furigana == first_name_furigana)).all()
     return user_details
+
+
+
+@router.get("/json/admin/users/search", tags=["User"])
+def admin_user_search(
+    session: Annotated[Session, Depends(get_session)], 
+    current_user: Annotated[User, Depends(get_current_active_user)], 
+    last_name_furigana: str = None, 
+    first_name_furigana: str = None
+):
+    # 現在のユーザーが管理者であることを確認
+    user = session.exec(select(User).where(User.username == current_user.username)).one()
+    if not user.is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not Authorized")
+
+    # UserDetailのリストを取得する
+    if last_name_furigana and not first_name_furigana:
+        user_details = session.exec(select(UserDetail).where(UserDetail.last_name_furigana == last_name_furigana)).all()
+    elif not last_name_furigana and first_name_furigana:
+        user_details = session.exec(select(UserDetail).where(UserDetail.first_name_furigana == first_name_furigana)).all()
+    elif last_name_furigana and first_name_furigana:
+        user_details = session.exec(select(UserDetail).where(UserDetail.last_name_furigana == last_name_furigana and UserDetail.first_name_furigana == first_name_furigana)).all()
+
+    # 各UserDetailのuser_idを使って対応するUserを取得し、必要な情報を追加
+    response = []
+    for detail in user_details:
+        # user_idを使ってUserを取得
+        user = session.exec(select(User).where(User.id == detail.user_id)).one_or_none()
+
+        if user:
+            # Userの情報をUserDetailに追加
+            user_info = {
+                "user_id": detail.user_id,
+                "username": user.username,
+                "user_children": [
+                    {"user_child_id": child.id, "first_name": child.child_first_name, "last_name": child.child_last_name}
+                    for child in user.user_children
+                ] if user.user_children else []
+            }
+            
+            # UserDetailの他の情報を追加
+            user_info.update({
+                "email": detail.email,
+                "first_name": detail.first_name,
+                "last_name": detail.last_name,
+                "first_name_furigana": detail.first_name_furigana,
+                "last_name_furigana": detail.last_name_furigana,
+                "tel": detail.tel,
+                "postal_code": detail.postal_code,
+                "address": detail.address,
+                "created_time": detail.created_time
+            })
+
+            # レスポンスリストに追加
+            response.append(user_info)
+    
+    return response
+
+
+
+
+# admin
+@router.get("/admin/user_search", response_class=HTMLResponse, tags=["User"])
+def read_page_admin_user_search(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("admin/user_search.html", context)
 
