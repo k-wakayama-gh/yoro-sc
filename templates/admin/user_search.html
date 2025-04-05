@@ -6,8 +6,7 @@
     <link rel="stylesheet" href="/static/css/base.css">
     <title>ユーザー検索</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        #main-container {
             padding: 20px;
         }
         .results {
@@ -25,12 +24,15 @@
             margin-top: 10px;
         }
         .copy-username {
-            color: blue;
+            color: darkcyan;
             cursor: pointer;
             text-decoration: underline;
         }
         .copy-username:hover {
-            color: darkblue;
+            color: rgb(0, 172, 172);
+        }
+        #search-btn:hover {
+            background-color: darkgray;
         }
     </style>
 </head>
@@ -39,22 +41,25 @@
 
     {% include "login.html" %}
 
-    <h1>ユーザー検索</h1>
+    <div id="main-container">
 
-    <!-- 検索フォーム -->
-    <form id="searchForm">
-        <label for="lastNameFurigana">姓（ふりがな）:</label>
-        <input type="text" id="lastNameFurigana" name="last_name_furigana" placeholder="姓のふりがな">
-        <br><br>
-        <label for="firstNameFurigana">名（ふりがな）:</label>
-        <input type="text" id="firstNameFurigana" name="first_name_furigana" placeholder="名のふりがな">
-        <br><br>
-        <button type="submit">検索</button>
-    </form>
-
-    <!-- 検索結果表示 -->
-    <div class="results" id="results">
-        <!-- 結果はここに表示されます -->
+        <h1>ユーザー検索</h1>
+    
+        <!-- 検索フォーム -->
+        <form id="searchForm">
+            <label for="lastNameFurigana">姓（ふりがな）:</label>
+            <input type="text" id="lastNameFurigana" name="last_name_furigana" placeholder="姓のふりがな">
+            <br><br>
+            <label for="firstNameFurigana">名（ふりがな）:</label>
+            <input type="text" id="firstNameFurigana" name="first_name_furigana" placeholder="名のふりがな">
+            <br><br>
+            <button type="submit" id="search-btn">検索</button>
+        </form>
+    
+        <!-- 検索結果表示 -->
+        <div class="results" id="results">
+            <!-- 結果はここに表示されます -->
+        </div>
     </div>
 
     <script src="/static/js/base.js"></script>

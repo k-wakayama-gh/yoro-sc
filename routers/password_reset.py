@@ -76,7 +76,7 @@ def request_password_reset(request: PasswordResetRequest, session: Annotated[Ses
     username = request.username
     token = generate_reset_token(username)
     reset_link = f"https://yoro-sc.azurewebsites.net/password_reset?token={token}"
-    return JSONResponse(content={"message": "Reset link generated", "reset_link": reset_link})
+    return JSONResponse(content={"message": "Reset link generated", "reset_link": reset_link, "username": username})
 
 
 
