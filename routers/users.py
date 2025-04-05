@@ -419,7 +419,8 @@ def admin_user_search(
                 "tel": detail.tel,
                 "postal_code": detail.postal_code,
                 "address": detail.address,
-                "created_time": detail.created_time
+                "created_time": detail.created_time,
+                "lessons": len(user.lessons)
             })
 
             # レスポンスリストに追加

@@ -7,7 +7,7 @@
     <title>ユーザー検索</title>
     <style>
         #main-container {
-            padding: 20px;
+            padding: 1.25rem;
         }
         .results {
             margin-top: 20px;
@@ -60,6 +60,11 @@
         <div class="results" id="results">
             <!-- 結果はここに表示されます -->
         </div>
+    </div>
+
+    <div class="flex-column-center" style="padding: 1.25rem;">
+        <a href="/admin/password_reset" class="a-btn">パスワード再設定ページ</a>
+        <div class="space"></div>
     </div>
 
     <script src="/static/js/base.js"></script>
@@ -126,6 +131,7 @@
                     <p>電話番号: ${user.tel}</p>
                     <p>住所: ${user.address}</p>
                     <p>作成日: ${user.created_time}</p>
+                    <p>受講数: ${user.lessons}</p>
                     
                     <!-- ユーザーの子供情報 -->
                     <div class="children">
