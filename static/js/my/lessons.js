@@ -29,8 +29,8 @@ async function renderLessons() {
     const my_children = await fetchMyChildren();
     const lessonList = document.getElementById("lesson-list");
 
-    const current_year = 2024;
-    const current_season = 2;
+    const current_year = 2025;
+    const current_season = 1;
 
     // clear the previous lesson list
     lessonList.textContent = "";
@@ -52,7 +52,7 @@ async function renderLessons() {
         let numberColor = "gray";
         if (lesson.number <= 1) {
             numberColor = "#a44d3a";
-        } else if (lesson.number >= 11) {
+        } else if (lesson.number >= 100) {
             numberColor = "#dcbd24";
         } else {
             numberColor = "#4379a6";
@@ -104,7 +104,8 @@ async function renderLessons() {
         `;
         lessonList.insertAdjacentHTML("beforeend", listItem);
     });
-    if (myLessons.length !== 0) {
+    const count_mylessons = myLessons.filter(item => item.year === current_year && item.season === current_season).length;
+    if (count_mylessons >= 1) {
         console.log("rendered lesson list");
         document.getElementById("fee-list-section").classList.remove("hidden");
     };

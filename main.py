@@ -10,7 +10,7 @@ from alembic.config import Config
 
 # my modules
 from database import engine, create_database
-import routers.html, routers.items, routers.users, routers.lessons, routers.auth, routers.todos, routers.test, routers.password_reset
+import routers.html, routers.items, routers.users, routers.lessons, routers.auth, routers.todos, routers.test, routers.password_reset, routers.settings
 from force_sqlite import force_sqlite
 
 # FastAPI instance
@@ -31,6 +31,7 @@ app.include_router(routers.auth.router)
 app.include_router(routers.todos.router)
 app.include_router(routers.test.router)
 app.include_router(routers.password_reset.router)
+app.include_router(routers.settings.router)
 
 
 # static files settings
