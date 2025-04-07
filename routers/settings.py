@@ -28,6 +28,11 @@ def get_period(session: Annotated[Session, Depends(get_session)]):
     period = session.exec(select(Period)).first()
     if not period:
         raise HTTPException(status_code=404, detail="Period not found")
+    
+    # JSTのタイムゾーンを追加する（コピーを作って返す）
+    JST = timezone(timedelta(hours=9))
+    period.start_time = period.start_time.astimezone(JST)
+    period.end_time = period.end_time.astimezone(JST)
     return period
 
 

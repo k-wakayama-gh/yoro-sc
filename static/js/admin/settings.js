@@ -57,3 +57,45 @@ function convertToDateDict(dateTimeString) {
     };
 };
 
+
+
+window.addEventListener("DOMContentLoaded", async () => {
+    try {
+        // APIから期間情報を取得
+        const response = await fetch("/admin/period");
+        if (!response.ok) {
+            throw new Error("期間情報の取得に失敗しました");
+        }
+        const data = await response.json();
+
+        // 年とシーズンをフォームに設定
+        document.getElementById("year").value = data.year;
+        document.getElementById("season").value = data.season;
+
+        // UTC日時をJSTに変換してdatetime-local形式で設定
+        document.getElementById("start_time").value = convertToJSTInput(data.start_time);
+        document.getElementById("end_time").value = convertToJSTInput(data.end_time);
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("response-message").innerText = "期間情報の取得に失敗しました";
+    }
+});
+
+// UTCの日時文字列をJSTのdatetime-local用形式（yyyy-MM-ddTHH:mm）に変換する関数
+function convertToJSTInput(utcDateTime) {
+    const date = new Date(utcDateTime);
+
+    // UTC→JSTに変換（JSTはUTC+9）
+    date.setHours(date.getHours() + 9);
+
+    // JST日時をdatetime-local用のフォーマット（yyyy-MM-ddTHH:mm）に変換
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const hh = String(date.getHours()).padStart(2, '0');
+    const min = String(date.getMinutes()).padStart(2, '0');
+
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+}
+
