@@ -29,10 +29,15 @@ def get_period(session: Annotated[Session, Depends(get_session)]):
     if not period:
         raise HTTPException(status_code=404, detail="Period not found")
     
-    # JSTのタイムゾーンを追加する（コピーを作って返す）
-    JST = timezone(timedelta(hours=9))
-    period.start_time = period.start_time.astimezone(JST)
-    period.end_time = period.end_time.astimezone(JST)
+    # # JSTのタイムゾーンを追加する（コピーを作って返す）
+    # JST = timezone(timedelta(hours=9))
+    # period.start_time = period.start_time.astimezone(JST)
+    # period.end_time = period.end_time.astimezone(JST)
+    # # print(period.start_time, period.start_time.tzinfo)
+
+    # JSTに変換（タイムゾーン情報なし）
+    period.start_time = (period.start_time + timedelta(hours=9)).replace(tzinfo=None)
+    period.end_time = (period.end_time + timedelta(hours=9)).replace(tzinfo=None)
     return period
 
 

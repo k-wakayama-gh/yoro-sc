@@ -130,8 +130,8 @@ def read_lesson_list_json(session: Annotated[Session, Depends(get_session)]):
 def read_lesson_list_json(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
     current_time = datetime.utcnow()
     current_period = get_current_period(session)
-    if current_time < current_period.start_time:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="it is before test start time")
+    # if current_time < current_period.start_time:
+    #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="it is before test start time")
     user = session.exec(select(User).where(User.username == current_user.username)).one()
     if not user.is_admin:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
@@ -412,7 +412,13 @@ def admin_remove_lesson_member(session: Annotated[Session, Depends(get_session)]
     user = session.exec(select(User).where(User.username == username)).one()
     user_details = (user.user_details).model_dump()
     user_fullname = user_details["last_name"] + "　" + user_details["first_name"]
-    lesson_member.remove(user)
+    if user in lesson_member:
+        lesson_member.remove(user)
+    # user_children = session.exec(select(UserChild).where(UserChild.user_id == user.id)).all()
+    if lesson.number == 1:
+        for child in user.user_children:
+            if lesson in child.lessons:
+                child.lessons.remove(lesson)
     session.add(lesson)
     session.commit()
     session.refresh(lesson)

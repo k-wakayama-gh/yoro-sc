@@ -71,10 +71,12 @@ window.addEventListener("DOMContentLoaded", async () => {
         // 年とシーズンをフォームに設定
         document.getElementById("year").value = data.year;
         document.getElementById("season").value = data.season;
+        document.getElementById("start_time").value = data.start_time;
+        document.getElementById("end_time").value = data.end_time;
 
-        // UTC日時をJSTに変換してdatetime-local形式で設定
-        document.getElementById("start_time").value = convertToJSTInput(data.start_time);
-        document.getElementById("end_time").value = convertToJSTInput(data.end_time);
+        // // UTC日時をJSTに変換してdatetime-local形式で設定
+        // document.getElementById("start_time").value = convertToJSTInput(data.start_time);
+        // document.getElementById("end_time").value = convertToJSTInput(data.end_time);
 
     } catch (error) {
         console.error(error);
