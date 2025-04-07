@@ -171,3 +171,11 @@ input:invalid:focus {
     grid-template-columns: 1fr 2fr;
 }
 
+
+.link-userdetails-edit {
+    background-color: #28822c;
+}
+
+.link-userdetails-edit:hover {
+    background-color: #4CAF50;
+}

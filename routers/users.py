@@ -439,3 +439,14 @@ def read_page_admin_user_search(request: Request):
     }
     return templates.TemplateResponse("admin/user_search.html", context)
 
+
+
+# user detailds edit page
+@router.get("/my/userdetails/edit", response_class=HTMLResponse, tags=["User"])
+def read_page_admin_user_search(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("my/userdetails/edit.html", context)
+
+

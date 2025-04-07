@@ -424,7 +424,7 @@ function renderUserChildren(userChildren) {
             <div class="user-child-item" data-child-id="${child.id}">
                 <label>
                     <input type="checkbox" class="child-checkbox" data-child-id="${child.id}">
-                    ${child.child_first_name} ${child.child_last_name}
+                    ${child.child_last_name} ${child.child_first_name}
                 </label>
             </div>
         `;

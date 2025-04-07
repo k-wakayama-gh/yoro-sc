@@ -119,7 +119,7 @@ async function renderLessons() {
         let fee_text = `<p>${lesson.title}：${lesson.price.toLocaleString()}円</p>`;
         if (lesson.number == 1) {
             const number_of_children = my_children.length;
-            const child_names = my_children.map(child => `${child.child_first_name} ${child.child_last_name} さん`).join(", ");
+            const child_names = my_children.map(child => `${child.child_last_name} ${child.child_first_name} さん`).join(", ");
             fee_text = `<p>${lesson.title}：${lesson.price.toLocaleString()}円 x ${number_of_children}名分（${child_names}）</p>`;
         };
         feeList.insertAdjacentHTML("beforeend", fee_text);

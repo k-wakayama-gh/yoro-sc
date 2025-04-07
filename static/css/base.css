@@ -170,7 +170,8 @@ body {
 }
 
 .a-btn:hover {
-    background-color: #2fafda;
+    /* background-color: #2fafda; */
+    background-color: #1378ca;
     box-shadow: none;
 }
 
