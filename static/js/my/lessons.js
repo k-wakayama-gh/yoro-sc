@@ -26,7 +26,7 @@ function attachEventListeners() {
 async function renderLessons() {
     const myLessons = await fetchMyLessons();
     const position_list = await get_lesson_signup_position();
-    const my_children = await fetchMyChildren();
+    const my_children = await fetch_my_children_in_current_lesson();
     const lessonList = document.getElementById("lesson-list");
 
     const current_year = 2025;
@@ -116,12 +116,13 @@ async function renderLessons() {
     let totalFee = 0;
     current_my_lessons.forEach(function (lesson) {
         totalFee = totalFee + lesson.price;
-        let fee = `<p>${lesson.title}：${lesson.price.toLocaleString()}円</p>`;
+        let fee_text = `<p>${lesson.title}：${lesson.price.toLocaleString()}円</p>`;
         if (lesson.number == 1) {
             const number_of_children = my_children.length;
-            fee = `<p>${lesson.title}：${lesson.price.toLocaleString()}円 x ${number_of_children}名分</p>`;
+            const child_names = my_children.map(child => `${child.child_first_name} ${child.child_last_name} さん`).join(", ");
+            fee_text = `<p>${lesson.title}：${lesson.price.toLocaleString()}円 x ${number_of_children}名分（${child_names}）</p>`;
         };
-        feeList.insertAdjacentHTML("beforeend", fee);
+        feeList.insertAdjacentHTML("beforeend", fee_text);
     });
     // feeList.insertAdjacentHTML("beforeend", `<p style="font-weight: bold;">合計：${totalFee.toLocaleString()}円</p>`);
 };
@@ -163,6 +164,25 @@ async function fetchMyChildren() {
     } else {
         console.error("error: fetchMyChildren()");
         return []; // empty <=> length == 0
+    };
+};
+
+
+
+// get my children joining current lesson
+async function fetch_my_children_in_current_lesson() {
+    const token = loadAccessToken();
+    const response = await fetch("/json/my/children_in_current_lesson", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+    });
+    if (response.ok) {
+        const result = await response.json();
+        console.log("success: fetch_my_children_in_current_lesson()", result);
+        return result;
+    } else {
+        console.error("error: fetch_my_children_in_current_lesson()");
+        return [];
     };
 };
 

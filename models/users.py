@@ -153,5 +153,5 @@ class UserChildCreate(UserChildBase):
     pass
 
 class UserChildRead(UserChildBase):
-    pass
+    id: int
 

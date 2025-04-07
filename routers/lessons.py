@@ -11,7 +11,7 @@ from datetime import datetime, timedelta, timezone
 # my modules
 from database import engine, get_session
 from models.lessons import Lesson, LessonCreate, LessonRead, LessonUpdate, LessonDelete
-from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserChild
+from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserChild, UserChildRead
 from routers.auth import get_current_active_user
 from models.settings import Period
 
@@ -236,6 +236,51 @@ def create_my_lessons(session: Annotated[Session, Depends(get_session)], current
 
 
 
+
+class ChildrenIdsRequest(SQLModel):
+    children_ids: list[int]
+
+
+@router.post("/lessons_for_children/{lesson_id}")
+def create_my_lessons_for_children(
+    lesson_id: int,
+    children_ids_request: ChildrenIdsRequest,
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    session: Annotated[Session, Depends(get_session)],
+):
+    lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
+    if lesson.number != 1:
+        raise HTTPException(status_code=400, detail="invalid lesson number")
+
+    current_period = get_current_period(session)
+    if lesson.year != current_period.year or lesson.season != current_period.season:
+        raise HTTPException(status_code=403, detail="invalid year or season")
+
+    for child_id in children_ids_request.children_ids:
+        user_child = session.exec(select(UserChild).where(UserChild.id == child_id)).first()
+        if not user_child:
+            raise HTTPException(status_code=404, detail="user child not found")
+        if user_child.user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="invalid child id")
+        
+        if not lesson in user_child.lessons:
+            user_child.lessons.append(lesson)
+    
+    # current_user.lessons.append(lesson)
+    user = session.exec(select(User).where(User.username == current_user.username)).one()
+    user.lessons.append(lesson)
+
+    lesson.capacity_left = lesson.capacity - len(lesson.user_children)
+    
+    session.add(lesson)
+    session.commit()
+    session.refresh(lesson)
+
+    return {"success": "children signed up to the lesson"}
+
+
+
+
 # display my lessons async
 @router.get("/my/lessons", response_class=HTMLResponse, response_model=list[LessonRead], tags=["Lesson"])
 def display_my_lessons(request: Request):
@@ -278,7 +323,8 @@ def delete_my_lesson(session: Annotated[Session, Depends(get_session)], current_
     if cancel_lesson.number == 1: # subject to change: lessons for children
         user_children = session.exec(select(UserChild).where(UserChild.user_id == user.id)).all()
         for child in user_children:
-            child.lessons.remove(cancel_lesson)
+            if cancel_lesson in child.lessons:
+                child.lessons.remove(cancel_lesson)
         cancel_lesson.capacity_left = cancel_lesson.capacity - len(cancel_lesson.user_children)
         session.add(cancel_lesson)
         session.commit()
@@ -594,4 +640,48 @@ def json_admin_create_lessons(lessons_create: list[LessonCreate], session: Annot
         session.add(db_lesson)
     session.commit()
     return {"ok": "done"}
+
+
+
+
+# json: get my user children in current lesson
+@router.get("/json/my/children_in_current_lesson", tags=["Lesson"], response_model=list[UserChildRead])
+def json_get_my_children_in_current_lesson(
+    session: Annotated[Session, Depends(get_session)],
+    current_user: Annotated[User, Depends(get_current_active_user)]
+    ):
+    current_period = get_current_period(session)
+    children = session.exec(select(UserChild).where(UserChild.user_id == current_user.id)).all()
+    children_in_current_lesson = []
+    for child in children:
+        for lesson in child.lessons:
+            if lesson.year == current_period.year and lesson.season == current_period.season:
+                children_in_current_lesson.append(child)
+    return children_in_current_lesson
+
+
+
+# from sqlalchemy import and_
+
+# # json: get my user children in current lesson
+# @router.get("/json/my/children_in_current_lesson", tags=["Lesson"], response_model=list[UserChildRead])
+# def json_get_my_children_in_current_lesson(
+#     session: Annotated[Session, Depends(get_session)],
+#     current_user: Annotated[User, Depends(get_current_active_user)]
+# ):
+#     current_period = get_current_period(session)
+
+#     statement = (
+#         select(UserChild)
+#         .where(UserChild.user_id == current_user.id)
+#         .where(UserChild.lessons.any(
+#             and_(
+#                 Lesson.year == current_period.year,
+#                 Lesson.season == current_period.season
+#             )
+#         ))
+#     )
+
+#     children_in_current_lesson = session.exec(statement).all()
+#     return children_in_current_lesson
 

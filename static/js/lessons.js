@@ -10,7 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // fetch, render lesson list data and attach event listeners
 async function fetchAndDisplayLessons() {
+    // await fetchUserChildren();
     await renderLessons();
+    // displayUserChildren(userChildren);
     attachEventListeners();
 };
 
@@ -41,6 +43,7 @@ async function renderLessons() {
     const lessons = await fetchLessons();
     const myLessons = await fetchMyLessons();
     const position_list = await get_lesson_signup_position();
+    const userChildren = await fetchUserChildren();
     const lessonList = document.getElementById("lesson-list");
 
     // clear the previous lesson list
@@ -98,7 +101,7 @@ async function renderLessons() {
         };
         const dayColor = {"日": "red", "月": "gray", "火": "orange", "水": "#4193f6", "木": "3f8d57", "金": "#f19937", "土": "blue"};
         const listItem = `
-            <li class="lesson-list-li flex-column" style="border-color: ${numberColor};" data-lesson-id="${lesson.id}">
+            <li class="lesson-list-li flex-column" style="border-color: ${numberColor};" data-lesson-id="${lesson.id}" data-lesson-number="${lesson.number}">
                 <div class="flex-row-between lesson-number-etc">
                     <div class="lesson-number" style="background-color: ${numberColor};"><div>${lesson.number}</div></div>
                     <div class="lesson-name"><div class="flex-row">${lesson.title}</div></div>
@@ -123,6 +126,8 @@ async function renderLessons() {
 
                 ${signUpBtn}
 
+                <div class="user-children-list hidden"></div>
+
                 <div class="sign-up-check-message hidden">[確認]この教室に申し込みますか？</div>
                 <div class="sign-up-check-div hidden">
                     <button class="lesson-sign-up-confirm-btn">はい</button>
@@ -142,6 +147,7 @@ async function renderLessons() {
         console.log("rendered lesson list");
         const poster = `<li class="lesson-poster"><img src="/static/img/lessons/lesson-poster.png" style="width:100%; height: auto;"></li>`;
         document.querySelector("#lesson-list > :nth-child(1)").insertAdjacentHTML("afterend", poster);
+        renderUserChildren(userChildren);
     };
 };
 
@@ -202,6 +208,9 @@ function signUpCheck() {
             this.parentNode.querySelector(".sign-up-check-div").classList.toggle("hidden");
             this.parentNode.querySelector(".sign-up-check-message").classList.toggle("hidden");
             this.classList.toggle("hidden");
+            if (this.parentNode.dataset.lessonNumber == 1) {
+                document.querySelector(".user-children-list").classList.remove("hidden");
+            }
         });
     });
 };
@@ -213,9 +222,43 @@ function signUpCancel() {
             this.parentNode.classList.toggle("hidden");
             this.parentNode.parentNode.querySelector(".lesson-sign-up-btn").classList.toggle("hidden");
             this.parentNode.parentNode.querySelector(".sign-up-check-message").classList.toggle("hidden");
+            document.querySelector(".user-children-list").classList.add("hidden");
         });
     });
 };
+
+
+
+// // sign up to a lesson
+// function signUpLesson() {
+//     document.querySelectorAll(".lesson-sign-up-confirm-btn").forEach(function (button) {
+//         button.addEventListener("click", async function () {
+//             const token = loadAccessToken();
+//             const lessonId = this.parentNode.parentNode.dataset.lessonId;
+
+//             this.textContent = "処理中...";
+
+//             const body = {};
+
+//             console.log("fetching data...");
+
+//             const response = await fetch(`/lessons/${lessonId}`, {
+//                 method: "POST",
+//                 headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+//                 body: JSON.stringify(body),
+//             });
+
+//             if (response.ok) {
+//                 const result = await response.json();
+//                 fetchAndDisplayLessons();
+//                 console.log("success: signed up to a lesson", result);
+//             } else {
+//                 console.error("error: signUpLesson()");
+//                 alert("エラーが発生しました。もう一度やり直してください。")
+//             };
+//         });
+//     });
+// };
 
 
 
@@ -225,16 +268,31 @@ function signUpLesson() {
         button.addEventListener("click", async function () {
             const token = loadAccessToken();
             const lessonId = this.parentNode.parentNode.dataset.lessonId;
+            const lessonNumber = parseInt(this.parentNode.parentNode.dataset.lessonNumber);
+            const childrenIds = loadChildrenIds();
+            console.log("requesting children ids: ", childrenIds);
 
             this.textContent = "処理中...";
 
-            const body = {};
+            let url = "";
+            let body = {};
+
+            if (lessonNumber === 1) {
+                url = `/lessons_for_children/${lessonId}`;
+                body = { children_ids: childrenIds };
+            } else {
+                url = `/lessons/${lessonId}`;
+                body = {};
+            }
 
             console.log("fetching data...");
 
-            const response = await fetch(`/lessons/${lessonId}`, {
+            const response = await fetch(url, {
                 method: "POST",
-                headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
                 body: JSON.stringify(body),
             });
 
@@ -244,11 +302,13 @@ function signUpLesson() {
                 console.log("success: signed up to a lesson", result);
             } else {
                 console.error("error: signUpLesson()");
-                alert("エラーが発生しました。もう一度やり直してください。")
-            };
+                alert("エラーが発生しました。")
+            }
         });
     });
 };
+
+
 
 
 
@@ -329,6 +389,74 @@ async function get_lesson_signup_position() {
     };
 };
 
+
+
+
+async function fetchUserChildren() {
+    const token = loadAccessToken();
+
+    const response = await fetch('/json/my/children', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        },
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        console.log("success: userChildren:", result);
+        return result;
+    } else {
+        console.error("error: fetchUserChildren()");
+        return [];
+    }
+}
+
+
+// user_childrenリストを表示する関数
+function renderUserChildren(userChildren) {
+    let userChildrenHTML = '';
+
+    // user_childrenのデータをリストとしてHTML文字列で作成
+    userChildren.forEach(child => {
+        userChildrenHTML += `
+            <div class="user-child-item" data-child-id="${child.id}">
+                <label>
+                    <input type="checkbox" class="child-checkbox" data-child-id="${child.id}">
+                    ${child.child_first_name} ${child.child_last_name}
+                </label>
+            </div>
+        `;
+    });
+
+    // user-children-listにHTMLを挿入
+    document.querySelector(".user-children-list").innerHTML = userChildrenHTML;
+
+    // チェックボックスが変更された際の処理
+    const checkboxes = document.querySelectorAll(".child-checkbox");
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", () => {
+            const childId = checkbox.dataset.childId;  // チェックボックスに対応する子供のIDを取得
+            if (checkbox.checked) {
+                console.log(`選択された子供のID: ${childId}`);
+            } else {
+                console.log(`選択解除された子供のID: ${childId}`);
+            }
+        });
+    });
+}
+
+
+
+// 選択された子供のIDを取得
+function loadChildrenIds() {
+    const selectedChildren = [];
+    document.querySelectorAll(".child-checkbox:checked").forEach(checkbox => {
+        selectedChildren.push(parseInt(checkbox.dataset.childId));  // data-child-id から子供のIDを取得してリストに追加
+    });
+    return selectedChildren;
+}
 
 
 
