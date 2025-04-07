@@ -101,3 +101,9 @@ function convertToJSTInput(utcDateTime) {
     return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
 }
 
+function convertToInputDateTime(utcDateTime) {
+    const date = new Date(utcDateTime);
+    // datetime-local用のフォーマット (yyyy-MM-ddTHH:mm)
+    return date.toISOString().slice(0, 16);
+}
+
