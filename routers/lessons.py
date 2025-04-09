@@ -7,6 +7,7 @@ from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
 from typing import Optional, Annotated
 from datetime import datetime, timedelta, timezone
+import os
 
 # my modules
 from database import engine, get_session
@@ -41,6 +42,10 @@ class FakeCurrentPeriod:
 # for test
 # CurrentPeriod.start_time = CurrentPeriod.test_start_time
 
+if "PUBLIC_API_KEY" in os.environ:
+    PUBLIC_API_KEY = os.getenv("PUBLIC_API_KEY")
+else:
+    PUBLIC_API_KEY = "fake_key"
 
 
 # create
@@ -575,13 +580,15 @@ def refresh_lesson_capacity_left(session: Annotated[Session, Depends(get_session
 
 # get: json list of lesson applicants
 @router.get("/json/lessons/{lesson_id}/applicants", tags=["Lesson"])
-def json_read_lesson_applicants(lesson_id: int, session: Annotated[Session, Depends(get_session)]):
+def json_read_lesson_applicants(lesson_id: int, session: Annotated[Session, Depends(get_session)], key: str = None):
+    if key is None or not key == PUBLIC_API_KEY:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
     lesson = session.exec(select(Lesson).where(Lesson.id == lesson_id)).one()
     result = []
     if lesson.number == 1:
-        user_children = lesson.user_children
+        children = lesson.user_children
         counter = 1
-        for child in user_children:
+        for child in children:
             user_details = child.user.user_details
             child_details_out = {"No.": counter, "name": child.child_last_name + "　" + child.child_first_name, "parent": user_details.last_name + "　" + user_details.first_name, "tel": user_details.tel, "address": user_details.address}
             counter = counter + 1
@@ -603,7 +610,7 @@ def json_read_lesson_applicants(lesson_id: int, session: Annotated[Session, Depe
 def json_read_lessons_each_user_applied(session: Annotated[Session, Depends(get_session)], key: str = None):
     if key is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
-    elif not key == "1489":
+    elif not key == PUBLIC_API_KEY:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
     users = session.exec(select(User)).all()
     result = []
