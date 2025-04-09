@@ -260,6 +260,9 @@ def create_my_lessons_for_children(
     current_period = get_current_period(session)
     if lesson.year != current_period.year or lesson.season != current_period.season:
         raise HTTPException(status_code=403, detail="invalid year or season")
+    
+    if len(children_ids_request.children_ids) == 0:
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="no children selected")
 
     for child_id in children_ids_request.children_ids:
         user_child = session.exec(select(UserChild).where(UserChild.id == child_id)).first()

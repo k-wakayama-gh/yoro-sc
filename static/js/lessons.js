@@ -57,6 +57,8 @@ async function renderLessons() {
             signUpBtn = "";
         } else if (myLessons.some(myLesson => myLesson.id == lesson.id)) {
             signUpBtn = `<button class="dummy-btn" style="position: relative;">申し込み済み${cancelBtn}</button>`;
+        } else if (lesson.capacity_left <= 0) {
+            signUpBtn = `<button class="lesson-sign-up-btn sign-up-over-capacity">キャンセル待ちに申し込む</button>`;
         } else {
             signUpBtn = `<button class="lesson-sign-up-btn">申し込みをする</button>`;
         };
@@ -90,14 +92,14 @@ async function renderLessons() {
             numberColor = "#4379a6";
         };
 
-        let capacity_left = lesson.capacity;
-        if (lesson.capacity_left != null) {
-            capacity_left = lesson.capacity_left;
-        };
+        // let capacity_left = lesson.capacity;
+        // if (lesson.capacity_left != null) {
+        //     capacity_left = lesson.capacity_left;
+        // };
 
         let capacity = "なし";
         if (lesson.capacity != null) {
-            capacity = capacity_left + " / " + lesson.capacity + " 名";
+            capacity = `<span class="capacity-left-span" data-capacity-left="${lesson.capacity_left}">${lesson.capacity_left}</span>` + " / " + lesson.capacity + " 名";
         };
         const dayColor = {"日": "red", "月": "gray", "火": "orange", "水": "#4193f6", "木": "3f8d57", "金": "#f19937", "土": "blue"};
         const listItem = `
@@ -148,6 +150,7 @@ async function renderLessons() {
         const poster = `<li class="lesson-poster"><img src="/static/img/lessons/lesson-poster.png" style="width:100%; height: auto;"></li>`;
         document.querySelector("#lesson-list > :nth-child(1)").insertAdjacentHTML("afterend", poster);
         renderUserChildren(userChildren);
+        color_red_minus_capacity_left();
     };
 };
 
@@ -300,9 +303,14 @@ function signUpLesson() {
                 const result = await response.json();
                 fetchAndDisplayLessons();
                 console.log("success: signed up to a lesson", result);
+            } else if(response.status == 406) {
+                console.error("error: signUpLesson()");
+                alert("参加するお子さんが選択されていません。");
+                fetchAndDisplayLessons();
             } else {
                 console.error("error: signUpLesson()");
-                alert("エラーが発生しました。")
+                alert("エラーが発生しました。");
+                fetchAndDisplayLessons();
             }
         });
     });
@@ -458,6 +466,15 @@ function loadChildrenIds() {
     return selectedChildren;
 }
 
+
+
+function color_red_minus_capacity_left() {
+    document.querySelectorAll(".capacity-left-span").forEach(function (span) {
+        if (span.dataset.capacityLeft <= 0) {
+            span.classList.add("red-text");
+        }
+    });
+}
 
 
 

@@ -238,6 +238,18 @@
     cursor: pointer;
 }
 
+.sign-up-over-capacity {
+    background-color: rgb(141, 131, 23);
+}
+
+.sign-up-over-capacity:hover {
+    background-color: rgb(165, 154, 41);
+}
+
+.red-text {
+    color: tomato;
+}
+
 
 .hidden {
     display: none;
