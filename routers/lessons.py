@@ -701,3 +701,38 @@ def json_get_my_children_in_current_lesson(
 #     children_in_current_lesson = session.exec(statement).all()
 #     return children_in_current_lesson
 
+
+# json send message to lesson applicants
+@router.get("/json/confirmation_message/lesson/{lesson_number}")
+def json_confirmation_message_lesson(
+    session: Annotated[Session, Depends(get_session)],
+    lesson_number: int,
+    key: str = None
+):
+    if key != PUBLIC_API_KEY:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
+    current_period = get_current_period(session)
+    lesson = session.exec(select(Lesson).where(Lesson.year == current_period.year, Lesson.season == current_period.season, Lesson.number == lesson_number)).first()
+    user_list = lesson.users
+    child_list = []
+    if lesson.number == 1:
+        child_list = lesson.user_children
+    message_list = []
+    number_symbol = ["None","①", "②", "③", "④", "⑤", "⑥", "⑦","⑧", "⑨", "⑩", "⑪", "⑫", "⑬", "⑭"]
+    first_date_list = ["初回日", "５月９日", "５月１４日", "５月７日", "５月１日", "５月１日", "５月１日", "５月８日", "５月１日", "５月１日", "５月８日", "５月８日"]
+    # print(lesson.number, lesson_number)
+    for user in user_list:
+        lesson_title = number_symbol[lesson.number] + lesson.title
+        lesson_children = [child.child_last_name + " " + child.child_first_name for child in child_list if child.user_id == user.id]
+        lesson_price = str(lesson.price) + "円x" + str(len(lesson_children)) + "人分" if lesson.number == 1 else str(lesson.price) + "円"
+        message_format = {
+            "name": user.user_details.last_name + " " + user.user_details.first_name,
+            "tel": user.user_details.tel,
+            "lesson_title": lesson_title,
+            "fee": lesson_price,
+            "children": lesson_children,
+            "message": "前期教室" + lesson_title + "が" + first_date_list[lesson.number] + "から始まります。初回に参加費" + lesson_price + "をお願いします。\n養老スポーツクラブ　若山"
+        }
+        message_list.append(message_format)
+    return message_list
+
