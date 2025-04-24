@@ -63,11 +63,6 @@ async function renderLessons() {
             signUpBtn = `<button class="lesson-sign-up-btn">申し込みをする</button>`;
         };
 
-        // comment out here to accept more signups manually
-        if ([100].includes(lesson.number) && lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
-            signUpBtn = `<button class="dummy-btn-1" style="position: relative;">受付を締め切りました</button>`;
-        };
-
         let position;
         for (let i = 0; i < position_list.length; i++) {
             if (position_list[i].lesson_id == lesson.id) {
@@ -81,6 +76,15 @@ async function renderLessons() {
             signUpBtn = `<button class="dummy-btn" style="position: relative; color: tomato;">キャンセル待ちに申込済${cancelBtn}</button>`;
         } else {
             console.log("position: ok");
+        };
+
+        // manually stop over acceptance and cancel
+        if ([100,1,10].includes(lesson.number)) {
+            if (lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
+                signUpBtn = `<button class="dummy-btn-1" style="position: relative;">受付を締め切りました</button>`;
+            } else if (myLessons.some(myLesson => myLesson.id == lesson.id)) {
+                signUpBtn = `<button class="dummy-btn" style="position: relative;">申し込み済み</button>`;
+            };
         };
 
         let numberColor = "gray";
