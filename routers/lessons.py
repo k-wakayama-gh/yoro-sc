@@ -573,7 +573,10 @@ def refresh_lesson_capacity_left(session: Annotated[Session, Depends(get_session
     current_period = get_current_period(session)
     lessons = session.exec(select(Lesson).where(Lesson.year == current_period.year, Lesson.season == current_period.season)).all()
     for lesson in lessons:
-        lesson.capacity_left = lesson.capacity - len(lesson.users)
+        if lesson.number == 1:
+            lesson.capacity_left = lesson.capacity - len(lesson.user_children)
+        else:
+            lesson.capacity_left = lesson.capacity - len(lesson.users)
         session.add(lesson)
     session.commit()
     for lesson in lessons:
