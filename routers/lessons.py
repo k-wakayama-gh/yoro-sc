@@ -570,7 +570,8 @@ def admin_add_children_into_lesson_username_ver(session: Annotated[Session, Depe
 # get: refresh lesson capacity
 @router.get("/lessons/refresh/capacity", tags=["Lesson"])
 def refresh_lesson_capacity_left(session: Annotated[Session, Depends(get_session)]):
-    lessons = session.exec(select(Lesson).where(Lesson.year == 2024)).all()
+    current_period = get_current_period(session)
+    lessons = session.exec(select(Lesson).where(Lesson.year == current_period.year, Lesson.season == current_period.season)).all()
     for lesson in lessons:
         lesson.capacity_left = lesson.capacity - len(lesson.users)
         session.add(lesson)
