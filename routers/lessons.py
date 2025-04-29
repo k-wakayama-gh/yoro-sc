@@ -32,12 +32,13 @@ class CommonQueryParams:
 
 # routes below 000000000000000000000000000000000000
 
-# current lesson period
-class FakeCurrentPeriod:
+# temporary date time
+class TemporaryCurrentPeriod:
     year = 2025
     season = 1
     start_time = datetime(year=2025, month=4, day=9, hour=7, minute=0, second=0, tzinfo=timezone(timedelta(hours=9)))
     test_start_time = datetime(year=2024, month=4, day=9, hour=22, minute=30, second=0, tzinfo=timezone(timedelta(hours=9)))
+    notification_time = datetime(year=2025, month=4, day=29, hour=0, minute=0, second=0, tzinfo=timezone(timedelta(hours=9)))
 
 # for test
 # CurrentPeriod.start_time = CurrentPeriod.test_start_time
@@ -597,7 +598,14 @@ def json_read_lesson_applicants(lesson_id: int, session: Annotated[Session, Depe
         counter = 1
         for child in children:
             user_details = child.user.user_details
-            child_details_out = {"No.": counter, "name": child.child_last_name + "　" + child.child_first_name, "parent": user_details.last_name + "　" + user_details.first_name, "tel": user_details.tel, "address": user_details.address}
+            child_details_out = {
+                "No.": counter,
+                "name": child.child_last_name + "　" + child.child_first_name,
+                "furigana": child.child_last_name_furigana + "　" + child.child_first_name_furigana,
+                "parent": user_details.last_name + "　" + user_details.first_name,
+                "tel": user_details.tel,
+                "address": user_details.address
+                }
             counter = counter + 1
             result.append(child_details_out)
     else:
