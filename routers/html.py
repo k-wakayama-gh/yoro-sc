@@ -2,7 +2,7 @@
 
 # modules
 from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
 from typing import Optional, Annotated
@@ -106,4 +106,13 @@ def backup_database():
 def show_current_datetime():
     current_datetime = (datetime.utcnow() + timedelta(hours=9)).strftime("%Y-%m-%dT%H-%M-%S")
     return {"now": current_datetime}
+
+
+@app.get("/robots.txt", response_class=PlainTextResponse)
+async def robots_txt():
+    return (
+        "User-agent: *\n"
+        "Disallow: /admin\n"
+        "Disallow: /json\n"
+    )
 

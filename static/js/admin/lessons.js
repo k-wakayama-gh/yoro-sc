@@ -6,7 +6,7 @@ document.getElementById("add-lessons-all-btn").addEventListener("click", async f
     this.style.pointerEvents = "none";
 
     const api_url = document.getElementById("api-url").value;
-    console.log("api_irl:", api_url);
+    console.log("api_url:", api_url);
 
     // sending a request to GAS API
     const response_gas = await fetch(api_url, {
@@ -167,8 +167,8 @@ async function renderLessons() {
         lessonList.insertAdjacentHTML("beforeend", listItem);
     });
     if (lessons.length !== 0) {
-        console.log("rendered lesson list");
-        const poster = `<li class="lesson-poster"><img src="/static/img/lessons/lesson-poster.png" style="width:100%; height: auto;"></li>`;
+        // console.log("rendered lesson list");
+        // const poster = `<li class="lesson-poster"><img src="/static/img/lessons/lesson-poster.png" style="width:100%; height: auto;"></li>`;
         document.querySelector("#lesson-list > :nth-child(1)").insertAdjacentHTML("afterend", poster);
     };
 };

@@ -79,7 +79,7 @@ async function renderLessons() {
         };
 
         // manually stop over acceptance and cancel
-        if ([100,1,10].includes(lesson.number)) {
+        if ([100].includes(lesson.number)) {
             if (lesson.capacity_left <= 0 && !myLessons.some(myLesson => myLesson.id == lesson.id)) {
                 signUpBtn = `<button class="dummy-btn-1" style="position: relative;">受付を締め切りました</button>`;
             } else if (myLessons.some(myLesson => myLesson.id == lesson.id)) {
@@ -151,8 +151,8 @@ async function renderLessons() {
     });
     if (lessons.length !== 0) {
         console.log("rendered lesson list");
-        const poster = `<li class="lesson-poster"><img src="/static/img/lessons/lesson-poster.png" style="width:100%; height: auto;"></li>`;
-        document.querySelector("#lesson-list > :nth-child(1)").insertAdjacentHTML("afterend", poster);
+        // const poster = `<li class="lesson-poster"><img src="/static/img/lessons/lesson-poster.png" style="width:100%; height: auto;"></li>`;
+        // document.querySelector("#lesson-list > :nth-child(1)").insertAdjacentHTML("afterend", poster);
         renderUserChildren(userChildren);
         color_red_minus_capacity_left();
     };

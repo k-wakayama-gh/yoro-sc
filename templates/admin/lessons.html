@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A website created by K.W.">
     <meta name="author" content="K.W.">
+    <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/lessons.css">
     <link rel="stylesheet" href="/static/css/admin/lessons.css">
@@ -32,7 +33,7 @@
                 {% include "login.html" %}
 
                 <section id="lesson-list-section" class="flex-column align-center on-login">
-                    <h1>2025年度　前期</h1>
+                    <h1>2025年度　後期</h1>
 
                     <div class="space"></div>
 
@@ -63,7 +64,7 @@
                 <section class="on-login">
                     <h1>教室を追加する</h1>
                     <form id="add-lessons-all-form">
-                        <input id="api-url" type="text" name="gas_api" placeholder="GAS API">
+                        <input id="api-url" type="text" name="gas_api" placeholder="GAS API with password">
                         <button id="add-lessons-all-btn" type="button">教室を追加する</button>
                     </form>
                 </section>

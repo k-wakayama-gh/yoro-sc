@@ -30,7 +30,7 @@ async function renderLessons() {
     const lessonList = document.getElementById("lesson-list");
 
     const current_year = 2025;
-    const current_season = 1;
+    const current_season = 2;
 
     // clear the previous lesson list
     lessonList.textContent = "";
