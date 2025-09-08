@@ -1,7 +1,7 @@
-# --- routers/password_reset.py ---
+# routers/password_reset.py
 
 # modules
-from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
+from fastapi import APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
@@ -20,9 +20,10 @@ from models.lessons import Lesson, LessonCreate, LessonRead, LessonUpdate, Lesso
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserChild
 from routers.auth import get_current_active_user, get_hashed_password
 
-app = FastAPI()
+
+# instance of API router and templates
 router = APIRouter()
-templates = Jinja2Templates(directory='templates')
+templates = Jinja2Templates(directory="templates")
 
 
 # パスワードリセットリクエスト用のモデル
@@ -104,21 +105,23 @@ def reset_password(request: PasswordResetConfirm, session: Annotated[Session, De
 
 
 
-@router.get("/password_reset", response_class=HTMLResponse, tags=["PasswordReset"])
-def read_page_password_reset(request: Request):
+@router.get("/password_reset", response_class=HTMLResponse, tags=["html"])
+def get_password_reset_html(request: Request):
+    html_file = "password_reset.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("password_reset.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
 # admin
-@router.get("/admin/password_reset", response_class=HTMLResponse, tags=["PasswordReset"])
-def read_page_admin_password_reset(request: Request):
+@router.get("/admin/password_reset", response_class=HTMLResponse, tags=["html"])
+def get_password_reset_html_admin(request: Request):
+    html_file = "admin/password_reset.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("admin/password_reset.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 

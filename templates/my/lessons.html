@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A website created by K.W.">
+    <meta name="description" content="Yoro Sports Club official website">
     <meta name="author" content="K.W.">
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/lessons.css">
@@ -13,64 +13,58 @@
 <body>
     {% include "header.html" %}
 
-    <div id="app" class="flex-column">
-        
-        <section id="page-directory-section" class="flex-row">
-            <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
-            <span><a href="/">ホーム</a></span>
-            <span>＞</span>
-            <span><a href="/my">マイページ</a></span>
-            <span>＞</span>
-            <span>申し込み済みの教室</span>
+    <section id="page-directory-section" class="flex-row">
+        <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
+        <span><a href="/">ホーム</a></span>
+        <span>＞</span>
+        <span><a href="/my">マイページ</a></span>
+        <span>＞</span>
+        <span>申し込み済みの教室</span>
+    </section>
+
+    <main id="main" class="flex-column-center">
+        <h2 style="color: darkgoldenrod;">申し込み済みの教室</h2>
+
+        {% include "login.html" %}
+
+        <section id="lesson-list-section" class="flex-column-center on-login">
+            <h1>2025年度　後期</h1>
+
+            <div class="space"></div>
+
+            <ul id="lesson-list" class="flex-column">
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+                <li class="dummy-li"></li>
+            </ul>
         </section>
 
-        <div id="proper-body" class="flex-row">
-            
-            <main id="main" class="flex-column-center">
-                <h2 style="color: darkgoldenrod;">申し込み済みの教室</h2>
+        <div class="space"></div>
 
-                {% include "login.html" %}
+        <section id="fee-list-section" class="flex-column hidden">
+            <h1 class="text-center">金額</h1>
+            <ul id="fee-list" class="flex-column">
+                <li class="dummy-li-1"></li>
+            </ul>
+            <div class="space"></div>
+            <p>参加費は初回の教室時にお支払いください。</p>
+        </section>
 
-                <section id="lesson-list-section" class="flex-column-center on-login">
-                    <h1>2025年度　後期</h1>
-
-                    <div class="space"></div>
-
-                    <ul id="lesson-list" class="flex-column">
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                        <li class="dummy-li"></li>
-                    </ul>
-                </section>
-
-                <div class="space"></div>
-
-                <section id="fee-list-section" class="flex-column hidden">
-                    <h1 class="text-center">金額</h1>
-                    <ul id="fee-list" class="flex-column">
-                        <li class="dummy-li-1"></li>
-                    </ul>
-                    <div class="space"></div>
-                    <p>参加費は初回の教室時にお支払いください。</p>
-                </section>
-
-                <div class="space"></div>
-                <div class="space"></div>
-                
-                <a href="/lessons" class="a-btn">教室申し込み</a>
-                <p>キャンセルもこちらでできます↑</p>
-            </main>
-        </div>
-    </div>
+        <div class="space"></div>
+        <div class="space"></div>
+        
+        <a href="/lessons" class="a-btn">教室申し込み</a>
+        <p>キャンセルもこちらでできます↑</p>
+    </main>
 
     <footer id="footer">
         <p>（一社）養老スポーツクラブ</p>

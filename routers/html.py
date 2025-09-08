@@ -1,7 +1,7 @@
-# --- routers/html.py ---
+# routers/html.py
 
 # modules
-from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
+from fastapi import APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
@@ -16,64 +16,65 @@ from models.todos import Todo, TodoCreate, TodoRead, TodoUpdate, TodoDelete
 from routers.auth import get_current_active_user
 from database import make_backup_db
 
-# FastAPI instance and API router
-app = FastAPI()
+# instance of API router and templates
 router = APIRouter()
+templates = Jinja2Templates(directory="templates")
 
-# templates settings
-templates = Jinja2Templates(directory='templates')
-
-# routes below 000000000000000000000000000000000000
 
 
 # top page
 @router.get("/", response_class=HTMLResponse, tags=["html"])
-def index(request: Request):
+def get_index_html(request: Request):
+    html_file = "index.html"
     context = {
         "request": request,
         "title": "ホーム｜(一社)養老スポーツクラブ",
     }
-    return templates.TemplateResponse("index.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
 # my page
 @router.get("/my", response_class=HTMLResponse, tags=["html"])
-def my(request: Request):
+def get_my_html(request: Request):
+    html_file = "my.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("my.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
 # user sign up page
 @router.get("/users/signup", response_class=HTMLResponse, tags=["html"])
-def user_signup(request: Request):
+def get_user_signup_html(request: Request):
+    html_file = "signup.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("signup.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
 # after sign up complete page
 @router.get("/signupcomplete", response_class=HTMLResponse, tags=["html"])
-def signup_complete(request: Request):
+def get_signup_complete_html(request: Request):
+    html_file = "signupcomplete.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("signupcomplete.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
 # admin top page
 @router.get("/admin", response_class=HTMLResponse, tags=["html"])
-def signup_complete(request: Request):
+def get_admin_html(request: Request):
+    html_file = "admin.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("admin.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
@@ -108,7 +109,7 @@ def show_current_datetime():
     return {"now": current_datetime}
 
 
-@app.get("/robots.txt", response_class=PlainTextResponse)
+@router.get("/robots.txt", response_class=PlainTextResponse)
 async def robots_txt():
     return (
         "User-agent: *\n"

@@ -16,6 +16,12 @@
     --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-color);
 }
@@ -55,8 +61,8 @@ input, textarea {
     background-color: var(--bg-color-accent);
     border: var(--border-form);
     border-radius: 5px;
-    box-sizing: border-box; /* ボックスモデルの設定：ボーダーをサイズに含める */
-    padding: 1rem; /* 0.5rem == 8px if font size is 16px */
+    box-sizing: border-box; /* size with borders */
+    padding: 1rem; /* 0.5rem = 8px if font size is 16px */
     margin: 0.5rem 0;
     width: 100%;
 }
@@ -72,9 +78,9 @@ body {
     overflow-y: scroll;
     color: var(--text-color);
     background-color: var(--bg-color);
-    margin: auto;
-    position: relative;
-    width: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .space {
@@ -263,11 +269,11 @@ header {
 }
 
 
-/* do not write width: 100%; on main and on the others that dont need it */
+/* do not write width: 100%; on main and the others that dont need it */
 main {
     padding: 1rem;
     background-color: var(--bg-color);
-    flex-grow: 1; /* fill horizontal space of the parent flex-row element with main */
+    flex: 1;
 }
 
 aside {
@@ -276,7 +282,7 @@ aside {
 
 footer {
     padding: 1rem 0;
-    margin-top: 2rem;
+    margin-top: 4rem;
     width: 100%;
     background-color: #333333;
     color: #f0f0f0;

@@ -1,7 +1,7 @@
-# --- routers/users.py ---
+# routers/users.py
 
 # modules
-from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
+from fastapi import APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
@@ -15,17 +15,10 @@ from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, Use
 from routers.auth import get_hashed_password
 from routers.auth import get_current_active_user
 
-# FastAPI instance and API router
-app = FastAPI()
+# instance of API router and templates
 router = APIRouter()
+templates = Jinja2Templates(directory="templates")
 
-# templates settings
-templates = Jinja2Templates(directory='templates')
-
-# database session
-# session = Session(engine)
-
-# routes below 000000000000000000000000000000000000
 
 
 # create User model from UserIn model converting plain password into hashed password
@@ -320,32 +313,36 @@ def json_get_my_children(session: Annotated[Session, Depends(get_session)], curr
 
 
 # display user details
-@router.get("/my/userdetails", tags=["User"], response_class=HTMLResponse)
-def display_my_personal_info(request: Request):
+@router.get("/my/userdetails", response_class=HTMLResponse, tags=["html"])
+def get_my_user_details_html(request: Request):
+    html_file = "my/userdetails.html"
     context = {
         'request': request,
     }
-    return templates.TemplateResponse("my/userdetails.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
 # children signup page
-@router.get("/my/childrensignup", tags=["User"], response_class=HTMLResponse)
-def display_children_signup_page(request: Request):
+@router.get("/my/childrensignup", response_class=HTMLResponse, tags=["html"])
+def get_children_signup_page_html(request: Request):
+    html_file = "my/childrensignup.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("my/childrensignup.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
 # admin: display: users
-@router.get("/admin/users", tags=["User"], response_class=HTMLResponse)
-def display_users(request: Request):
+@router.get("/admin/users", response_class=HTMLResponse, tags=["html"])
+def get_users_html_admin(request: Request):
+    html_file = "admin/users.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("admin/users.html", context)
+    return templates.TemplateResponse(html_file, context)
+
 
 
 @router.get("/json/admin/users", tags=["User"])
@@ -431,22 +428,24 @@ def admin_user_search(
 
 
 
-# admin
-@router.get("/admin/user_search", response_class=HTMLResponse, tags=["User"])
-def read_page_admin_user_search(request: Request):
+# admin: user serch page
+@router.get("/admin/user_search", response_class=HTMLResponse, tags=["html"])
+def get_user_search_html_admin(request: Request):
+    html_file = "admin/user_search.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("admin/user_search.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
-# user detailds edit page
-@router.get("/my/userdetails/edit", response_class=HTMLResponse, tags=["User"])
-def read_page_admin_user_search(request: Request):
+# edit my user details information
+@router.get("/my/userdetails/edit", response_class=HTMLResponse, tags=["html"])
+def get_edit_my_userdetails_html(request: Request):
+    html_file = "my/userdetails/edit.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("my/userdetails/edit.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 

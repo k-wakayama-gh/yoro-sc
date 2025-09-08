@@ -1,7 +1,7 @@
-# --- routers/auth.py ---
+# routers/auth.py
 
 # modules
-from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
+from fastapi import APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -17,12 +17,10 @@ from database import engine, get_session
 from models.auth import Token, TokenData
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, UserInDB, UserUsername
 
-# FastAPI instance and API router
-app = FastAPI()
+# instance of API router and templates
 router = APIRouter()
+templates = Jinja2Templates(directory="templates")
 
-# templates settings
-templates = Jinja2Templates(directory='templates')
 
 # auth scheme and hash scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -38,8 +36,6 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 * 30 * 12
 
 
-# codes below 000000000000000000000000000000000000
-
 
 
 # verify password with hashed password
@@ -48,7 +44,7 @@ def verify_password(plain_password, hashed_password):
 
 
 
-# def: make hashed password
+# make hashed password
 def get_hashed_password(password):
     return pwd_context.hash(password)
 
@@ -61,19 +57,15 @@ def get_hashed_password(password):
 
 
 
-# def: get user by username
+# get user by username
 def get_user(username: str):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.username == username)).one()
     return user
 
 
-# argumentにsession: Session=Depends(get_session)を入れるやり方はあまりよくないかもしれない。
-# with Session...を使う場合は、argumentは検索用のusernameひとつでいい。
-# しかし、パフォーマンス的にはDependsでinjectionするほうがいいらしい
 
-
-# def: verify username and password
+# verify username and password
 def authenticate_user(username: str, password: str):
     user = get_user(username)
     if not user:
@@ -84,7 +76,7 @@ def authenticate_user(username: str, password: str):
 
 
 
-# def: create access token expecting {"sub": username} and expiring time
+# create access token expecting {"sub": username} and expiring time
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
     if expires_delta:
@@ -97,7 +89,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 
 
 
-# def: get user from access token
+# get user from access token
 def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -119,7 +111,7 @@ def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
 
 
-# def: eliminate inactive user
+# eliminate inactive user
 def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")

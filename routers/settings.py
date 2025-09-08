@@ -1,7 +1,7 @@
-# --- routers/period.py ---
+# routers/period.py
 
 # modules
-from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
+from fastapi import APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
@@ -14,12 +14,10 @@ from models.users import User
 from routers.auth import get_current_active_user
 from models.settings import Period, PeriodRequest
 
-# FastAPI instance and API router
-app = FastAPI()
+# instance of API router and templates
 router = APIRouter()
+templates = Jinja2Templates(directory="templates")
 
-# templates settings
-templates = Jinja2Templates(directory='templates')
 
 
 # 期間情報取得
@@ -104,12 +102,13 @@ def upsert_period(
 
 
 
-# admin page
-@router.get("/admin/settings", response_class=HTMLResponse, tags=["Setting"])
-def read_page_admin_period(request: Request):
+# admin: period setting page
+@router.get("/admin/settings", response_class=HTMLResponse, tags=["html"])
+def get_period_html_admin(request: Request):
+    html_file = "admin/settings.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("admin/settings.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 

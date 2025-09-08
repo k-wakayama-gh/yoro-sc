@@ -1,7 +1,7 @@
 # --- routers/lessons.py ---
 
 # modules
-from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
+from fastapi import APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
@@ -16,12 +16,10 @@ from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete, Use
 from routers.auth import get_current_active_user
 from models.settings import Period
 
-# FastAPI instance and API router
-app = FastAPI()
+# instance of API router and templates
 router = APIRouter()
+templates = Jinja2Templates(directory="templates")
 
-# templates settings
-templates = Jinja2Templates(directory='templates')
 
 # common query parameters
 class CommonQueryParams:
@@ -30,7 +28,7 @@ class CommonQueryParams:
         self.offset = offset
         self.limit = limit
 
-# routes below 000000000000000000000000000000000000
+
 
 # temporary date time
 class TemporaryCurrentPeriod:
@@ -49,7 +47,7 @@ else:
     PUBLIC_API_KEY = "fake_key"
 
 
-# create
+# create a lesson: this is not used now
 @router.post("/lessons", response_model=LessonRead, tags=["Lesson"])
 def create_lesson(session: Annotated[Session, Depends(get_session)], lesson_create: LessonCreate):
     db_lesson = Lesson.model_validate(lesson_create)
@@ -60,29 +58,29 @@ def create_lesson(session: Annotated[Session, Depends(get_session)], lesson_crea
 
 
 
-# jinja: display lessons synced
+# jinja: display lessons synced: this is not used now
 @router.get("/jinja/lessons", response_class=HTMLResponse, tags=["html"], response_model=list[LessonRead])
 def display_lessons_sync(session: Annotated[Session, Depends(get_session)], query: Annotated[CommonQueryParams, Depends()], request: Request):
-    lessons = session.exec(select(Lesson).offset(query.offset).limit(query.limit)).all() # Lesson here must be a database model i.e. table: not LessonRead model
-    # if not lessons:
-    #     raise HTTPException(status_code=404, detail="Not found")
+    html_file = "lessons.html"
+    lessons = session.exec(select(Lesson).offset(query.offset).limit(query.limit)).all()
     context = {
         "request": request,
         "lessons": lessons,
         "title": "教室一覧",
     }
-    return templates.TemplateResponse("lessons.html", context) # this context includes lesson.id even if it is not loaded in the html corresponding response_model
+    return templates.TemplateResponse(html_file, context)
 
 
 
 
 # display lessons async
 @router.get("/lessons", response_class=HTMLResponse, response_model=list[LessonRead], tags=["Lesson"])
-def display_lessons(request: Request):
+def get_lessons_html(request: Request):
+    html_file = "lessons.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("lessons.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
@@ -99,33 +97,23 @@ def display_lessons(request: Request):
 
 
 
-# 現在の期間情報を取得する関数
+# get current lesson period infomation
 def get_current_period(session: Session):
-    # データベースから現在の期間情報(UTC)を取得
     db_period = session.exec(select(Period)).first()
-    
     if not db_period:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Period not found in the database")
-    
     return db_period
+
 
 
 # json: get lesson list
 @router.get("/json/lessons", response_model=list[LessonRead], tags=["Lesson"])
 def read_lesson_list_json(session: Annotated[Session, Depends(get_session)]):
-    # 期間情報を取得(UTC)
     current_period = get_current_period(session)
-    
-    # 現在の時刻をUTCで取得
     current_time = datetime.utcnow()
-
-    # 現在時刻が期間内かどうかを比較
     if current_time < current_period.start_time:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Lesson signup is not allowed yet")
-    
-    # 現在の期間に対応するレッスンを取得
     lessons = session.exec(select(Lesson).where(Lesson.year == current_period.year, Lesson.season == current_period.season)).all()
-    
     return lessons
 
 
@@ -133,7 +121,7 @@ def read_lesson_list_json(session: Annotated[Session, Depends(get_session)]):
 
 # json admin: get lesson list
 @router.get("/json/admin/lessons", response_model=list[LessonRead], tags=["Lesson"])
-def read_lesson_list_json(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
+def read_lesson_list_json_admin(session: Annotated[Session, Depends(get_session)], current_user: Annotated[User, Depends(get_current_active_user)]):
     current_time = datetime.utcnow()
     current_period = get_current_period(session)
     # if current_time < current_period.start_time:
@@ -291,22 +279,24 @@ def create_my_lessons_for_children(
 
 
 # display my lessons async
-@router.get("/my/lessons", response_class=HTMLResponse, response_model=list[LessonRead], tags=["Lesson"])
-def display_my_lessons(request: Request):
+@router.get("/my/lessons", response_class=HTMLResponse, response_model=list[LessonRead], tags=["html"])
+def get_my_lessons_html(request: Request):
+    html_file = "my/lessons.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("my/lessons.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
 # admin: display admin lessons async for management
-@router.get("/admin/lessons", response_class=HTMLResponse, response_model=list[LessonRead], tags=["Lesson"])
-def display_superuser_lessons(request: Request):
+@router.get("/admin/lessons", response_class=HTMLResponse, response_model=list[LessonRead], tags=["html"])
+def get_admin_lessons_html(request: Request):
+    html_file = "admin/lessons.html"
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("admin/lessons.html", context)
+    return templates.TemplateResponse(html_file, context)
 
 
 
@@ -689,30 +679,6 @@ def json_get_my_children_in_current_lesson(
 
 
 
-# from sqlalchemy import and_
-
-# # json: get my user children in current lesson
-# @router.get("/json/my/children_in_current_lesson", tags=["Lesson"], response_model=list[UserChildRead])
-# def json_get_my_children_in_current_lesson(
-#     session: Annotated[Session, Depends(get_session)],
-#     current_user: Annotated[User, Depends(get_current_active_user)]
-# ):
-#     current_period = get_current_period(session)
-
-#     statement = (
-#         select(UserChild)
-#         .where(UserChild.user_id == current_user.id)
-#         .where(UserChild.lessons.any(
-#             and_(
-#                 Lesson.year == current_period.year,
-#                 Lesson.season == current_period.season
-#             )
-#         ))
-#     )
-
-#     children_in_current_lesson = session.exec(statement).all()
-#     return children_in_current_lesson
-
 
 # json send message to lesson applicants
 @router.get("/json/confirmation_message/lesson/{lesson_number}")
@@ -730,20 +696,21 @@ def json_confirmation_message_lesson(
     if lesson.number == 1:
         child_list = lesson.user_children
     message_list = []
-    number_symbol = ["None","①", "②", "③", "④", "⑤", "⑥", "⑦","⑧", "⑨", "⑩", "⑪", "⑫", "⑬", "⑭"]
-    first_date_list = ["初回日", "5/9(金)", "5/14(水)", "5/7(水)", "5/1(木)", "5/1(木)", "5/1(木)", "5/8(木)", "5/1(木)13:30", "5/1(木)14:30", "5/8(木)13:30", "5/8(木)14:30"]
+    number_symbol = ["None","①", "②", "③", "④", "⑤", "⑥", "⑦","⑧", "⑨", "⑩", "⑪", "⑫", "⑬"]
+    first_date_list = ["初回日", "10/10(金)", "10/8(水)", "10/8(水)", "10/2(木)", "10/9(木)", "10/9(木)", "10/10(金)", "10/2(木)", "10/9(木)", "10/2(木)13:30", "10/2(木)14:30", "10/9(木)13:30", "10/9(木)14:30"]
     # print(lesson.number, lesson_number)
     for user in user_list:
         lesson_title = number_symbol[lesson.number] + lesson.title
+        first_date = first_date_list[lesson.number]
         lesson_children = [child.child_last_name + " " + child.child_first_name for child in child_list if child.user_id == user.id]
-        lesson_price = str(lesson.price) + "円x" + str(len(lesson_children)) + "人分" if lesson.number == 1 else str(lesson.price) + "円"
+        lesson_price_str = str(lesson.price) + "円x" + str(len(lesson_children)) + "人分" if lesson.number == 1 else str(lesson.price) + "円"
         message_format = {
             "name": user.user_details.last_name + " " + user.user_details.first_name,
             "tel": user.user_details.tel,
             "lesson_title": lesson_title,
-            "fee": lesson_price,
+            "fee": lesson_price_str,
             "children": lesson_children,
-            "message": "前期教室" + lesson_title + "が" + first_date_list[lesson.number] + "から始まります。初回に参加費" + lesson_price + "をお願いします。\n養老スポーツクラブ　若山"
+            "message": "後期教室" + lesson_title + "が" + first_date + "から始まります。初回に参加費" + lesson_price_str + "をお願いします。\n養老スポーツクラブ　若山"
         }
         message_list.append(message_format)
     return message_list
