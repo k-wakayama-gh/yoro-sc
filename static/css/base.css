@@ -246,12 +246,11 @@ header {
 }
 
 #page-directory-section {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding: 1em 0;
     font-size: small;
     overflow-wrap: break-word;
     word-break: keep-all;
-    overflow-x: scroll;
+    overflow-x: auto;
     background-color: var(--bg-color-accent);
 }
 
@@ -264,9 +263,26 @@ header {
     padding-right: 1rem;
 }
 
-#proper-body {
-    flex-grow: 1;
+
+#page-directory-div {
+    padding: 1em 0;
+    font-size: small;
+    overflow-wrap: break-word;
+    word-break: keep-all;
+    overflow-x: auto;
+    background-color: var(--bg-color-accent);
+    flex-shrink: 0;
 }
+
+#page-directory-div > span {
+    margin-right: 1rem;
+}
+
+#page-directory-div::after {
+    content: "";
+    padding-right: 1rem;
+}
+
 
 
 /* do not write width: 100%; on main and the others that dont need it */
