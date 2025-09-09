@@ -14,20 +14,20 @@
 <body>
     {% include "header.html" %}
 
-    <section id="page-directory-section" class="flex-row">
-        <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
+    <div id="page-directory-div" class="flex-row">
+        <span style="margin-left: 1rem; margin-right: 0;"></span>
         <span><a href="/">ホーム</a></span>
         <span>＞</span>
         <span><a href="/admin">管理者ページ</a></span>
         <span>＞</span>
         <span>教室一覧</span>
-    </section>
+    </div>
 
-    <main id="main" class="flex-column align-center">
+    <main id="main" class="flex-column-center">
 
         {% include "login.html" %}
 
-        <section id="lesson-list-section" class="flex-column align-center on-login">
+        <section id="lesson-list-section" class="flex-column-center on-login">
             <h1>2025年度　後期</h1>
 
             <div class="space"></div>

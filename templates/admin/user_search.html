@@ -44,6 +44,15 @@
 <body>
     {% include "header.html" %}
 
+    <div id="page-directory-div" class="flex-row">
+        <span style="margin-left: 1rem; margin-right: 0;"></span>
+        <span><a href="/">ホーム</a></span>
+        <span>＞</span>
+        <span><a href="/admin">管理者ページ</a></span>
+        <span>＞</span>
+        <span>ユーザー検索</span>
+    </div>
+
     {% include "login.html" %}
 
     <div id="main-container">
@@ -69,8 +78,6 @@
 
     <div class="flex-column-center" style="padding: 1.25rem;">
         <a href="/admin/password_reset" class="a-btn">パスワード再設定ページ</a>
-        <div class="space"></div>
-        <a href="/admin" class="a-btn">管理者ページ</a>
         <div class="space"></div>
     </div>
 

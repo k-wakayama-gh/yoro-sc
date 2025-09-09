@@ -13,14 +13,14 @@
 <body>
     {% include "header.html" %}
 
-    <section id="page-directory-section" class="flex-row">
-        <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
+    <div id="page-directory-div" class="flex-row">
+        <span style="margin-left: 1rem; margin-right: 0;"></span>
         <span><a href="/">ホーム</a></span>
         <span>＞</span>
         <span><a href="/my">マイページ</a></span>
         <span>＞</span>
         <span>申し込み済みの教室</span>
-    </section>
+    </div>
 
     <main id="main" class="flex-column-center">
         <h2 style="color: darkgoldenrod;">申し込み済みの教室</h2>
@@ -62,7 +62,7 @@
         <div class="space"></div>
         <div class="space"></div>
         
-        <a href="/lessons" class="a-btn">教室申し込み</a>
+        <a href="/lessons" class="a-btn">教室参加申し込み</a>
         <p>キャンセルもこちらでできます↑</p>
     </main>
 

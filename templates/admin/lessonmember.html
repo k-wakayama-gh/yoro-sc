@@ -13,110 +13,101 @@
 <body>
     {% include "header.html" %}
 
-    <div id="app" class="flex-column">
-
-        <section id="page-directory-section" class="flex-row">
-            <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
-            <span><a href="/">ホーム</a></span>
-            <span>＞</span>
-            <span><a href="/admin">管理者ページ</a></span>
-            <span>＞</span>
-            <span>教室申込一覧</span>
-        </section>
-
-        <div id="proper-body" class="flex-row">
-
-            <main id="main" class="flex-column-center">
-
-                {% include "login.html" %}
-
-                <section id="lesson-member-section">
-                    <table class="lesson-member-table" data-lesson-id="1">
-                        <h2>教室１</h2>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>氏名</th>
-                                <th>ふりがな</th>
-                                <th>電話番号</th>
-                                <th>郵便番号</th>
-                                <th>住所</th>
-                            </tr>
-                        </thead>
-                        <tbody class="lesson-member-content">
-                            <tr>
-                                <td>1</td>
-                                <td>あああ</td>
-                                <td>いいい</td>
-                                <td>ううう</td>
-                                <td>えええ</td>
-                                <td>おおお</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>あああ</td>
-                                <td>いいい</td>
-                                <td>ううう</td>
-                                <td>えええ</td>
-                                <td>おおお</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>あああ</td>
-                                <td>いいい</td>
-                                <td>ううう</td>
-                                <td>えええ</td>
-                                <td>おおお</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="space"></div>
-                    <table class="lesson-member-table" data-lesson-id="2">
-                        <h2>教室２</h2>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>氏名</th>
-                                <th>ふりがな</th>
-                                <th>電話番号</th>
-                                <th>郵便番号</th>
-                                <th>住所</th>
-                            </tr>
-                        </thead>
-                        <tbody class="lesson-member-content">
-                            <tr>
-                                <td>1</td>
-                                <td>あああ</td>
-                                <td>いいい</td>
-                                <td>ううう</td>
-                                <td>えええ</td>
-                                <td>おおお</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>あああ</td>
-                                <td>いいい</td>
-                                <td>ううう</td>
-                                <td>えええ</td>
-                                <td>おおお</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>あああ</td>
-                                <td>いいい</td>
-                                <td>ううう</td>
-                                <td>えええ</td>
-                                <td>おおお</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <div class="space"></div>
-
-            </main>
-        </div>
+    <div id="page-directory-div" class="flex-row">
+        <span style="margin-left: 1rem; margin-right: 0;"></span>
+        <span><a href="/">ホーム</a></span>
+        <span>＞</span>
+        <span><a href="/admin">管理者ページ</a></span>
+        <span>＞</span>
+        <span>教室申込一覧</span>
     </div>
+
+    <main id="main" class="flex-column-center">
+
+        {% include "login.html" %}
+
+        <section id="lesson-member-section">
+            <table class="lesson-member-table" data-lesson-id="1">
+                <h2>教室１</h2>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>氏名</th>
+                        <th>ふりがな</th>
+                        <th>電話番号</th>
+                        <th>郵便番号</th>
+                        <th>住所</th>
+                    </tr>
+                </thead>
+                <tbody class="lesson-member-content">
+                    <tr>
+                        <td>1</td>
+                        <td>あああ</td>
+                        <td>いいい</td>
+                        <td>ううう</td>
+                        <td>えええ</td>
+                        <td>おおお</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>あああ</td>
+                        <td>いいい</td>
+                        <td>ううう</td>
+                        <td>えええ</td>
+                        <td>おおお</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>あああ</td>
+                        <td>いいい</td>
+                        <td>ううう</td>
+                        <td>えええ</td>
+                        <td>おおお</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="space"></div>
+            <table class="lesson-member-table" data-lesson-id="2">
+                <h2>教室２</h2>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>氏名</th>
+                        <th>ふりがな</th>
+                        <th>電話番号</th>
+                        <th>郵便番号</th>
+                        <th>住所</th>
+                    </tr>
+                </thead>
+                <tbody class="lesson-member-content">
+                    <tr>
+                        <td>1</td>
+                        <td>あああ</td>
+                        <td>いいい</td>
+                        <td>ううう</td>
+                        <td>えええ</td>
+                        <td>おおお</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>あああ</td>
+                        <td>いいい</td>
+                        <td>ううう</td>
+                        <td>えええ</td>
+                        <td>おおお</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>あああ</td>
+                        <td>いいい</td>
+                        <td>ううう</td>
+                        <td>えええ</td>
+                        <td>おおお</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
 
     <footer id="footer">
         <p>（一社）養老スポーツクラブ</p>

@@ -12,63 +12,54 @@
 <body>
     {% include "header.html" %}
 
-    <div id="app" class="flex-column">
+    <div id="page-directory-div" class="flex-row">
+        <span style="margin-left: 1rem; margin-right: 0;"></span>
+        <span><a href="/">ホーム</a></span>
+        <span>＞</span>
+        <span><a href="/my">マイページ</a></span>
+        <span>＞</span>
+        <span>利用者情報</span>
+    </div>
 
-        <section id="page-directory-section" class="flex-row">
-            <span id="span-margin-left" style="margin-left: 1rem; margin-right: 0;"></span>
-            <span><a href="/">ホーム</a></span>
-            <span>＞</span>
-            <span><a href="/my">マイページ</a></span>
-            <span>＞</span>
-            <span>利用者情報</span>
+    <main id="main" class="flex-column-center">
+
+        <h2>利用者情報</h2>
+
+        {% include "login.html" %}
+
+        <div class="space"></div>
+        
+        <section id="user-detail-section" class="flex-column-center full-width">
+            <ul id="user-details" class="flex-column">
+                <p>読み込み中...</p>
+            </ul>
+
+            <div class="space"></div>
+            <h2>お子さんの情報</h2>
+            <ul id="user-children" class="flex-column">
+                <p>読み込み中...</p>
+            </ul>
+
+            <hr class="full-width">
+
+            <div class="space"></div>
+            
+            <!-- <button id="edit-btn">登録内容を変更する</button> -->
+            <a href="/my/userdetails/edit" class="a-btn link-userdetails-edit">利用者の情報を編集する</a>
+
+            <div class="space"></div>
+
+            <a href="/my/childrensignup" class="a-btn link-children-signup">お子さんの情報を追加する</a>
         </section>
 
-        <div id="proper-body" class="flex-row">
-
-            <main id="main" class="flex-column-center full-width">
-
-                <h2>利用者情報</h2>
-
-                {% include "login.html" %}
-
-                <div class="space"></div>
-                
-                <section id="user-detail-section" class="flex-column-center full-width">
-                    <ul id="user-details" class="flex-column">
-                        <p>読み込み中...</p>
-                    </ul>
-
-                    <div class="space"></div>
-                    <h2>お子さんの情報</h2>
-                    <ul id="user-children" class="flex-column">
-                        <p>読み込み中...</p>
-                    </ul>
-
-                    <hr class="full-width">
-
-                    <div class="space"></div>
-                    
-                    <!-- <button id="edit-btn">登録内容を変更する</button> -->
-                    <a href="/my/userdetails/edit" class="a-btn link-userdetails-edit">利用者の情報を編集する</a>
-
-                    <div class="space"></div>
-
-                    <a href="/my/childrensignup" class="a-btn link-children-signup">お子さんの情報を追加する</a>
-                </section>
-
-                <div class="space"></div>
-                
-                <section id="user-detail-edit-section" class="flex-column-center full-width hidden">
-                    <h2>編集フォーム</h2>
-                    <form id="user-details-edit-form" class="flex-column">
-                    </form>
-                </section>
-
-                <div class="space"></div>
-
-            </main>
-        </div>
-    </div>
+        <div class="space"></div>
+        
+        <section id="user-detail-edit-section" class="flex-column-center full-width hidden">
+            <h2>編集フォーム</h2>
+            <form id="user-details-edit-form" class="flex-column">
+            </form>
+        </section>
+    </main>
 
     <footer id="footer">
         <p>（一社）養老スポーツクラブ</p>

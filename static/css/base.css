@@ -245,24 +245,6 @@ header {
     background-color: darkgray;
 }
 
-#page-directory-section {
-    padding: 1em 0;
-    font-size: small;
-    overflow-wrap: break-word;
-    word-break: keep-all;
-    overflow-x: auto;
-    background-color: var(--bg-color-accent);
-}
-
-#page-directory-section > span {
-    margin-right: 1rem;
-}
-
-#page-directory-section::after {
-    content: "";
-    padding-right: 1rem;
-}
-
 
 #page-directory-div {
     padding: 1em 0;
@@ -358,10 +340,6 @@ footer {
 
 /* responsive design for PC */
 @media screen and (min-width: 80rem) {
-    #proper-body {
-        margin: 0 1rem; /* do not set width with this padding here */
-    }
-    
     #header-section {
         display: flex;
         flex-direction: row;
