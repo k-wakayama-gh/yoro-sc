@@ -36,7 +36,7 @@
     text-align: center;
 }
 
-h2 {
+h2, h3 {
     text-align: center;
 }
 
@@ -71,4 +71,8 @@ h2 {
 
 #signup-cancel-btn:hover {
     background-color: rgb(212, 67, 51);
+}
+
+#children-signup-form-section {
+    max-width: 30rem;
 }

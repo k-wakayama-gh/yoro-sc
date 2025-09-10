@@ -8,8 +8,15 @@
     max-width: 100%;
 }
 
+form > .flex-row-between {
+    gap: 1rem;
+    max-width: 100%;
+}
+
 .half-input {
-    max-width: 49%;
+    /* max-width: 49%; */
+    /* flex-grow: 1; */
+    width: 48%;
 }
 
 input:invalid:focus {
@@ -19,7 +26,7 @@ input:invalid:focus {
 
 .form-text {
     text-align: start;
-    margin-left: 1rem;
+    /* margin-left: 1rem; */
 }
 
 .form-annotation {

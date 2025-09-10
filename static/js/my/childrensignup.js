@@ -54,7 +54,7 @@ document.getElementById("signup-check-btn").addEventListener("click", async func
         const signUpInfomation = `
         <p class="numbering">${eachNumber}</p>
         <ul class="grid-1-2" style="text-align: start; font-size: medium;">
-            <li>お名前</li>
+            <li>氏名</li>
             <li>${last_name}　${first_name}</li>
             <li>ふりがな</li>
             <li>${last_name_furigana}　${first_name_furigana}</li>
