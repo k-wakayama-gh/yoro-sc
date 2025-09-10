@@ -22,6 +22,39 @@ html, body {
     padding: 0;
 }
 
+body {
+    font-family: sans-serif;
+    font-size: medium;
+    overflow-y: scroll;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* do not write width: 100%; on main and its elements but max-width */
+main {
+    padding: 1rem;
+    background-color: var(--bg-color);
+    flex-grow: 1;
+    box-sizing: border-box;
+}
+
+header {
+    position: relative;
+    background-color: #333333;
+    color: #cccccc;
+}
+
+footer {
+    padding: 1rem 0;
+    margin-top: 4rem;
+    background-color: #333333;
+    color: #f0f0f0;
+    text-align: center;
+}
+
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-color);
 }
@@ -64,23 +97,11 @@ input, textarea {
     box-sizing: border-box; /* size with borders */
     padding: 1rem; /* 0.5rem = 8px if font size is 16px */
     margin: 0.5rem 0;
-    width: 100%;
 }
 
 textarea {
     resize: none;
     font-family: inherit;
-}
-
-body {
-    font-family: sans-serif;
-    font-size: medium;
-    overflow-y: scroll;
-    color: var(--text-color);
-    background-color: var(--bg-color);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
 }
 
 .space {
@@ -102,12 +123,24 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
-    /* margin: 0 auto; */
+    /* align-items: center; */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .flex-column-center > * {
-    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center-item {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.insert-space > * {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .flex-row {
@@ -128,27 +161,9 @@ body {
     justify-content: center;
 }
 
-.grid-1 {
+.grid-column {
     display: grid;
-    grid-template-columns: 1fr;
-}
-
-.grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-.grid-3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.align-center {
-    align-items: center;
-}
-
-.text-center {
-    text-align: center; /* this will be inherited */
+    flex-direction: column;
 }
 
 .bg {
@@ -183,14 +198,6 @@ body {
 
 .a-btn:visited {
     color: white;
-}
-
-
-header {
-    width: 100%;
-    position: relative;
-    background-color: #333333;
-    color: #ccc;
 }
 
 #header-section {
@@ -266,28 +273,6 @@ header {
 }
 
 
-
-/* do not write width: 100%; on main and the others that dont need it */
-main {
-    padding: 1rem;
-    background-color: var(--bg-color);
-    flex: 1;
-}
-
-aside {
-    display: none;
-}
-
-footer {
-    padding: 1rem 0;
-    margin-top: 4rem;
-    width: 100%;
-    background-color: #333333;
-    color: #f0f0f0;
-    text-align: center;
-}
-
-
 .auth-form-div {
     text-align: center;
     max-width: 30rem;
@@ -338,8 +323,13 @@ footer {
 }
 
 
-/* responsive design for PC */
-@media screen and (min-width: 80rem) {
+/* responsive design for tablet and PC */
+@media screen and (min-width: 960px) {
+    .flex-column-center {
+        min-width: 30%;
+        max-width: 100%;
+    }
+
     #header-section {
         display: flex;
         flex-direction: row;
