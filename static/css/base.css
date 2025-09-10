@@ -102,13 +102,13 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center; /* all elements of this will be inline like */
+    align-items: center;
+    /* margin: 0 auto; */
 }
 
-/* .flex-column-center > * {
-    margin-right: auto;
-    margin-left: auto;
-} */
+.flex-column-center > * {
+    max-width: 100%;
+}
 
 .flex-row {
     display: flex;

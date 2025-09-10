@@ -1,6 +1,5 @@
 /* admin/lessonmember.css */
 
-
 table {
     border-collapse: collapse;
     background-color: inherit;
@@ -38,7 +37,8 @@ td {
 }
 
 
-/* table#lesson-member-section {
-    overflow-x: scroll;
-} */
-
+#lesson-member-section {
+    max-width: 100%;
+    overflow-x: auto;  /* 横スクロールを許可 */
+    -webkit-overflow-scrolling: touch; /* スマホでスムーズスクロール */
+}
