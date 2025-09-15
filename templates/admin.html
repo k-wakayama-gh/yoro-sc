@@ -12,7 +12,6 @@
     {% include "header.html" %}
 
     <div id="page-directory-div" class="flex-row">
-        <span style="margin-left: 1rem; margin-right: 0;"></span>
         <span><a href="/">ホーム</a></span>
         <span>＞</span>
         <span>管理者ページ</span>
@@ -20,13 +19,13 @@
 
     <main class="flex-column-center">
 
-        <h2>（一社）養老スポーツクラブ</h2>
+        <h2 class="text-center">（一社）養老スポーツクラブ</h2>
 
         {% include "login.html" %}
 
         <div class="space"></div>
         
-        <div class="flex-column-center full-width insert-space on-login">
+        <div class="flex-column-center insert-space on-login">
             <a href="/admin/lessons/users" class="a-btn">申し込み名簿</a>
             <a href="/admin/user_search" class="a-btn">ユーザー検索</a>
             <a href="/admin/password_reset" class="a-btn">パスワードリセット(管理者用)</a>

@@ -10,9 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
 async function displayUsername() {
     const myUsername = await fetchMyUsername();
     if (myUsername.length != 0) {
-        const shortName = myUsername.slice(0, 6);
-        document.getElementById("user-btn").textContent = shortName;
-        console.log("short name: ", shortName);
+        // const shortName = myUsername.slice(0, 6);
+        // document.getElementById("user-btn").textContent = shortName;
+        // console.log("short name: ", shortName);
+        document.getElementById("user-btn").textContent = "ログイン済";
+        document.getElementById("user-btn").style.color = "lightblue";
+    } else {
+        document.getElementById("user-btn").style.color = "lightgoldenrodyellow";
     };
 };
 

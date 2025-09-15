@@ -14,21 +14,18 @@
     {% include "header.html" %}
 
     <div id="page-directory-div" class="flex-row">
-        <span style="margin-left: 1rem; margin-right: 0;"></span>
         <span><a href="/">ホーム</a></span>
         <span>＞</span>
-        <span><a href="/my">マイページ</a></span>
-        <span>＞</span>
-        <span>申し込み済みの教室</span>
+        <span>申込済の教室</span>
     </div>
 
     <main class="flex-column-center">
-        <h2 style="color: darkgoldenrod;">申し込み済みの教室</h2>
+        <h2 class="text-center">申し込み済みの教室</h2>
 
         {% include "login.html" %}
 
         <section id="lesson-list-section" class="flex-column-center on-login">
-            <h1>2025年度　後期</h1>
+            <h1 class="text-center">2025年度　後期</h1>
 
             <div class="space"></div>
 
@@ -50,8 +47,8 @@
 
         <div class="space"></div>
 
-        <section id="fee-list-section" class="flex-column-center hidden">
-            <h1>金額</h1>
+        <section id="fee-list-section" class="flex-column hidden">
+            <h1 class="text-center">金額</h1>
             <ul id="fee-list" class="flex-column">
                 <li class="dummy-li-1"></li>
             </ul>

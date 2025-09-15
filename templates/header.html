@@ -1,25 +1,25 @@
-<header id="header">
-    <section id="header-section" class="flex-row-between">
-        <section id="nav-section">
-            <nav id="nav-mobile" class="flex-row">
+<header>
+    <div class="flex-row-between">
+        <div class="flex-row">
+            <nav id="nav-mobile">
                 <button type="button" id="menu-btn">メニュー</button>
             </nav>
             <nav id="nav-pc" class="flex-row hidden">
-                <span><a href="/">ホーム</a></span>
-                <span><a href="/my">マイページ</a></span>
-                <span><a href="/lessons">教室申込</a></span>
-                <span><a href="/my/lessons">申込済の教室</a></span>
+                <a href="/">ホーム</a>
+                <a href="/my">マイページ</a>
+                <a href="/lessons">教室申込</a>
+                <a href="/my/lessons">申込済の教室</a>
             </nav>
-        </section>
-        <section id="user-info-section" class="flex-row">
-            <button type="button" id="logout-btn" class="hidden" style="margin-right: 0.5rem;">ログアウト</button>
-            <button type="button" id="user-btn" class="is-loged-out">ユーザー</button>
-        </section>
-    </section>
-    <nav id="nav-mobile-content" class="flex-column-center hidden">
-        <span><a href="/">ホーム</a></span>
-        <span><a href="/my">マイページ</a></span>
-        <span><a href="/lessons">教室申込</a></span>
-        <span><a href="/my/lessons">申込済の教室</a></span>
+        </div>
+        <div class="flex-row">
+            <button type="button" id="logout-btn" class="hidden" style="color: orange;">ログアウト</button>
+            <button type="button" id="user-btn" class="is-loged-out">未ログイン</button>
+        </div>
+    </div>
+    <nav id="nav-mobile-content" class="flex-column hidden">
+        <a href="/">ホーム</a>
+        <a href="/my">マイページ</a>
+        <a href="/lessons">教室申込</a>
+        <a href="/my/lessons">申込済の教室</a>
     </nav>
 </header>

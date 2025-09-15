@@ -13,19 +13,18 @@
     {% include "header.html" %}
 
     <div id="page-directory-div" class="flex-row">
-        <span style="margin-left: 1rem; margin-right: 0;"></span>
         <span><a href="/">ホーム</a></span>
         <span>＞</span>
         <span>マイページ</span>
     </div>
 
     <main class="flex-column-center">
-        <h2>（一社）養老スポーツクラブ</h2>
+        <h2 class="text-center">（一社）養老スポーツクラブ</h2>
 
         {% include "login.html" %}
 
-        <div class="flex-column-center full-width on-login">
-            <h2>マイページ</h2>
+        <div class="flex-column on-login">
+            <h2 class="text-center">マイページ</h2>
             <div class="space"></div>
             <a class="a-btn" href="/my/userdetails">利用者情報を確認する</a>
             <div class="space"></div>

@@ -127,6 +127,7 @@
     cursor: auto;
     font-size: medium;
     background-color: aliceblue;
+    border: 1px darkgray solid;
 }
 
 .lesson-cancel-btn {
@@ -256,17 +257,16 @@
 }
 
 
-@media screen and (max-width: 26rem) {
+/* @media screen and (max-width: 26rem) {
     .lesson-list-li, .dummy-li, #lesson-list, #lesson-list-section {
         min-width: 100%;
-        /* width: inherit; */
     }
-}
+} */
 
 
-@media screen and (min-width: 26rem) {
-    .lesson-list-li, .dummy-li {
-        min-width: 24rem;
+@media screen and (min-width: 26rem) and (max-width: 80rem) {
+    #lesson-list {
+        width: 24rem;
     }
 }
 

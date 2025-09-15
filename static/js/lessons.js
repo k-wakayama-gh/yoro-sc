@@ -356,10 +356,8 @@ function cancelLessonOnSmallBtn() {
             // console.log("loading dataset");
             const lessonId = this.parentNode.parentNode.dataset.lessonId;
             // console.log("dataset is ", lessonId);
-
-            this.parentNode.parentNode.querySelector(".lesson-cancel-confirm-btn").textContent = "処理中...";
-            // console.log(this.parentNode.parentNode.querySelector(".lesson-cancel-confirm-btn"));
-            this.textContent = "";
+            
+            this.textContent = "処理中...";
 
             const body = {};
 
