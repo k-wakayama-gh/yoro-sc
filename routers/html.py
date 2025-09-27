@@ -7,6 +7,8 @@ from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
 from typing import Optional, Annotated
 from datetime import datetime, timedelta
+import json
+from pathlib import Path
 
 # my modules
 from database import engine, get_session
@@ -116,4 +118,26 @@ async def robots_txt():
         "Disallow: /admin\n"
         "Disallow: /json\n"
     )
+
+
+FILE_PATH = Path("logs.json")
+
+@router.get("/json/admin/logs")
+def get_logs_json():
+    """JSONファイルのログをすべて返す"""
+    if FILE_PATH.exists():
+        with open(FILE_PATH, "r", encoding="utf-8") as f:
+            logs = json.load(f)
+    else:
+        logs = []
+    return JSONResponse(content=logs)
+
+
+@router.get("/admin/logs", response_class=HTMLResponse, tags=["html"])
+def get_signup_complete_html(request: Request):
+    html_file = "/admin/logs.html"
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse(html_file, context)
 
