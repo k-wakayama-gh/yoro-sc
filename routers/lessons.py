@@ -281,6 +281,15 @@ def create_my_lessons_for_children(
     session.add(lesson)
     session.commit()
     session.refresh(lesson)
+    
+    add_log(
+        user_name=user.user_details.last_name + "　" + user.user_details.first_name,
+        user_tel=user.user_details.tel,
+        user_address=user.user_details.address,
+        lesson_number=lesson.number,
+        lesson_title=lesson.title,
+        action="apply"
+    )
 
     return {"success": "children signed up to the lesson"}
 
