@@ -123,7 +123,9 @@ async def robots_txt():
 FILE_PATH = Path("logs.json")
 
 @router.get("/json/admin/logs")
-def get_logs_json():
+def get_logs_json(current_user: Annotated[Session, Depends(get_current_active_user)]):
+    if not current_user.is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="not authorized")
     """JSONファイルのログをすべて返す"""
     if FILE_PATH.exists():
         with open(FILE_PATH, "r", encoding="utf-8") as f:
