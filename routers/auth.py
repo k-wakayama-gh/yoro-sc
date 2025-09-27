@@ -40,12 +40,14 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 * 30 * 12
 
 # verify password with hashed password
 def verify_password(plain_password, hashed_password):
+    plain_password = plain_password.encode("utf-8")[:72]
     return pwd_context.verify(plain_password, hashed_password)
 
 
 
 # make hashed password
 def get_hashed_password(password):
+    password = password.encode("utf-8")[:72]
     return pwd_context.hash(password)
 
 

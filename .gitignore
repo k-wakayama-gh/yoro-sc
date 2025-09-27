@@ -1,8 +1,8 @@
-/__pycache__/
-/.github/
-/venv/
-/zzz/
 database.sqlite
 memo.txt
 secret.txt
 logs.json
+/__pycache__/
+/.github/
+/venv/
+/zzz/
