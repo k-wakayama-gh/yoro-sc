@@ -5,4 +5,5 @@ Jinja2
 python-multipart
 alembic
 python-jose[cryptography]
-passlib[bcrypt]
+passlib[bcrypt]==1.7.4
+bcrypt==4.1.2
