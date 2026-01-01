@@ -2,7 +2,8 @@ database.sqlite
 memo.txt
 secret.txt
 logs.json
-/__pycache__/
+__pycache__/
 /.github/
 /venv/
 /zzz/
+*.pyc
